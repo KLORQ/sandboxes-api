@@ -20,9 +20,11 @@ jobs:
       - name: Contract drift
         run: |
           go install github.com/bufbuild/buf/cmd/buf@v1.50.0
-          BUF="$(go env GOPATH)/bin/buf"
-          "$BUF" lint
-          "$BUF" generate
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.11
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.6.0
+          export PATH="$(go env GOPATH)/bin:$PATH"
+          buf lint
+          buf generate
           git diff --exit-code
       - name: Format
         run: test -z "$(gofmt -l .)"
@@ -33,7 +35,7 @@ jobs:
       - name: Install analyzers
         run: |
           go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.14.0
-          go install golang.org/x/vuln/cmd/govulncheck@v1.1.4
+          go install golang.org/x/vuln/cmd/govulncheck@v1.9.0
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
       - name: Lint
         run: |
