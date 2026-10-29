@@ -1,0 +1,6 @@
+openapi: 3.2.0
+info:
+  title: KLORQ Sandboxes Cloud API
+  version: v1
+  description: Pre-alpha contract placeholder.
+paths: {}
