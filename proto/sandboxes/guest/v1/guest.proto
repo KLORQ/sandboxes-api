@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package sandboxes.guest.v1;
 
-option go_package = "github.com/KLORQ/sandboxes-api/gen/go/guest/v1;guestv1";
+option go_package = "github.com/KLORQ/sandboxes-api/gen/go/sandboxes/guest/v1;guestv1";
 
 message ExecRequest {
   repeated string argv = 1;
@@ -10,11 +10,11 @@ message ExecRequest {
   bool tty = 3;
 }
 
-message ExecFrame {
+message ExecResponse {
   bytes data = 1;
   int32 exit_code = 2;
 }
 
 service GuestService {
-  rpc Exec(stream ExecRequest) returns (stream ExecFrame);
+  rpc Exec(stream ExecRequest) returns (stream ExecResponse);
 }

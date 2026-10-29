@@ -17,6 +17,13 @@ jobs:
         with:
           go-version-file: go.mod
           cache: true
+      - name: Contract drift
+        run: |
+          go install github.com/bufbuild/buf/cmd/buf@v1.50.0
+          BUF="$(go env GOPATH)/bin/buf"
+          "$BUF" lint
+          "$BUF" generate
+          git diff --exit-code
       - name: Format
         run: test -z "$(gofmt -l .)"
       - name: Vet

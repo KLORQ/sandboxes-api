@@ -1,6 +1,6 @@
 BIN ?= bin/app
 
-.PHONY: build test check fmt lint vuln clean
+.PHONY: build test check fmt lint vuln generate generate-check clean
 
 build:
 	go build ./...
@@ -20,6 +20,14 @@ lint:
 
 vuln:
 	govulncheck ./...
+
+generate:
+	buf lint
+	buf generate
+
+generate-check:
+	buf generate
+	git diff --exit-code
 
 clean:
 	rm -rf bin
