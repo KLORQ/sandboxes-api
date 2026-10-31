@@ -19,18 +19,20 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SandboxService_Create_FullMethodName       = "/sandboxes.local.v1.SandboxService/Create"
-	SandboxService_Get_FullMethodName          = "/sandboxes.local.v1.SandboxService/Get"
-	SandboxService_List_FullMethodName         = "/sandboxes.local.v1.SandboxService/List"
-	SandboxService_Start_FullMethodName        = "/sandboxes.local.v1.SandboxService/Start"
-	SandboxService_Stop_FullMethodName         = "/sandboxes.local.v1.SandboxService/Stop"
-	SandboxService_Delete_FullMethodName       = "/sandboxes.local.v1.SandboxService/Delete"
-	SandboxService_Watch_FullMethodName        = "/sandboxes.local.v1.SandboxService/Watch"
-	SandboxService_Exec_FullMethodName         = "/sandboxes.local.v1.SandboxService/Exec"
-	SandboxService_ExecSession_FullMethodName  = "/sandboxes.local.v1.SandboxService/ExecSession"
-	SandboxService_UpdatePolicy_FullMethodName = "/sandboxes.local.v1.SandboxService/UpdatePolicy"
-	SandboxService_MutatePolicy_FullMethodName = "/sandboxes.local.v1.SandboxService/MutatePolicy"
-	SandboxService_UpdatePorts_FullMethodName  = "/sandboxes.local.v1.SandboxService/UpdatePorts"
+	SandboxService_Create_FullMethodName           = "/sandboxes.local.v1.SandboxService/Create"
+	SandboxService_Get_FullMethodName              = "/sandboxes.local.v1.SandboxService/Get"
+	SandboxService_List_FullMethodName             = "/sandboxes.local.v1.SandboxService/List"
+	SandboxService_Start_FullMethodName            = "/sandboxes.local.v1.SandboxService/Start"
+	SandboxService_Stop_FullMethodName             = "/sandboxes.local.v1.SandboxService/Stop"
+	SandboxService_Delete_FullMethodName           = "/sandboxes.local.v1.SandboxService/Delete"
+	SandboxService_Watch_FullMethodName            = "/sandboxes.local.v1.SandboxService/Watch"
+	SandboxService_Exec_FullMethodName             = "/sandboxes.local.v1.SandboxService/Exec"
+	SandboxService_ExecSession_FullMethodName      = "/sandboxes.local.v1.SandboxService/ExecSession"
+	SandboxService_UpdatePolicy_FullMethodName     = "/sandboxes.local.v1.SandboxService/UpdatePolicy"
+	SandboxService_MutatePolicy_FullMethodName     = "/sandboxes.local.v1.SandboxService/MutatePolicy"
+	SandboxService_UpdatePorts_FullMethodName      = "/sandboxes.local.v1.SandboxService/UpdatePorts"
+	SandboxService_GetPolicyProfile_FullMethodName = "/sandboxes.local.v1.SandboxService/GetPolicyProfile"
+	SandboxService_SetPolicyProfile_FullMethodName = "/sandboxes.local.v1.SandboxService/SetPolicyProfile"
 )
 
 // SandboxServiceClient is the client API for SandboxService service.
@@ -49,6 +51,8 @@ type SandboxServiceClient interface {
 	UpdatePolicy(ctx context.Context, in *UpdatePolicyRequest, opts ...grpc.CallOption) (*UpdatePolicyResponse, error)
 	MutatePolicy(ctx context.Context, in *MutatePolicyRequest, opts ...grpc.CallOption) (*MutatePolicyResponse, error)
 	UpdatePorts(ctx context.Context, in *UpdatePortsRequest, opts ...grpc.CallOption) (*UpdatePortsResponse, error)
+	GetPolicyProfile(ctx context.Context, in *GetPolicyProfileRequest, opts ...grpc.CallOption) (*GetPolicyProfileResponse, error)
+	SetPolicyProfile(ctx context.Context, in *SetPolicyProfileRequest, opts ...grpc.CallOption) (*SetPolicyProfileResponse, error)
 }
 
 type sandboxServiceClient struct {
@@ -200,6 +204,26 @@ func (c *sandboxServiceClient) UpdatePorts(ctx context.Context, in *UpdatePortsR
 	return out, nil
 }
 
+func (c *sandboxServiceClient) GetPolicyProfile(ctx context.Context, in *GetPolicyProfileRequest, opts ...grpc.CallOption) (*GetPolicyProfileResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPolicyProfileResponse)
+	err := c.cc.Invoke(ctx, SandboxService_GetPolicyProfile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sandboxServiceClient) SetPolicyProfile(ctx context.Context, in *SetPolicyProfileRequest, opts ...grpc.CallOption) (*SetPolicyProfileResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetPolicyProfileResponse)
+	err := c.cc.Invoke(ctx, SandboxService_SetPolicyProfile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SandboxServiceServer is the server API for SandboxService service.
 // All implementations must embed UnimplementedSandboxServiceServer
 // for forward compatibility.
@@ -216,6 +240,8 @@ type SandboxServiceServer interface {
 	UpdatePolicy(context.Context, *UpdatePolicyRequest) (*UpdatePolicyResponse, error)
 	MutatePolicy(context.Context, *MutatePolicyRequest) (*MutatePolicyResponse, error)
 	UpdatePorts(context.Context, *UpdatePortsRequest) (*UpdatePortsResponse, error)
+	GetPolicyProfile(context.Context, *GetPolicyProfileRequest) (*GetPolicyProfileResponse, error)
+	SetPolicyProfile(context.Context, *SetPolicyProfileRequest) (*SetPolicyProfileResponse, error)
 	mustEmbedUnimplementedSandboxServiceServer()
 }
 
@@ -261,6 +287,12 @@ func (UnimplementedSandboxServiceServer) MutatePolicy(context.Context, *MutatePo
 }
 func (UnimplementedSandboxServiceServer) UpdatePorts(context.Context, *UpdatePortsRequest) (*UpdatePortsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdatePorts not implemented")
+}
+func (UnimplementedSandboxServiceServer) GetPolicyProfile(context.Context, *GetPolicyProfileRequest) (*GetPolicyProfileResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetPolicyProfile not implemented")
+}
+func (UnimplementedSandboxServiceServer) SetPolicyProfile(context.Context, *SetPolicyProfileRequest) (*SetPolicyProfileResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetPolicyProfile not implemented")
 }
 func (UnimplementedSandboxServiceServer) mustEmbedUnimplementedSandboxServiceServer() {}
 func (UnimplementedSandboxServiceServer) testEmbeddedByValue()                        {}
@@ -474,6 +506,42 @@ func _SandboxService_UpdatePorts_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SandboxService_GetPolicyProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPolicyProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).GetPolicyProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_GetPolicyProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).GetPolicyProfile(ctx, req.(*GetPolicyProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SandboxService_SetPolicyProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetPolicyProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).SetPolicyProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_SetPolicyProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).SetPolicyProfile(ctx, req.(*SetPolicyProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SandboxService_ServiceDesc is the grpc.ServiceDesc for SandboxService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -516,6 +584,14 @@ var SandboxService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdatePorts",
 			Handler:    _SandboxService_UpdatePorts_Handler,
+		},
+		{
+			MethodName: "GetPolicyProfile",
+			Handler:    _SandboxService_GetPolicyProfile_Handler,
+		},
+		{
+			MethodName: "SetPolicyProfile",
+			Handler:    _SandboxService_SetPolicyProfile_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
