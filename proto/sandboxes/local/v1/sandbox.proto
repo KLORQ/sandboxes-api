@@ -334,8 +334,16 @@ message UpdatePortsResponse {
   Sandbox sandbox = 1;
 }
 
+message GetVersionRequest {}
+
+message GetVersionResponse {
+  string version = 1;
+  string api_version = 2;
+}
+
 service SandboxService {
   rpc Create(CreateRequest) returns (CreateResponse);
+  rpc GetVersion(GetVersionRequest) returns (GetVersionResponse);
   rpc Get(GetRequest) returns (GetResponse);
   rpc List(ListRequest) returns (ListResponse);
   rpc Start(StartRequest) returns (StartResponse);
