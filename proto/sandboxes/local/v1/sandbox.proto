@@ -33,6 +33,30 @@ enum OperationState {
   OPERATION_STATE_FAILED = 4;
 }
 
+enum RegistryCredentialScope {
+  REGISTRY_CREDENTIAL_SCOPE_UNSPECIFIED = 0;
+  REGISTRY_CREDENTIAL_SCOPE_HOST_ONLY = 1;
+  REGISTRY_CREDENTIAL_SCOPE_ALL_SANDBOXES = 2;
+  REGISTRY_CREDENTIAL_SCOPE_SANDBOX = 3;
+}
+
+message NetworkRule {
+  string protocol = 1;
+  string cidr = 2;
+  uint32 port = 3;
+}
+
+message Port {
+  uint32 host = 1;
+  uint32 guest = 2;
+  string protocol = 3;
+}
+
+message Workspace {
+  string path = 1;
+  bool read_only = 2;
+}
+
 message Sandbox {
   string id = 1;
   string name = 2;
@@ -43,6 +67,17 @@ message Sandbox {
   string error = 7;
   int64 created_at_unix = 8;
   int64 updated_at_unix = 9;
+  uint32 cpus = 10;
+  uint32 memory_mib = 11;
+  int64 stopped_at_unix = 12;
+  repeated Workspace workspaces = 13;
+  repeated Port ports = 14;
+  repeated NetworkRule allow = 15;
+  repeated NetworkRule deny = 16;
+  string agent = 17;
+  bool detached = 18;
+  int64 last_used_at_unix = 19;
+  int64 last_used_at_unix_nano = 20;
 }
 
 message Operation {
@@ -61,6 +96,15 @@ message CreateRequest {
   string image = 2;
   string workspace = 3;
   string idempotency_key = 4;
+  // Zero selects the daemon default for each resource.
+  uint32 cpus = 5;
+  uint32 memory_mib = 6;
+  repeated Workspace workspaces = 7;
+  repeated Port ports = 8;
+  repeated NetworkRule allow = 9;
+  repeated NetworkRule deny = 10;
+  string agent = 11;
+  bool detached = 12;
 }
 
 message GetRequest {
@@ -131,12 +175,160 @@ message DeleteResponse {
   Operation operation = 1;
 }
 
+message ExecRequest {
+  string sandbox_id = 1;
+  repeated string argv = 2;
+  string workdir = 3;
+  // Explicit KEY=VALUE overrides. Host environment variables are never copied.
+  repeated string env = 4;
+  // Numeric uid[:gid] or local guest user/group names when supported by the guest.
+  string user = 5;
+}
+
+message ExecResponse {
+  oneof frame {
+    bytes stdout = 1;
+    bytes stderr = 2;
+    int32 exit_code = 3;
+  }
+}
+
+// The first frame opens a session. Subsequent frames carry input, terminal
+// resize events, or an explicit stdin EOF.
+message ExecSessionOpen {
+  string sandbox_id = 1;
+  repeated string argv = 2;
+  string workdir = 3;
+  bool tty = 4;
+  uint32 rows = 5;
+  uint32 cols = 6;
+  // Explicit KEY=VALUE overrides. Host environment variables are never copied.
+  repeated string env = 7;
+  // Numeric uid[:gid] or local guest user/group names when supported by the guest.
+  string user = 8;
+}
+
+message ExecSessionResize {
+  uint32 rows = 1;
+  uint32 cols = 2;
+}
+
+message ExecSessionRequest {
+  oneof frame {
+    ExecSessionOpen open = 1;
+    bytes stdin = 2;
+    ExecSessionResize resize = 3;
+    bool stdin_eof = 4;
+  }
+}
+
+message ExecSessionResponse {
+  oneof frame {
+    bytes stdout = 1;
+    bytes stderr = 2;
+    int32 exit_code = 3;
+  }
+}
+
 message OperationServiceGetResponse {
   Operation operation = 1;
 }
 
 message OperationServiceWaitResponse {
   Operation operation = 1;
+}
+
+message RegistryCredentialServiceLoginRequest {
+  string registry = 1;
+  string username = 2;
+  bytes password = 3;
+  RegistryCredentialScope scope = 4;
+  string sandbox_name = 5;
+}
+
+message RegistryCredentialServiceLoginResponse {
+  string registry = 1;
+  string username = 2;
+  RegistryCredentialScope scope = 3;
+  string sandbox_name = 4;
+}
+
+message RegistryCredentialServiceLogoutRequest {
+  string registry = 1;
+  RegistryCredentialScope scope = 2;
+  string sandbox_name = 3;
+}
+
+message RegistryCredentialServiceListRequest {}
+
+message RegistryCredentialSummary {
+  string registry = 1;
+  string username = 2;
+  string scope = 3;
+  string sandbox_name = 4;
+}
+
+message RegistryCredentialServiceListResponse {
+  repeated RegistryCredentialSummary credentials = 1;
+}
+
+message RegistryCredentialServiceLogoutResponse {
+  bool removed = 1;
+}
+
+message AccountServiceLoginRequest {
+  string provider = 1;
+}
+
+message AccountServiceLoginResponse {
+  string provider = 1;
+  bool authenticated = 2;
+}
+
+message AccountServiceLoginWithPATRequest {
+  string username = 1;
+  bytes password = 2;
+}
+
+message AccountServiceLoginWithPATResponse {
+  bool authenticated = 1;
+}
+
+message AccountServiceLogoutRequest {
+  string provider = 1;
+}
+
+message AccountServiceLogoutResponse {
+  bool removed = 1;
+}
+
+message UpdatePolicyRequest {
+  string id = 1;
+  repeated NetworkRule allow = 2;
+  repeated NetworkRule deny = 3;
+}
+
+message UpdatePolicyResponse {
+  Sandbox sandbox = 1;
+}
+
+message MutatePolicyRequest {
+  string id = 1;
+  string action = 2;
+  NetworkRule rule = 3;
+}
+
+message MutatePolicyResponse {
+  Sandbox sandbox = 1;
+}
+
+message UpdatePortsRequest {
+  string id = 1;
+  repeated Port ports = 2;
+}
+
+message UpdatePortsResponse {
+  Sandbox sandbox = 1;
 }
 
 service SandboxService {
@@ -147,9 +339,26 @@ service SandboxService {
   rpc Stop(StopRequest) returns (StopResponse);
   rpc Delete(DeleteRequest) returns (DeleteResponse);
   rpc Watch(WatchRequest) returns (stream WatchResponse);
+  rpc Exec(ExecRequest) returns (stream ExecResponse);
+  rpc ExecSession(stream ExecSessionRequest) returns (stream ExecSessionResponse);
+  rpc UpdatePolicy(UpdatePolicyRequest) returns (UpdatePolicyResponse);
+  rpc MutatePolicy(MutatePolicyRequest) returns (MutatePolicyResponse);
+  rpc UpdatePorts(UpdatePortsRequest) returns (UpdatePortsResponse);
 }
 
 service OperationService {
   rpc Get(OperationServiceGetRequest) returns (OperationServiceGetResponse);
   rpc Wait(OperationServiceWaitRequest) returns (OperationServiceWaitResponse);
+}
+
+service RegistryCredentialService {
+  rpc Login(RegistryCredentialServiceLoginRequest) returns (RegistryCredentialServiceLoginResponse);
+  rpc Logout(RegistryCredentialServiceLogoutRequest) returns (RegistryCredentialServiceLogoutResponse);
+  rpc List(RegistryCredentialServiceListRequest) returns (RegistryCredentialServiceListResponse);
+}
+
+service AccountService {
+  rpc Login(AccountServiceLoginRequest) returns (AccountServiceLoginResponse);
+  rpc LoginWithPAT(AccountServiceLoginWithPATRequest) returns (AccountServiceLoginWithPATResponse);
+  rpc Logout(AccountServiceLogoutRequest) returns (AccountServiceLogoutResponse);
 }

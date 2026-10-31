@@ -19,13 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SandboxService_Create_FullMethodName = "/sandboxes.local.v1.SandboxService/Create"
-	SandboxService_Get_FullMethodName    = "/sandboxes.local.v1.SandboxService/Get"
-	SandboxService_List_FullMethodName   = "/sandboxes.local.v1.SandboxService/List"
-	SandboxService_Start_FullMethodName  = "/sandboxes.local.v1.SandboxService/Start"
-	SandboxService_Stop_FullMethodName   = "/sandboxes.local.v1.SandboxService/Stop"
-	SandboxService_Delete_FullMethodName = "/sandboxes.local.v1.SandboxService/Delete"
-	SandboxService_Watch_FullMethodName  = "/sandboxes.local.v1.SandboxService/Watch"
+	SandboxService_Create_FullMethodName       = "/sandboxes.local.v1.SandboxService/Create"
+	SandboxService_Get_FullMethodName          = "/sandboxes.local.v1.SandboxService/Get"
+	SandboxService_List_FullMethodName         = "/sandboxes.local.v1.SandboxService/List"
+	SandboxService_Start_FullMethodName        = "/sandboxes.local.v1.SandboxService/Start"
+	SandboxService_Stop_FullMethodName         = "/sandboxes.local.v1.SandboxService/Stop"
+	SandboxService_Delete_FullMethodName       = "/sandboxes.local.v1.SandboxService/Delete"
+	SandboxService_Watch_FullMethodName        = "/sandboxes.local.v1.SandboxService/Watch"
+	SandboxService_Exec_FullMethodName         = "/sandboxes.local.v1.SandboxService/Exec"
+	SandboxService_ExecSession_FullMethodName  = "/sandboxes.local.v1.SandboxService/ExecSession"
+	SandboxService_UpdatePolicy_FullMethodName = "/sandboxes.local.v1.SandboxService/UpdatePolicy"
+	SandboxService_MutatePolicy_FullMethodName = "/sandboxes.local.v1.SandboxService/MutatePolicy"
+	SandboxService_UpdatePorts_FullMethodName  = "/sandboxes.local.v1.SandboxService/UpdatePorts"
 )
 
 // SandboxServiceClient is the client API for SandboxService service.
@@ -39,6 +44,11 @@ type SandboxServiceClient interface {
 	Stop(ctx context.Context, in *StopRequest, opts ...grpc.CallOption) (*StopResponse, error)
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
 	Watch(ctx context.Context, in *WatchRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[WatchResponse], error)
+	Exec(ctx context.Context, in *ExecRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ExecResponse], error)
+	ExecSession(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[ExecSessionRequest, ExecSessionResponse], error)
+	UpdatePolicy(ctx context.Context, in *UpdatePolicyRequest, opts ...grpc.CallOption) (*UpdatePolicyResponse, error)
+	MutatePolicy(ctx context.Context, in *MutatePolicyRequest, opts ...grpc.CallOption) (*MutatePolicyResponse, error)
+	UpdatePorts(ctx context.Context, in *UpdatePortsRequest, opts ...grpc.CallOption) (*UpdatePortsResponse, error)
 }
 
 type sandboxServiceClient struct {
@@ -128,6 +138,68 @@ func (c *sandboxServiceClient) Watch(ctx context.Context, in *WatchRequest, opts
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type SandboxService_WatchClient = grpc.ServerStreamingClient[WatchResponse]
 
+func (c *sandboxServiceClient) Exec(ctx context.Context, in *ExecRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ExecResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &SandboxService_ServiceDesc.Streams[1], SandboxService_Exec_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[ExecRequest, ExecResponse]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type SandboxService_ExecClient = grpc.ServerStreamingClient[ExecResponse]
+
+func (c *sandboxServiceClient) ExecSession(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[ExecSessionRequest, ExecSessionResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &SandboxService_ServiceDesc.Streams[2], SandboxService_ExecSession_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[ExecSessionRequest, ExecSessionResponse]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type SandboxService_ExecSessionClient = grpc.BidiStreamingClient[ExecSessionRequest, ExecSessionResponse]
+
+func (c *sandboxServiceClient) UpdatePolicy(ctx context.Context, in *UpdatePolicyRequest, opts ...grpc.CallOption) (*UpdatePolicyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdatePolicyResponse)
+	err := c.cc.Invoke(ctx, SandboxService_UpdatePolicy_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sandboxServiceClient) MutatePolicy(ctx context.Context, in *MutatePolicyRequest, opts ...grpc.CallOption) (*MutatePolicyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MutatePolicyResponse)
+	err := c.cc.Invoke(ctx, SandboxService_MutatePolicy_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sandboxServiceClient) UpdatePorts(ctx context.Context, in *UpdatePortsRequest, opts ...grpc.CallOption) (*UpdatePortsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdatePortsResponse)
+	err := c.cc.Invoke(ctx, SandboxService_UpdatePorts_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SandboxServiceServer is the server API for SandboxService service.
 // All implementations must embed UnimplementedSandboxServiceServer
 // for forward compatibility.
@@ -139,6 +211,11 @@ type SandboxServiceServer interface {
 	Stop(context.Context, *StopRequest) (*StopResponse, error)
 	Delete(context.Context, *DeleteRequest) (*DeleteResponse, error)
 	Watch(*WatchRequest, grpc.ServerStreamingServer[WatchResponse]) error
+	Exec(*ExecRequest, grpc.ServerStreamingServer[ExecResponse]) error
+	ExecSession(grpc.BidiStreamingServer[ExecSessionRequest, ExecSessionResponse]) error
+	UpdatePolicy(context.Context, *UpdatePolicyRequest) (*UpdatePolicyResponse, error)
+	MutatePolicy(context.Context, *MutatePolicyRequest) (*MutatePolicyResponse, error)
+	UpdatePorts(context.Context, *UpdatePortsRequest) (*UpdatePortsResponse, error)
 	mustEmbedUnimplementedSandboxServiceServer()
 }
 
@@ -169,6 +246,21 @@ func (UnimplementedSandboxServiceServer) Delete(context.Context, *DeleteRequest)
 }
 func (UnimplementedSandboxServiceServer) Watch(*WatchRequest, grpc.ServerStreamingServer[WatchResponse]) error {
 	return status.Error(codes.Unimplemented, "method Watch not implemented")
+}
+func (UnimplementedSandboxServiceServer) Exec(*ExecRequest, grpc.ServerStreamingServer[ExecResponse]) error {
+	return status.Error(codes.Unimplemented, "method Exec not implemented")
+}
+func (UnimplementedSandboxServiceServer) ExecSession(grpc.BidiStreamingServer[ExecSessionRequest, ExecSessionResponse]) error {
+	return status.Error(codes.Unimplemented, "method ExecSession not implemented")
+}
+func (UnimplementedSandboxServiceServer) UpdatePolicy(context.Context, *UpdatePolicyRequest) (*UpdatePolicyResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdatePolicy not implemented")
+}
+func (UnimplementedSandboxServiceServer) MutatePolicy(context.Context, *MutatePolicyRequest) (*MutatePolicyResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method MutatePolicy not implemented")
+}
+func (UnimplementedSandboxServiceServer) UpdatePorts(context.Context, *UpdatePortsRequest) (*UpdatePortsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdatePorts not implemented")
 }
 func (UnimplementedSandboxServiceServer) mustEmbedUnimplementedSandboxServiceServer() {}
 func (UnimplementedSandboxServiceServer) testEmbeddedByValue()                        {}
@@ -310,6 +402,78 @@ func _SandboxService_Watch_Handler(srv interface{}, stream grpc.ServerStream) er
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type SandboxService_WatchServer = grpc.ServerStreamingServer[WatchResponse]
 
+func _SandboxService_Exec_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(ExecRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(SandboxServiceServer).Exec(m, &grpc.GenericServerStream[ExecRequest, ExecResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type SandboxService_ExecServer = grpc.ServerStreamingServer[ExecResponse]
+
+func _SandboxService_ExecSession_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(SandboxServiceServer).ExecSession(&grpc.GenericServerStream[ExecSessionRequest, ExecSessionResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type SandboxService_ExecSessionServer = grpc.BidiStreamingServer[ExecSessionRequest, ExecSessionResponse]
+
+func _SandboxService_UpdatePolicy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePolicyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).UpdatePolicy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_UpdatePolicy_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).UpdatePolicy(ctx, req.(*UpdatePolicyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SandboxService_MutatePolicy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MutatePolicyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).MutatePolicy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_MutatePolicy_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).MutatePolicy(ctx, req.(*MutatePolicyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SandboxService_UpdatePorts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePortsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).UpdatePorts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_UpdatePorts_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).UpdatePorts(ctx, req.(*UpdatePortsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SandboxService_ServiceDesc is the grpc.ServiceDesc for SandboxService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -341,12 +505,35 @@ var SandboxService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "Delete",
 			Handler:    _SandboxService_Delete_Handler,
 		},
+		{
+			MethodName: "UpdatePolicy",
+			Handler:    _SandboxService_UpdatePolicy_Handler,
+		},
+		{
+			MethodName: "MutatePolicy",
+			Handler:    _SandboxService_MutatePolicy_Handler,
+		},
+		{
+			MethodName: "UpdatePorts",
+			Handler:    _SandboxService_UpdatePorts_Handler,
+		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "Watch",
 			Handler:       _SandboxService_Watch_Handler,
 			ServerStreams: true,
+		},
+		{
+			StreamName:    "Exec",
+			Handler:       _SandboxService_Exec_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "ExecSession",
+			Handler:       _SandboxService_ExecSession_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
 		},
 	},
 	Metadata: "sandboxes/local/v1/sandbox.proto",
@@ -486,6 +673,363 @@ var OperationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Wait",
 			Handler:    _OperationService_Wait_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "sandboxes/local/v1/sandbox.proto",
+}
+
+const (
+	RegistryCredentialService_Login_FullMethodName  = "/sandboxes.local.v1.RegistryCredentialService/Login"
+	RegistryCredentialService_Logout_FullMethodName = "/sandboxes.local.v1.RegistryCredentialService/Logout"
+	RegistryCredentialService_List_FullMethodName   = "/sandboxes.local.v1.RegistryCredentialService/List"
+)
+
+// RegistryCredentialServiceClient is the client API for RegistryCredentialService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type RegistryCredentialServiceClient interface {
+	Login(ctx context.Context, in *RegistryCredentialServiceLoginRequest, opts ...grpc.CallOption) (*RegistryCredentialServiceLoginResponse, error)
+	Logout(ctx context.Context, in *RegistryCredentialServiceLogoutRequest, opts ...grpc.CallOption) (*RegistryCredentialServiceLogoutResponse, error)
+	List(ctx context.Context, in *RegistryCredentialServiceListRequest, opts ...grpc.CallOption) (*RegistryCredentialServiceListResponse, error)
+}
+
+type registryCredentialServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewRegistryCredentialServiceClient(cc grpc.ClientConnInterface) RegistryCredentialServiceClient {
+	return &registryCredentialServiceClient{cc}
+}
+
+func (c *registryCredentialServiceClient) Login(ctx context.Context, in *RegistryCredentialServiceLoginRequest, opts ...grpc.CallOption) (*RegistryCredentialServiceLoginResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RegistryCredentialServiceLoginResponse)
+	err := c.cc.Invoke(ctx, RegistryCredentialService_Login_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *registryCredentialServiceClient) Logout(ctx context.Context, in *RegistryCredentialServiceLogoutRequest, opts ...grpc.CallOption) (*RegistryCredentialServiceLogoutResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RegistryCredentialServiceLogoutResponse)
+	err := c.cc.Invoke(ctx, RegistryCredentialService_Logout_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *registryCredentialServiceClient) List(ctx context.Context, in *RegistryCredentialServiceListRequest, opts ...grpc.CallOption) (*RegistryCredentialServiceListResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RegistryCredentialServiceListResponse)
+	err := c.cc.Invoke(ctx, RegistryCredentialService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// RegistryCredentialServiceServer is the server API for RegistryCredentialService service.
+// All implementations must embed UnimplementedRegistryCredentialServiceServer
+// for forward compatibility.
+type RegistryCredentialServiceServer interface {
+	Login(context.Context, *RegistryCredentialServiceLoginRequest) (*RegistryCredentialServiceLoginResponse, error)
+	Logout(context.Context, *RegistryCredentialServiceLogoutRequest) (*RegistryCredentialServiceLogoutResponse, error)
+	List(context.Context, *RegistryCredentialServiceListRequest) (*RegistryCredentialServiceListResponse, error)
+	mustEmbedUnimplementedRegistryCredentialServiceServer()
+}
+
+// UnimplementedRegistryCredentialServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedRegistryCredentialServiceServer struct{}
+
+func (UnimplementedRegistryCredentialServiceServer) Login(context.Context, *RegistryCredentialServiceLoginRequest) (*RegistryCredentialServiceLoginResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedRegistryCredentialServiceServer) Logout(context.Context, *RegistryCredentialServiceLogoutRequest) (*RegistryCredentialServiceLogoutResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Logout not implemented")
+}
+func (UnimplementedRegistryCredentialServiceServer) List(context.Context, *RegistryCredentialServiceListRequest) (*RegistryCredentialServiceListResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedRegistryCredentialServiceServer) mustEmbedUnimplementedRegistryCredentialServiceServer() {
+}
+func (UnimplementedRegistryCredentialServiceServer) testEmbeddedByValue() {}
+
+// UnsafeRegistryCredentialServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to RegistryCredentialServiceServer will
+// result in compilation errors.
+type UnsafeRegistryCredentialServiceServer interface {
+	mustEmbedUnimplementedRegistryCredentialServiceServer()
+}
+
+func RegisterRegistryCredentialServiceServer(s grpc.ServiceRegistrar, srv RegistryCredentialServiceServer) {
+	// If the following call panics, it indicates UnimplementedRegistryCredentialServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&RegistryCredentialService_ServiceDesc, srv)
+}
+
+func _RegistryCredentialService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegistryCredentialServiceLoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryCredentialServiceServer).Login(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RegistryCredentialService_Login_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryCredentialServiceServer).Login(ctx, req.(*RegistryCredentialServiceLoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RegistryCredentialService_Logout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegistryCredentialServiceLogoutRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryCredentialServiceServer).Logout(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RegistryCredentialService_Logout_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryCredentialServiceServer).Logout(ctx, req.(*RegistryCredentialServiceLogoutRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RegistryCredentialService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegistryCredentialServiceListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryCredentialServiceServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RegistryCredentialService_List_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryCredentialServiceServer).List(ctx, req.(*RegistryCredentialServiceListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// RegistryCredentialService_ServiceDesc is the grpc.ServiceDesc for RegistryCredentialService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var RegistryCredentialService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "sandboxes.local.v1.RegistryCredentialService",
+	HandlerType: (*RegistryCredentialServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Login",
+			Handler:    _RegistryCredentialService_Login_Handler,
+		},
+		{
+			MethodName: "Logout",
+			Handler:    _RegistryCredentialService_Logout_Handler,
+		},
+		{
+			MethodName: "List",
+			Handler:    _RegistryCredentialService_List_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "sandboxes/local/v1/sandbox.proto",
+}
+
+const (
+	AccountService_Login_FullMethodName        = "/sandboxes.local.v1.AccountService/Login"
+	AccountService_LoginWithPAT_FullMethodName = "/sandboxes.local.v1.AccountService/LoginWithPAT"
+	AccountService_Logout_FullMethodName       = "/sandboxes.local.v1.AccountService/Logout"
+)
+
+// AccountServiceClient is the client API for AccountService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type AccountServiceClient interface {
+	Login(ctx context.Context, in *AccountServiceLoginRequest, opts ...grpc.CallOption) (*AccountServiceLoginResponse, error)
+	LoginWithPAT(ctx context.Context, in *AccountServiceLoginWithPATRequest, opts ...grpc.CallOption) (*AccountServiceLoginWithPATResponse, error)
+	Logout(ctx context.Context, in *AccountServiceLogoutRequest, opts ...grpc.CallOption) (*AccountServiceLogoutResponse, error)
+}
+
+type accountServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewAccountServiceClient(cc grpc.ClientConnInterface) AccountServiceClient {
+	return &accountServiceClient{cc}
+}
+
+func (c *accountServiceClient) Login(ctx context.Context, in *AccountServiceLoginRequest, opts ...grpc.CallOption) (*AccountServiceLoginResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AccountServiceLoginResponse)
+	err := c.cc.Invoke(ctx, AccountService_Login_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accountServiceClient) LoginWithPAT(ctx context.Context, in *AccountServiceLoginWithPATRequest, opts ...grpc.CallOption) (*AccountServiceLoginWithPATResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AccountServiceLoginWithPATResponse)
+	err := c.cc.Invoke(ctx, AccountService_LoginWithPAT_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accountServiceClient) Logout(ctx context.Context, in *AccountServiceLogoutRequest, opts ...grpc.CallOption) (*AccountServiceLogoutResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AccountServiceLogoutResponse)
+	err := c.cc.Invoke(ctx, AccountService_Logout_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// AccountServiceServer is the server API for AccountService service.
+// All implementations must embed UnimplementedAccountServiceServer
+// for forward compatibility.
+type AccountServiceServer interface {
+	Login(context.Context, *AccountServiceLoginRequest) (*AccountServiceLoginResponse, error)
+	LoginWithPAT(context.Context, *AccountServiceLoginWithPATRequest) (*AccountServiceLoginWithPATResponse, error)
+	Logout(context.Context, *AccountServiceLogoutRequest) (*AccountServiceLogoutResponse, error)
+	mustEmbedUnimplementedAccountServiceServer()
+}
+
+// UnimplementedAccountServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedAccountServiceServer struct{}
+
+func (UnimplementedAccountServiceServer) Login(context.Context, *AccountServiceLoginRequest) (*AccountServiceLoginResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedAccountServiceServer) LoginWithPAT(context.Context, *AccountServiceLoginWithPATRequest) (*AccountServiceLoginWithPATResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method LoginWithPAT not implemented")
+}
+func (UnimplementedAccountServiceServer) Logout(context.Context, *AccountServiceLogoutRequest) (*AccountServiceLogoutResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Logout not implemented")
+}
+func (UnimplementedAccountServiceServer) mustEmbedUnimplementedAccountServiceServer() {}
+func (UnimplementedAccountServiceServer) testEmbeddedByValue()                        {}
+
+// UnsafeAccountServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to AccountServiceServer will
+// result in compilation errors.
+type UnsafeAccountServiceServer interface {
+	mustEmbedUnimplementedAccountServiceServer()
+}
+
+func RegisterAccountServiceServer(s grpc.ServiceRegistrar, srv AccountServiceServer) {
+	// If the following call panics, it indicates UnimplementedAccountServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&AccountService_ServiceDesc, srv)
+}
+
+func _AccountService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AccountServiceLoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountServiceServer).Login(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AccountService_Login_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountServiceServer).Login(ctx, req.(*AccountServiceLoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AccountService_LoginWithPAT_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AccountServiceLoginWithPATRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountServiceServer).LoginWithPAT(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AccountService_LoginWithPAT_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountServiceServer).LoginWithPAT(ctx, req.(*AccountServiceLoginWithPATRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AccountService_Logout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AccountServiceLogoutRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountServiceServer).Logout(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AccountService_Logout_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountServiceServer).Logout(ctx, req.(*AccountServiceLogoutRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// AccountService_ServiceDesc is the grpc.ServiceDesc for AccountService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var AccountService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "sandboxes.local.v1.AccountService",
+	HandlerType: (*AccountServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Login",
+			Handler:    _AccountService_Login_Handler,
+		},
+		{
+			MethodName: "LoginWithPAT",
+			Handler:    _AccountService_LoginWithPAT_Handler,
+		},
+		{
+			MethodName: "Logout",
+			Handler:    _AccountService_Logout_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
