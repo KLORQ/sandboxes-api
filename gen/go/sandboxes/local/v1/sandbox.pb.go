@@ -728,14 +728,17 @@ type CreateRequest struct {
 	Workspace      string                 `protobuf:"bytes,3,opt,name=workspace,proto3" json:"workspace,omitempty"`
 	IdempotencyKey string                 `protobuf:"bytes,4,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty"`
 	// Zero selects the daemon default for each resource.
-	Cpus          uint32         `protobuf:"varint,5,opt,name=cpus,proto3" json:"cpus,omitempty"`
-	MemoryMib     uint32         `protobuf:"varint,6,opt,name=memory_mib,json=memoryMib,proto3" json:"memory_mib,omitempty"`
-	Workspaces    []*Workspace   `protobuf:"bytes,7,rep,name=workspaces,proto3" json:"workspaces,omitempty"`
-	Ports         []*Port        `protobuf:"bytes,8,rep,name=ports,proto3" json:"ports,omitempty"`
-	Allow         []*NetworkRule `protobuf:"bytes,9,rep,name=allow,proto3" json:"allow,omitempty"`
-	Deny          []*NetworkRule `protobuf:"bytes,10,rep,name=deny,proto3" json:"deny,omitempty"`
-	Agent         string         `protobuf:"bytes,11,opt,name=agent,proto3" json:"agent,omitempty"`
-	Detached      bool           `protobuf:"varint,12,opt,name=detached,proto3" json:"detached,omitempty"`
+	Cpus       uint32         `protobuf:"varint,5,opt,name=cpus,proto3" json:"cpus,omitempty"`
+	MemoryMib  uint32         `protobuf:"varint,6,opt,name=memory_mib,json=memoryMib,proto3" json:"memory_mib,omitempty"`
+	Workspaces []*Workspace   `protobuf:"bytes,7,rep,name=workspaces,proto3" json:"workspaces,omitempty"`
+	Ports      []*Port        `protobuf:"bytes,8,rep,name=ports,proto3" json:"ports,omitempty"`
+	Allow      []*NetworkRule `protobuf:"bytes,9,rep,name=allow,proto3" json:"allow,omitempty"`
+	Deny       []*NetworkRule `protobuf:"bytes,10,rep,name=deny,proto3" json:"deny,omitempty"`
+	Agent      string         `protobuf:"bytes,11,opt,name=agent,proto3" json:"agent,omitempty"`
+	Detached   bool           `protobuf:"varint,12,opt,name=detached,proto3" json:"detached,omitempty"`
+	// Environment baked into the sandbox for every process, including exec.
+	// Values are not persisted in sandbox state.
+	Env           map[string]string `protobuf:"bytes,13,rep,name=env,proto3" json:"env,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -852,6 +855,13 @@ func (x *CreateRequest) GetDetached() bool {
 		return x.Detached
 	}
 	return false
+}
+
+func (x *CreateRequest) GetEnv() map[string]string {
+	if x != nil {
+		return x.Env
+	}
+	return nil
 }
 
 type GetRequest struct {
@@ -3244,7 +3254,7 @@ const file_sandboxes_local_v1_sandbox_proto_rawDesc = "" +
 	"generation\x12\x14\n" +
 	"\x05error\x18\x06 \x01(\tR\x05error\x12&\n" +
 	"\x0fcreated_at_unix\x18\a \x01(\x03R\rcreatedAtUnix\x12&\n" +
-	"\x0fupdated_at_unix\x18\b \x01(\x03R\rupdatedAtUnix\"\xc0\x03\n" +
+	"\x0fupdated_at_unix\x18\b \x01(\x03R\rupdatedAtUnix\"\xb6\x04\n" +
 	"\rCreateRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
 	"\x05image\x18\x02 \x01(\tR\x05image\x12\x1c\n" +
@@ -3261,7 +3271,11 @@ const file_sandboxes_local_v1_sandbox_proto_rawDesc = "" +
 	"\x04deny\x18\n" +
 	" \x03(\v2\x1f.sandboxes.local.v1.NetworkRuleR\x04deny\x12\x14\n" +
 	"\x05agent\x18\v \x01(\tR\x05agent\x12\x1a\n" +
-	"\bdetached\x18\f \x01(\bR\bdetached\"\x1c\n" +
+	"\bdetached\x18\f \x01(\bR\bdetached\x12<\n" +
+	"\x03env\x18\r \x03(\v2*.sandboxes.local.v1.CreateRequest.EnvEntryR\x03env\x1a6\n" +
+	"\bEnvEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x1c\n" +
 	"\n" +
 	"GetRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"I\n" +
@@ -3465,7 +3479,7 @@ func file_sandboxes_local_v1_sandbox_proto_rawDescGZIP() []byte {
 }
 
 var file_sandboxes_local_v1_sandbox_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_sandboxes_local_v1_sandbox_proto_msgTypes = make([]protoimpl.MessageInfo, 48)
+var file_sandboxes_local_v1_sandbox_proto_msgTypes = make([]protoimpl.MessageInfo, 49)
 var file_sandboxes_local_v1_sandbox_proto_goTypes = []any{
 	(SandboxState)(0),                               // 0: sandboxes.local.v1.SandboxState
 	(OperationKind)(0),                              // 1: sandboxes.local.v1.OperationKind
@@ -3519,6 +3533,7 @@ var file_sandboxes_local_v1_sandbox_proto_goTypes = []any{
 	(*MutatePolicyResponse)(nil),                    // 49: sandboxes.local.v1.MutatePolicyResponse
 	(*UpdatePortsRequest)(nil),                      // 50: sandboxes.local.v1.UpdatePortsRequest
 	(*UpdatePortsResponse)(nil),                     // 51: sandboxes.local.v1.UpdatePortsResponse
+	nil,                                             // 52: sandboxes.local.v1.CreateRequest.EnvEntry
 }
 var file_sandboxes_local_v1_sandbox_proto_depIdxs = []int32{
 	0,  // 0: sandboxes.local.v1.Sandbox.state:type_name -> sandboxes.local.v1.SandboxState
@@ -3532,74 +3547,75 @@ var file_sandboxes_local_v1_sandbox_proto_depIdxs = []int32{
 	5,  // 8: sandboxes.local.v1.CreateRequest.ports:type_name -> sandboxes.local.v1.Port
 	4,  // 9: sandboxes.local.v1.CreateRequest.allow:type_name -> sandboxes.local.v1.NetworkRule
 	4,  // 10: sandboxes.local.v1.CreateRequest.deny:type_name -> sandboxes.local.v1.NetworkRule
-	7,  // 11: sandboxes.local.v1.GetResponse.sandbox:type_name -> sandboxes.local.v1.Sandbox
-	7,  // 12: sandboxes.local.v1.ListResponse.items:type_name -> sandboxes.local.v1.Sandbox
-	7,  // 13: sandboxes.local.v1.WatchResponse.sandbox:type_name -> sandboxes.local.v1.Sandbox
-	8,  // 14: sandboxes.local.v1.WatchResponse.operation:type_name -> sandboxes.local.v1.Operation
-	8,  // 15: sandboxes.local.v1.CreateResponse.operation:type_name -> sandboxes.local.v1.Operation
-	8,  // 16: sandboxes.local.v1.StartResponse.operation:type_name -> sandboxes.local.v1.Operation
-	8,  // 17: sandboxes.local.v1.StopResponse.operation:type_name -> sandboxes.local.v1.Operation
-	8,  // 18: sandboxes.local.v1.DeleteResponse.operation:type_name -> sandboxes.local.v1.Operation
-	27, // 19: sandboxes.local.v1.ExecSessionRequest.open:type_name -> sandboxes.local.v1.ExecSessionOpen
-	28, // 20: sandboxes.local.v1.ExecSessionRequest.resize:type_name -> sandboxes.local.v1.ExecSessionResize
-	8,  // 21: sandboxes.local.v1.OperationServiceGetResponse.operation:type_name -> sandboxes.local.v1.Operation
-	8,  // 22: sandboxes.local.v1.OperationServiceWaitResponse.operation:type_name -> sandboxes.local.v1.Operation
-	3,  // 23: sandboxes.local.v1.RegistryCredentialServiceLoginRequest.scope:type_name -> sandboxes.local.v1.RegistryCredentialScope
-	3,  // 24: sandboxes.local.v1.RegistryCredentialServiceLoginResponse.scope:type_name -> sandboxes.local.v1.RegistryCredentialScope
-	3,  // 25: sandboxes.local.v1.RegistryCredentialServiceLogoutRequest.scope:type_name -> sandboxes.local.v1.RegistryCredentialScope
-	37, // 26: sandboxes.local.v1.RegistryCredentialServiceListResponse.credentials:type_name -> sandboxes.local.v1.RegistryCredentialSummary
-	4,  // 27: sandboxes.local.v1.UpdatePolicyRequest.allow:type_name -> sandboxes.local.v1.NetworkRule
-	4,  // 28: sandboxes.local.v1.UpdatePolicyRequest.deny:type_name -> sandboxes.local.v1.NetworkRule
-	7,  // 29: sandboxes.local.v1.UpdatePolicyResponse.sandbox:type_name -> sandboxes.local.v1.Sandbox
-	4,  // 30: sandboxes.local.v1.MutatePolicyRequest.rule:type_name -> sandboxes.local.v1.NetworkRule
-	7,  // 31: sandboxes.local.v1.MutatePolicyResponse.sandbox:type_name -> sandboxes.local.v1.Sandbox
-	5,  // 32: sandboxes.local.v1.UpdatePortsRequest.ports:type_name -> sandboxes.local.v1.Port
-	7,  // 33: sandboxes.local.v1.UpdatePortsResponse.sandbox:type_name -> sandboxes.local.v1.Sandbox
-	9,  // 34: sandboxes.local.v1.SandboxService.Create:input_type -> sandboxes.local.v1.CreateRequest
-	10, // 35: sandboxes.local.v1.SandboxService.Get:input_type -> sandboxes.local.v1.GetRequest
-	11, // 36: sandboxes.local.v1.SandboxService.List:input_type -> sandboxes.local.v1.ListRequest
-	14, // 37: sandboxes.local.v1.SandboxService.Start:input_type -> sandboxes.local.v1.StartRequest
-	15, // 38: sandboxes.local.v1.SandboxService.Stop:input_type -> sandboxes.local.v1.StopRequest
-	16, // 39: sandboxes.local.v1.SandboxService.Delete:input_type -> sandboxes.local.v1.DeleteRequest
-	19, // 40: sandboxes.local.v1.SandboxService.Watch:input_type -> sandboxes.local.v1.WatchRequest
-	25, // 41: sandboxes.local.v1.SandboxService.Exec:input_type -> sandboxes.local.v1.ExecRequest
-	29, // 42: sandboxes.local.v1.SandboxService.ExecSession:input_type -> sandboxes.local.v1.ExecSessionRequest
-	46, // 43: sandboxes.local.v1.SandboxService.UpdatePolicy:input_type -> sandboxes.local.v1.UpdatePolicyRequest
-	48, // 44: sandboxes.local.v1.SandboxService.MutatePolicy:input_type -> sandboxes.local.v1.MutatePolicyRequest
-	50, // 45: sandboxes.local.v1.SandboxService.UpdatePorts:input_type -> sandboxes.local.v1.UpdatePortsRequest
-	17, // 46: sandboxes.local.v1.OperationService.Get:input_type -> sandboxes.local.v1.OperationServiceGetRequest
-	18, // 47: sandboxes.local.v1.OperationService.Wait:input_type -> sandboxes.local.v1.OperationServiceWaitRequest
-	33, // 48: sandboxes.local.v1.RegistryCredentialService.Login:input_type -> sandboxes.local.v1.RegistryCredentialServiceLoginRequest
-	35, // 49: sandboxes.local.v1.RegistryCredentialService.Logout:input_type -> sandboxes.local.v1.RegistryCredentialServiceLogoutRequest
-	36, // 50: sandboxes.local.v1.RegistryCredentialService.List:input_type -> sandboxes.local.v1.RegistryCredentialServiceListRequest
-	40, // 51: sandboxes.local.v1.AccountService.Login:input_type -> sandboxes.local.v1.AccountServiceLoginRequest
-	42, // 52: sandboxes.local.v1.AccountService.LoginWithPAT:input_type -> sandboxes.local.v1.AccountServiceLoginWithPATRequest
-	44, // 53: sandboxes.local.v1.AccountService.Logout:input_type -> sandboxes.local.v1.AccountServiceLogoutRequest
-	21, // 54: sandboxes.local.v1.SandboxService.Create:output_type -> sandboxes.local.v1.CreateResponse
-	12, // 55: sandboxes.local.v1.SandboxService.Get:output_type -> sandboxes.local.v1.GetResponse
-	13, // 56: sandboxes.local.v1.SandboxService.List:output_type -> sandboxes.local.v1.ListResponse
-	22, // 57: sandboxes.local.v1.SandboxService.Start:output_type -> sandboxes.local.v1.StartResponse
-	23, // 58: sandboxes.local.v1.SandboxService.Stop:output_type -> sandboxes.local.v1.StopResponse
-	24, // 59: sandboxes.local.v1.SandboxService.Delete:output_type -> sandboxes.local.v1.DeleteResponse
-	20, // 60: sandboxes.local.v1.SandboxService.Watch:output_type -> sandboxes.local.v1.WatchResponse
-	26, // 61: sandboxes.local.v1.SandboxService.Exec:output_type -> sandboxes.local.v1.ExecResponse
-	30, // 62: sandboxes.local.v1.SandboxService.ExecSession:output_type -> sandboxes.local.v1.ExecSessionResponse
-	47, // 63: sandboxes.local.v1.SandboxService.UpdatePolicy:output_type -> sandboxes.local.v1.UpdatePolicyResponse
-	49, // 64: sandboxes.local.v1.SandboxService.MutatePolicy:output_type -> sandboxes.local.v1.MutatePolicyResponse
-	51, // 65: sandboxes.local.v1.SandboxService.UpdatePorts:output_type -> sandboxes.local.v1.UpdatePortsResponse
-	31, // 66: sandboxes.local.v1.OperationService.Get:output_type -> sandboxes.local.v1.OperationServiceGetResponse
-	32, // 67: sandboxes.local.v1.OperationService.Wait:output_type -> sandboxes.local.v1.OperationServiceWaitResponse
-	34, // 68: sandboxes.local.v1.RegistryCredentialService.Login:output_type -> sandboxes.local.v1.RegistryCredentialServiceLoginResponse
-	39, // 69: sandboxes.local.v1.RegistryCredentialService.Logout:output_type -> sandboxes.local.v1.RegistryCredentialServiceLogoutResponse
-	38, // 70: sandboxes.local.v1.RegistryCredentialService.List:output_type -> sandboxes.local.v1.RegistryCredentialServiceListResponse
-	41, // 71: sandboxes.local.v1.AccountService.Login:output_type -> sandboxes.local.v1.AccountServiceLoginResponse
-	43, // 72: sandboxes.local.v1.AccountService.LoginWithPAT:output_type -> sandboxes.local.v1.AccountServiceLoginWithPATResponse
-	45, // 73: sandboxes.local.v1.AccountService.Logout:output_type -> sandboxes.local.v1.AccountServiceLogoutResponse
-	54, // [54:74] is the sub-list for method output_type
-	34, // [34:54] is the sub-list for method input_type
-	34, // [34:34] is the sub-list for extension type_name
-	34, // [34:34] is the sub-list for extension extendee
-	0,  // [0:34] is the sub-list for field type_name
+	52, // 11: sandboxes.local.v1.CreateRequest.env:type_name -> sandboxes.local.v1.CreateRequest.EnvEntry
+	7,  // 12: sandboxes.local.v1.GetResponse.sandbox:type_name -> sandboxes.local.v1.Sandbox
+	7,  // 13: sandboxes.local.v1.ListResponse.items:type_name -> sandboxes.local.v1.Sandbox
+	7,  // 14: sandboxes.local.v1.WatchResponse.sandbox:type_name -> sandboxes.local.v1.Sandbox
+	8,  // 15: sandboxes.local.v1.WatchResponse.operation:type_name -> sandboxes.local.v1.Operation
+	8,  // 16: sandboxes.local.v1.CreateResponse.operation:type_name -> sandboxes.local.v1.Operation
+	8,  // 17: sandboxes.local.v1.StartResponse.operation:type_name -> sandboxes.local.v1.Operation
+	8,  // 18: sandboxes.local.v1.StopResponse.operation:type_name -> sandboxes.local.v1.Operation
+	8,  // 19: sandboxes.local.v1.DeleteResponse.operation:type_name -> sandboxes.local.v1.Operation
+	27, // 20: sandboxes.local.v1.ExecSessionRequest.open:type_name -> sandboxes.local.v1.ExecSessionOpen
+	28, // 21: sandboxes.local.v1.ExecSessionRequest.resize:type_name -> sandboxes.local.v1.ExecSessionResize
+	8,  // 22: sandboxes.local.v1.OperationServiceGetResponse.operation:type_name -> sandboxes.local.v1.Operation
+	8,  // 23: sandboxes.local.v1.OperationServiceWaitResponse.operation:type_name -> sandboxes.local.v1.Operation
+	3,  // 24: sandboxes.local.v1.RegistryCredentialServiceLoginRequest.scope:type_name -> sandboxes.local.v1.RegistryCredentialScope
+	3,  // 25: sandboxes.local.v1.RegistryCredentialServiceLoginResponse.scope:type_name -> sandboxes.local.v1.RegistryCredentialScope
+	3,  // 26: sandboxes.local.v1.RegistryCredentialServiceLogoutRequest.scope:type_name -> sandboxes.local.v1.RegistryCredentialScope
+	37, // 27: sandboxes.local.v1.RegistryCredentialServiceListResponse.credentials:type_name -> sandboxes.local.v1.RegistryCredentialSummary
+	4,  // 28: sandboxes.local.v1.UpdatePolicyRequest.allow:type_name -> sandboxes.local.v1.NetworkRule
+	4,  // 29: sandboxes.local.v1.UpdatePolicyRequest.deny:type_name -> sandboxes.local.v1.NetworkRule
+	7,  // 30: sandboxes.local.v1.UpdatePolicyResponse.sandbox:type_name -> sandboxes.local.v1.Sandbox
+	4,  // 31: sandboxes.local.v1.MutatePolicyRequest.rule:type_name -> sandboxes.local.v1.NetworkRule
+	7,  // 32: sandboxes.local.v1.MutatePolicyResponse.sandbox:type_name -> sandboxes.local.v1.Sandbox
+	5,  // 33: sandboxes.local.v1.UpdatePortsRequest.ports:type_name -> sandboxes.local.v1.Port
+	7,  // 34: sandboxes.local.v1.UpdatePortsResponse.sandbox:type_name -> sandboxes.local.v1.Sandbox
+	9,  // 35: sandboxes.local.v1.SandboxService.Create:input_type -> sandboxes.local.v1.CreateRequest
+	10, // 36: sandboxes.local.v1.SandboxService.Get:input_type -> sandboxes.local.v1.GetRequest
+	11, // 37: sandboxes.local.v1.SandboxService.List:input_type -> sandboxes.local.v1.ListRequest
+	14, // 38: sandboxes.local.v1.SandboxService.Start:input_type -> sandboxes.local.v1.StartRequest
+	15, // 39: sandboxes.local.v1.SandboxService.Stop:input_type -> sandboxes.local.v1.StopRequest
+	16, // 40: sandboxes.local.v1.SandboxService.Delete:input_type -> sandboxes.local.v1.DeleteRequest
+	19, // 41: sandboxes.local.v1.SandboxService.Watch:input_type -> sandboxes.local.v1.WatchRequest
+	25, // 42: sandboxes.local.v1.SandboxService.Exec:input_type -> sandboxes.local.v1.ExecRequest
+	29, // 43: sandboxes.local.v1.SandboxService.ExecSession:input_type -> sandboxes.local.v1.ExecSessionRequest
+	46, // 44: sandboxes.local.v1.SandboxService.UpdatePolicy:input_type -> sandboxes.local.v1.UpdatePolicyRequest
+	48, // 45: sandboxes.local.v1.SandboxService.MutatePolicy:input_type -> sandboxes.local.v1.MutatePolicyRequest
+	50, // 46: sandboxes.local.v1.SandboxService.UpdatePorts:input_type -> sandboxes.local.v1.UpdatePortsRequest
+	17, // 47: sandboxes.local.v1.OperationService.Get:input_type -> sandboxes.local.v1.OperationServiceGetRequest
+	18, // 48: sandboxes.local.v1.OperationService.Wait:input_type -> sandboxes.local.v1.OperationServiceWaitRequest
+	33, // 49: sandboxes.local.v1.RegistryCredentialService.Login:input_type -> sandboxes.local.v1.RegistryCredentialServiceLoginRequest
+	35, // 50: sandboxes.local.v1.RegistryCredentialService.Logout:input_type -> sandboxes.local.v1.RegistryCredentialServiceLogoutRequest
+	36, // 51: sandboxes.local.v1.RegistryCredentialService.List:input_type -> sandboxes.local.v1.RegistryCredentialServiceListRequest
+	40, // 52: sandboxes.local.v1.AccountService.Login:input_type -> sandboxes.local.v1.AccountServiceLoginRequest
+	42, // 53: sandboxes.local.v1.AccountService.LoginWithPAT:input_type -> sandboxes.local.v1.AccountServiceLoginWithPATRequest
+	44, // 54: sandboxes.local.v1.AccountService.Logout:input_type -> sandboxes.local.v1.AccountServiceLogoutRequest
+	21, // 55: sandboxes.local.v1.SandboxService.Create:output_type -> sandboxes.local.v1.CreateResponse
+	12, // 56: sandboxes.local.v1.SandboxService.Get:output_type -> sandboxes.local.v1.GetResponse
+	13, // 57: sandboxes.local.v1.SandboxService.List:output_type -> sandboxes.local.v1.ListResponse
+	22, // 58: sandboxes.local.v1.SandboxService.Start:output_type -> sandboxes.local.v1.StartResponse
+	23, // 59: sandboxes.local.v1.SandboxService.Stop:output_type -> sandboxes.local.v1.StopResponse
+	24, // 60: sandboxes.local.v1.SandboxService.Delete:output_type -> sandboxes.local.v1.DeleteResponse
+	20, // 61: sandboxes.local.v1.SandboxService.Watch:output_type -> sandboxes.local.v1.WatchResponse
+	26, // 62: sandboxes.local.v1.SandboxService.Exec:output_type -> sandboxes.local.v1.ExecResponse
+	30, // 63: sandboxes.local.v1.SandboxService.ExecSession:output_type -> sandboxes.local.v1.ExecSessionResponse
+	47, // 64: sandboxes.local.v1.SandboxService.UpdatePolicy:output_type -> sandboxes.local.v1.UpdatePolicyResponse
+	49, // 65: sandboxes.local.v1.SandboxService.MutatePolicy:output_type -> sandboxes.local.v1.MutatePolicyResponse
+	51, // 66: sandboxes.local.v1.SandboxService.UpdatePorts:output_type -> sandboxes.local.v1.UpdatePortsResponse
+	31, // 67: sandboxes.local.v1.OperationService.Get:output_type -> sandboxes.local.v1.OperationServiceGetResponse
+	32, // 68: sandboxes.local.v1.OperationService.Wait:output_type -> sandboxes.local.v1.OperationServiceWaitResponse
+	34, // 69: sandboxes.local.v1.RegistryCredentialService.Login:output_type -> sandboxes.local.v1.RegistryCredentialServiceLoginResponse
+	39, // 70: sandboxes.local.v1.RegistryCredentialService.Logout:output_type -> sandboxes.local.v1.RegistryCredentialServiceLogoutResponse
+	38, // 71: sandboxes.local.v1.RegistryCredentialService.List:output_type -> sandboxes.local.v1.RegistryCredentialServiceListResponse
+	41, // 72: sandboxes.local.v1.AccountService.Login:output_type -> sandboxes.local.v1.AccountServiceLoginResponse
+	43, // 73: sandboxes.local.v1.AccountService.LoginWithPAT:output_type -> sandboxes.local.v1.AccountServiceLoginWithPATResponse
+	45, // 74: sandboxes.local.v1.AccountService.Logout:output_type -> sandboxes.local.v1.AccountServiceLogoutResponse
+	55, // [55:75] is the sub-list for method output_type
+	35, // [35:55] is the sub-list for method input_type
+	35, // [35:35] is the sub-list for extension type_name
+	35, // [35:35] is the sub-list for extension extendee
+	0,  // [0:35] is the sub-list for field type_name
 }
 
 func init() { file_sandboxes_local_v1_sandbox_proto_init() }
@@ -3629,7 +3645,7 @@ func file_sandboxes_local_v1_sandbox_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sandboxes_local_v1_sandbox_proto_rawDesc), len(file_sandboxes_local_v1_sandbox_proto_rawDesc)),
 			NumEnums:      4,
-			NumMessages:   48,
+			NumMessages:   49,
 			NumExtensions: 0,
 			NumServices:   4,
 		},

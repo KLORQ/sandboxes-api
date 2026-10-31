@@ -105,6 +105,9 @@ message CreateRequest {
   repeated NetworkRule deny = 10;
   string agent = 11;
   bool detached = 12;
+  // Environment baked into the sandbox for every process, including exec.
+  // Values are not persisted in sandbox state.
+  map<string, string> env = 13;
 }
 
 message GetRequest {
