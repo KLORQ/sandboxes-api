@@ -111,6 +111,8 @@ message CreateRequest {
   // Values are not persisted in sandbox state.
   map<string, string> env = 13;
   string policy_profile = 14;
+  // Runs the sandbox with the dedicated privileged Docker profile.
+  bool privileged = 15;
 }
 
 message GetRequest {
