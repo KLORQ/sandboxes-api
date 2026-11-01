@@ -19,20 +19,23 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SandboxService_Create_FullMethodName           = "/sandboxes.local.v1.SandboxService/Create"
-	SandboxService_Get_FullMethodName              = "/sandboxes.local.v1.SandboxService/Get"
-	SandboxService_List_FullMethodName             = "/sandboxes.local.v1.SandboxService/List"
-	SandboxService_Start_FullMethodName            = "/sandboxes.local.v1.SandboxService/Start"
-	SandboxService_Stop_FullMethodName             = "/sandboxes.local.v1.SandboxService/Stop"
-	SandboxService_Delete_FullMethodName           = "/sandboxes.local.v1.SandboxService/Delete"
-	SandboxService_Watch_FullMethodName            = "/sandboxes.local.v1.SandboxService/Watch"
-	SandboxService_Exec_FullMethodName             = "/sandboxes.local.v1.SandboxService/Exec"
-	SandboxService_ExecSession_FullMethodName      = "/sandboxes.local.v1.SandboxService/ExecSession"
-	SandboxService_UpdatePolicy_FullMethodName     = "/sandboxes.local.v1.SandboxService/UpdatePolicy"
-	SandboxService_MutatePolicy_FullMethodName     = "/sandboxes.local.v1.SandboxService/MutatePolicy"
-	SandboxService_UpdatePorts_FullMethodName      = "/sandboxes.local.v1.SandboxService/UpdatePorts"
-	SandboxService_GetPolicyProfile_FullMethodName = "/sandboxes.local.v1.SandboxService/GetPolicyProfile"
-	SandboxService_SetPolicyProfile_FullMethodName = "/sandboxes.local.v1.SandboxService/SetPolicyProfile"
+	SandboxService_Create_FullMethodName             = "/sandboxes.local.v1.SandboxService/Create"
+	SandboxService_GetVersion_FullMethodName         = "/sandboxes.local.v1.SandboxService/GetVersion"
+	SandboxService_Get_FullMethodName                = "/sandboxes.local.v1.SandboxService/Get"
+	SandboxService_List_FullMethodName               = "/sandboxes.local.v1.SandboxService/List"
+	SandboxService_Start_FullMethodName              = "/sandboxes.local.v1.SandboxService/Start"
+	SandboxService_Stop_FullMethodName               = "/sandboxes.local.v1.SandboxService/Stop"
+	SandboxService_Delete_FullMethodName             = "/sandboxes.local.v1.SandboxService/Delete"
+	SandboxService_Watch_FullMethodName              = "/sandboxes.local.v1.SandboxService/Watch"
+	SandboxService_Exec_FullMethodName               = "/sandboxes.local.v1.SandboxService/Exec"
+	SandboxService_ExecSession_FullMethodName        = "/sandboxes.local.v1.SandboxService/ExecSession"
+	SandboxService_UpdatePolicy_FullMethodName       = "/sandboxes.local.v1.SandboxService/UpdatePolicy"
+	SandboxService_MutatePolicy_FullMethodName       = "/sandboxes.local.v1.SandboxService/MutatePolicy"
+	SandboxService_UpdatePorts_FullMethodName        = "/sandboxes.local.v1.SandboxService/UpdatePorts"
+	SandboxService_GetPolicyProfile_FullMethodName   = "/sandboxes.local.v1.SandboxService/GetPolicyProfile"
+	SandboxService_SetPolicyProfile_FullMethodName   = "/sandboxes.local.v1.SandboxService/SetPolicyProfile"
+	SandboxService_GetGlobalPolicy_FullMethodName    = "/sandboxes.local.v1.SandboxService/GetGlobalPolicy"
+	SandboxService_MutateGlobalPolicy_FullMethodName = "/sandboxes.local.v1.SandboxService/MutateGlobalPolicy"
 )
 
 // SandboxServiceClient is the client API for SandboxService service.
@@ -40,6 +43,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SandboxServiceClient interface {
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
+	GetVersion(ctx context.Context, in *GetVersionRequest, opts ...grpc.CallOption) (*GetVersionResponse, error)
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	Start(ctx context.Context, in *StartRequest, opts ...grpc.CallOption) (*StartResponse, error)
@@ -53,6 +57,8 @@ type SandboxServiceClient interface {
 	UpdatePorts(ctx context.Context, in *UpdatePortsRequest, opts ...grpc.CallOption) (*UpdatePortsResponse, error)
 	GetPolicyProfile(ctx context.Context, in *GetPolicyProfileRequest, opts ...grpc.CallOption) (*GetPolicyProfileResponse, error)
 	SetPolicyProfile(ctx context.Context, in *SetPolicyProfileRequest, opts ...grpc.CallOption) (*SetPolicyProfileResponse, error)
+	GetGlobalPolicy(ctx context.Context, in *GetGlobalPolicyRequest, opts ...grpc.CallOption) (*GetGlobalPolicyResponse, error)
+	MutateGlobalPolicy(ctx context.Context, in *MutateGlobalPolicyRequest, opts ...grpc.CallOption) (*MutateGlobalPolicyResponse, error)
 }
 
 type sandboxServiceClient struct {
@@ -67,6 +73,16 @@ func (c *sandboxServiceClient) Create(ctx context.Context, in *CreateRequest, op
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateResponse)
 	err := c.cc.Invoke(ctx, SandboxService_Create_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sandboxServiceClient) GetVersion(ctx context.Context, in *GetVersionRequest, opts ...grpc.CallOption) (*GetVersionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetVersionResponse)
+	err := c.cc.Invoke(ctx, SandboxService_GetVersion_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -224,11 +240,32 @@ func (c *sandboxServiceClient) SetPolicyProfile(ctx context.Context, in *SetPoli
 	return out, nil
 }
 
+func (c *sandboxServiceClient) GetGlobalPolicy(ctx context.Context, in *GetGlobalPolicyRequest, opts ...grpc.CallOption) (*GetGlobalPolicyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetGlobalPolicyResponse)
+	err := c.cc.Invoke(ctx, SandboxService_GetGlobalPolicy_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sandboxServiceClient) MutateGlobalPolicy(ctx context.Context, in *MutateGlobalPolicyRequest, opts ...grpc.CallOption) (*MutateGlobalPolicyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MutateGlobalPolicyResponse)
+	err := c.cc.Invoke(ctx, SandboxService_MutateGlobalPolicy_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SandboxServiceServer is the server API for SandboxService service.
 // All implementations must embed UnimplementedSandboxServiceServer
 // for forward compatibility.
 type SandboxServiceServer interface {
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
+	GetVersion(context.Context, *GetVersionRequest) (*GetVersionResponse, error)
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	Start(context.Context, *StartRequest) (*StartResponse, error)
@@ -242,6 +279,8 @@ type SandboxServiceServer interface {
 	UpdatePorts(context.Context, *UpdatePortsRequest) (*UpdatePortsResponse, error)
 	GetPolicyProfile(context.Context, *GetPolicyProfileRequest) (*GetPolicyProfileResponse, error)
 	SetPolicyProfile(context.Context, *SetPolicyProfileRequest) (*SetPolicyProfileResponse, error)
+	GetGlobalPolicy(context.Context, *GetGlobalPolicyRequest) (*GetGlobalPolicyResponse, error)
+	MutateGlobalPolicy(context.Context, *MutateGlobalPolicyRequest) (*MutateGlobalPolicyResponse, error)
 	mustEmbedUnimplementedSandboxServiceServer()
 }
 
@@ -254,6 +293,9 @@ type UnimplementedSandboxServiceServer struct{}
 
 func (UnimplementedSandboxServiceServer) Create(context.Context, *CreateRequest) (*CreateResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedSandboxServiceServer) GetVersion(context.Context, *GetVersionRequest) (*GetVersionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetVersion not implemented")
 }
 func (UnimplementedSandboxServiceServer) Get(context.Context, *GetRequest) (*GetResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
@@ -294,6 +336,12 @@ func (UnimplementedSandboxServiceServer) GetPolicyProfile(context.Context, *GetP
 func (UnimplementedSandboxServiceServer) SetPolicyProfile(context.Context, *SetPolicyProfileRequest) (*SetPolicyProfileResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method SetPolicyProfile not implemented")
 }
+func (UnimplementedSandboxServiceServer) GetGlobalPolicy(context.Context, *GetGlobalPolicyRequest) (*GetGlobalPolicyResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetGlobalPolicy not implemented")
+}
+func (UnimplementedSandboxServiceServer) MutateGlobalPolicy(context.Context, *MutateGlobalPolicyRequest) (*MutateGlobalPolicyResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method MutateGlobalPolicy not implemented")
+}
 func (UnimplementedSandboxServiceServer) mustEmbedUnimplementedSandboxServiceServer() {}
 func (UnimplementedSandboxServiceServer) testEmbeddedByValue()                        {}
 
@@ -329,6 +377,24 @@ func _SandboxService_Create_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SandboxServiceServer).Create(ctx, req.(*CreateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SandboxService_GetVersion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetVersionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).GetVersion(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_GetVersion_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).GetVersion(ctx, req.(*GetVersionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -542,6 +608,42 @@ func _SandboxService_SetPolicyProfile_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SandboxService_GetGlobalPolicy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetGlobalPolicyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).GetGlobalPolicy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_GetGlobalPolicy_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).GetGlobalPolicy(ctx, req.(*GetGlobalPolicyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SandboxService_MutateGlobalPolicy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MutateGlobalPolicyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).MutateGlobalPolicy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_MutateGlobalPolicy_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).MutateGlobalPolicy(ctx, req.(*MutateGlobalPolicyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SandboxService_ServiceDesc is the grpc.ServiceDesc for SandboxService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -552,6 +654,10 @@ var SandboxService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Create",
 			Handler:    _SandboxService_Create_Handler,
+		},
+		{
+			MethodName: "GetVersion",
+			Handler:    _SandboxService_GetVersion_Handler,
 		},
 		{
 			MethodName: "Get",
@@ -592,6 +698,14 @@ var SandboxService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetPolicyProfile",
 			Handler:    _SandboxService_SetPolicyProfile_Handler,
+		},
+		{
+			MethodName: "GetGlobalPolicy",
+			Handler:    _SandboxService_GetGlobalPolicy_Handler,
+		},
+		{
+			MethodName: "MutateGlobalPolicy",
+			Handler:    _SandboxService_MutateGlobalPolicy_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
@@ -928,6 +1042,184 @@ var RegistryCredentialService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _RegistryCredentialService_List_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "sandboxes/local/v1/sandbox.proto",
+}
+
+const (
+	SecretService_Set_FullMethodName    = "/sandboxes.local.v1.SecretService/Set"
+	SecretService_List_FullMethodName   = "/sandboxes.local.v1.SecretService/List"
+	SecretService_Remove_FullMethodName = "/sandboxes.local.v1.SecretService/Remove"
+)
+
+// SecretServiceClient is the client API for SecretService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type SecretServiceClient interface {
+	Set(ctx context.Context, in *SecretServiceSetRequest, opts ...grpc.CallOption) (*SecretServiceSetResponse, error)
+	List(ctx context.Context, in *SecretServiceListRequest, opts ...grpc.CallOption) (*SecretServiceListResponse, error)
+	Remove(ctx context.Context, in *SecretServiceRemoveRequest, opts ...grpc.CallOption) (*SecretServiceRemoveResponse, error)
+}
+
+type secretServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewSecretServiceClient(cc grpc.ClientConnInterface) SecretServiceClient {
+	return &secretServiceClient{cc}
+}
+
+func (c *secretServiceClient) Set(ctx context.Context, in *SecretServiceSetRequest, opts ...grpc.CallOption) (*SecretServiceSetResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SecretServiceSetResponse)
+	err := c.cc.Invoke(ctx, SecretService_Set_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *secretServiceClient) List(ctx context.Context, in *SecretServiceListRequest, opts ...grpc.CallOption) (*SecretServiceListResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SecretServiceListResponse)
+	err := c.cc.Invoke(ctx, SecretService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *secretServiceClient) Remove(ctx context.Context, in *SecretServiceRemoveRequest, opts ...grpc.CallOption) (*SecretServiceRemoveResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SecretServiceRemoveResponse)
+	err := c.cc.Invoke(ctx, SecretService_Remove_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// SecretServiceServer is the server API for SecretService service.
+// All implementations must embed UnimplementedSecretServiceServer
+// for forward compatibility.
+type SecretServiceServer interface {
+	Set(context.Context, *SecretServiceSetRequest) (*SecretServiceSetResponse, error)
+	List(context.Context, *SecretServiceListRequest) (*SecretServiceListResponse, error)
+	Remove(context.Context, *SecretServiceRemoveRequest) (*SecretServiceRemoveResponse, error)
+	mustEmbedUnimplementedSecretServiceServer()
+}
+
+// UnimplementedSecretServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedSecretServiceServer struct{}
+
+func (UnimplementedSecretServiceServer) Set(context.Context, *SecretServiceSetRequest) (*SecretServiceSetResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Set not implemented")
+}
+func (UnimplementedSecretServiceServer) List(context.Context, *SecretServiceListRequest) (*SecretServiceListResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedSecretServiceServer) Remove(context.Context, *SecretServiceRemoveRequest) (*SecretServiceRemoveResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Remove not implemented")
+}
+func (UnimplementedSecretServiceServer) mustEmbedUnimplementedSecretServiceServer() {}
+func (UnimplementedSecretServiceServer) testEmbeddedByValue()                       {}
+
+// UnsafeSecretServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to SecretServiceServer will
+// result in compilation errors.
+type UnsafeSecretServiceServer interface {
+	mustEmbedUnimplementedSecretServiceServer()
+}
+
+func RegisterSecretServiceServer(s grpc.ServiceRegistrar, srv SecretServiceServer) {
+	// If the following call panics, it indicates UnimplementedSecretServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&SecretService_ServiceDesc, srv)
+}
+
+func _SecretService_Set_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SecretServiceSetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SecretServiceServer).Set(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SecretService_Set_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SecretServiceServer).Set(ctx, req.(*SecretServiceSetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SecretService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SecretServiceListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SecretServiceServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SecretService_List_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SecretServiceServer).List(ctx, req.(*SecretServiceListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SecretService_Remove_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SecretServiceRemoveRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SecretServiceServer).Remove(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SecretService_Remove_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SecretServiceServer).Remove(ctx, req.(*SecretServiceRemoveRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// SecretService_ServiceDesc is the grpc.ServiceDesc for SecretService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var SecretService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "sandboxes.local.v1.SecretService",
+	HandlerType: (*SecretServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Set",
+			Handler:    _SecretService_Set_Handler,
+		},
+		{
+			MethodName: "List",
+			Handler:    _SecretService_List_Handler,
+		},
+		{
+			MethodName: "Remove",
+			Handler:    _SecretService_Remove_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
