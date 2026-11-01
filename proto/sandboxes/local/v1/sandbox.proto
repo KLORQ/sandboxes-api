@@ -394,6 +394,20 @@ message MutateGlobalPolicyResponse {
   repeated NetworkRule deny = 2;
 }
 
+message CheckPolicyRequest {
+  string sandbox_id = 1;
+  string protocol = 2;
+  string address = 3;
+  string domain = 4;
+  uint32 port = 5;
+}
+
+message CheckPolicyResponse {
+  bool allowed = 1;
+  string rule_id = 2;
+  string reason = 3;
+}
+
 message GetVersionRequest {}
 
 message GetVersionResponse {
@@ -419,6 +433,7 @@ service SandboxService {
   rpc SetPolicyProfile(SetPolicyProfileRequest) returns (SetPolicyProfileResponse);
   rpc GetGlobalPolicy(GetGlobalPolicyRequest) returns (GetGlobalPolicyResponse);
   rpc MutateGlobalPolicy(MutateGlobalPolicyRequest) returns (MutateGlobalPolicyResponse);
+  rpc CheckPolicy(CheckPolicyRequest) returns (CheckPolicyResponse);
 }
 
 message GetPolicyProfileRequest {}
