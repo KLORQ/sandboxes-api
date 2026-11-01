@@ -50,6 +50,7 @@ message Port {
   uint32 host = 1;
   uint32 guest = 2;
   string protocol = 3;
+  string host_ip = 4;
 }
 
 message Workspace {
@@ -78,6 +79,7 @@ message Sandbox {
   bool detached = 18;
   int64 last_used_at_unix = 19;
   int64 last_used_at_unix_nano = 20;
+  string policy_profile = 21;
 }
 
 message Operation {
@@ -108,6 +110,9 @@ message CreateRequest {
   // Environment baked into the sandbox for every process, including exec.
   // Values are not persisted in sandbox state.
   map<string, string> env = 13;
+  string policy_profile = 14;
+  // Runs the sandbox with the dedicated privileged Docker profile.
+  bool privileged = 15;
 }
 
 message GetRequest {
@@ -355,6 +360,22 @@ service SandboxService {
   rpc UpdatePolicy(UpdatePolicyRequest) returns (UpdatePolicyResponse);
   rpc MutatePolicy(MutatePolicyRequest) returns (MutatePolicyResponse);
   rpc UpdatePorts(UpdatePortsRequest) returns (UpdatePortsResponse);
+  rpc GetPolicyProfile(GetPolicyProfileRequest) returns (GetPolicyProfileResponse);
+  rpc SetPolicyProfile(SetPolicyProfileRequest) returns (SetPolicyProfileResponse);
+}
+
+message GetPolicyProfileRequest {}
+
+message GetPolicyProfileResponse {
+  string profile = 1;
+}
+
+message SetPolicyProfileRequest {
+  string profile = 1;
+}
+
+message SetPolicyProfileResponse {
+  string profile = 1;
 }
 
 service OperationService {
