@@ -44,6 +44,11 @@ message NetworkRule {
   string protocol = 1;
   string cidr = 2;
   uint32 port = 3;
+  // Domain, wildcard (*.example.com), multi-label wildcard (**.example.com),
+  // or a single-label glob. Mutually exclusive with cidr.
+  string domain = 4;
+  // Stable content-derived identifier for policy listing and removal.
+  string rule_id = 5;
 }
 
 message Port {
@@ -284,6 +289,39 @@ message RegistryCredentialServiceLogoutResponse {
   bool removed = 1;
 }
 
+message SecretServiceSetRequest {
+  string service = 1;
+  string scope = 2;
+  string sandbox_name = 3;
+  bytes value = 4;
+}
+
+message SecretSummary {
+  string service = 1;
+  string scope = 2;
+  string sandbox_name = 3;
+}
+
+message SecretServiceSetResponse {
+  SecretSummary secret = 1;
+}
+
+message SecretServiceListRequest {}
+
+message SecretServiceListResponse {
+  repeated SecretSummary secrets = 1;
+}
+
+message SecretServiceRemoveRequest {
+  string service = 1;
+  string scope = 2;
+  string sandbox_name = 3;
+}
+
+message SecretServiceRemoveResponse {
+  bool removed = 1;
+}
+
 message AccountServiceLoginRequest {
   string provider = 1;
 }
@@ -339,6 +377,23 @@ message UpdatePortsResponse {
   Sandbox sandbox = 1;
 }
 
+message GetGlobalPolicyRequest {}
+
+message GetGlobalPolicyResponse {
+  repeated NetworkRule allow = 1;
+  repeated NetworkRule deny = 2;
+}
+
+message MutateGlobalPolicyRequest {
+  string action = 1;
+  NetworkRule rule = 2;
+}
+
+message MutateGlobalPolicyResponse {
+  repeated NetworkRule allow = 1;
+  repeated NetworkRule deny = 2;
+}
+
 message GetVersionRequest {}
 
 message GetVersionResponse {
@@ -362,6 +417,8 @@ service SandboxService {
   rpc UpdatePorts(UpdatePortsRequest) returns (UpdatePortsResponse);
   rpc GetPolicyProfile(GetPolicyProfileRequest) returns (GetPolicyProfileResponse);
   rpc SetPolicyProfile(SetPolicyProfileRequest) returns (SetPolicyProfileResponse);
+  rpc GetGlobalPolicy(GetGlobalPolicyRequest) returns (GetGlobalPolicyResponse);
+  rpc MutateGlobalPolicy(MutateGlobalPolicyRequest) returns (MutateGlobalPolicyResponse);
 }
 
 message GetPolicyProfileRequest {}
@@ -387,6 +444,12 @@ service RegistryCredentialService {
   rpc Login(RegistryCredentialServiceLoginRequest) returns (RegistryCredentialServiceLoginResponse);
   rpc Logout(RegistryCredentialServiceLogoutRequest) returns (RegistryCredentialServiceLogoutResponse);
   rpc List(RegistryCredentialServiceListRequest) returns (RegistryCredentialServiceListResponse);
+}
+
+service SecretService {
+  rpc Set(SecretServiceSetRequest) returns (SecretServiceSetResponse);
+  rpc List(SecretServiceListRequest) returns (SecretServiceListResponse);
+  rpc Remove(SecretServiceRemoveRequest) returns (SecretServiceRemoveResponse);
 }
 
 service AccountService {
