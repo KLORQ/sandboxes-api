@@ -756,6 +756,8 @@ type CreateRequest struct {
 	// Values are not persisted in sandbox state.
 	Env           map[string]string `protobuf:"bytes,13,rep,name=env,proto3" json:"env,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	PolicyProfile string            `protobuf:"bytes,14,opt,name=policy_profile,json=policyProfile,proto3" json:"policy_profile,omitempty"`
+	// Runs the sandbox with the dedicated privileged Docker profile.
+	Privileged    bool `protobuf:"varint,15,opt,name=privileged,proto3" json:"privileged,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -886,6 +888,13 @@ func (x *CreateRequest) GetPolicyProfile() string {
 		return x.PolicyProfile
 	}
 	return ""
+}
+
+func (x *CreateRequest) GetPrivileged() bool {
+	if x != nil {
+		return x.Privileged
+	}
+	return false
 }
 
 type GetRequest struct {
@@ -3448,7 +3457,7 @@ const file_sandboxes_local_v1_sandbox_proto_rawDesc = "" +
 	"generation\x12\x14\n" +
 	"\x05error\x18\x06 \x01(\tR\x05error\x12&\n" +
 	"\x0fcreated_at_unix\x18\a \x01(\x03R\rcreatedAtUnix\x12&\n" +
-	"\x0fupdated_at_unix\x18\b \x01(\x03R\rupdatedAtUnix\"\xdd\x04\n" +
+	"\x0fupdated_at_unix\x18\b \x01(\x03R\rupdatedAtUnix\"\xfd\x04\n" +
 	"\rCreateRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
 	"\x05image\x18\x02 \x01(\tR\x05image\x12\x1c\n" +
@@ -3467,7 +3476,10 @@ const file_sandboxes_local_v1_sandbox_proto_rawDesc = "" +
 	"\x05agent\x18\v \x01(\tR\x05agent\x12\x1a\n" +
 	"\bdetached\x18\f \x01(\bR\bdetached\x12<\n" +
 	"\x03env\x18\r \x03(\v2*.sandboxes.local.v1.CreateRequest.EnvEntryR\x03env\x12%\n" +
-	"\x0epolicy_profile\x18\x0e \x01(\tR\rpolicyProfile\x1a6\n" +
+	"\x0epolicy_profile\x18\x0e \x01(\tR\rpolicyProfile\x12\x1e\n" +
+	"\n" +
+	"privileged\x18\x0f \x01(\bR\n" +
+	"privileged\x1a6\n" +
 	"\bEnvEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x1c\n" +
