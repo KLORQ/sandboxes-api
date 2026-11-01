@@ -318,6 +318,7 @@ type Port struct {
 	Host          uint32                 `protobuf:"varint,1,opt,name=host,proto3" json:"host,omitempty"`
 	Guest         uint32                 `protobuf:"varint,2,opt,name=guest,proto3" json:"guest,omitempty"`
 	Protocol      string                 `protobuf:"bytes,3,opt,name=protocol,proto3" json:"protocol,omitempty"`
+	HostIp        string                 `protobuf:"bytes,4,opt,name=host_ip,json=hostIp,proto3" json:"host_ip,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -369,6 +370,13 @@ func (x *Port) GetGuest() uint32 {
 func (x *Port) GetProtocol() string {
 	if x != nil {
 		return x.Protocol
+	}
+	return ""
+}
+
+func (x *Port) GetHostIp() string {
+	if x != nil {
+		return x.HostIp
 	}
 	return ""
 }
@@ -3392,11 +3400,12 @@ const file_sandboxes_local_v1_sandbox_proto_rawDesc = "" +
 	"\vNetworkRule\x12\x1a\n" +
 	"\bprotocol\x18\x01 \x01(\tR\bprotocol\x12\x12\n" +
 	"\x04cidr\x18\x02 \x01(\tR\x04cidr\x12\x12\n" +
-	"\x04port\x18\x03 \x01(\rR\x04port\"L\n" +
+	"\x04port\x18\x03 \x01(\rR\x04port\"e\n" +
 	"\x04Port\x12\x12\n" +
 	"\x04host\x18\x01 \x01(\rR\x04host\x12\x14\n" +
 	"\x05guest\x18\x02 \x01(\rR\x05guest\x12\x1a\n" +
-	"\bprotocol\x18\x03 \x01(\tR\bprotocol\"<\n" +
+	"\bprotocol\x18\x03 \x01(\tR\bprotocol\x12\x17\n" +
+	"\ahost_ip\x18\x04 \x01(\tR\x06hostIp\"<\n" +
 	"\tWorkspace\x12\x12\n" +
 	"\x04path\x18\x01 \x01(\tR\x04path\x12\x1b\n" +
 	"\tread_only\x18\x02 \x01(\bR\breadOnly\"\x8d\x06\n" +

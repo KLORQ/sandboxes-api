@@ -50,6 +50,7 @@ message Port {
   uint32 host = 1;
   uint32 guest = 2;
   string protocol = 3;
+  string host_ip = 4;
 }
 
 message Workspace {
