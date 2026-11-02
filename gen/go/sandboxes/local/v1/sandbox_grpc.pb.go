@@ -1266,6 +1266,7 @@ var SecretService_ServiceDesc = grpc.ServiceDesc{
 
 const (
 	AccountService_Login_FullMethodName        = "/sandboxes.local.v1.AccountService/Login"
+	AccountService_LoginDevice_FullMethodName  = "/sandboxes.local.v1.AccountService/LoginDevice"
 	AccountService_LoginWithPAT_FullMethodName = "/sandboxes.local.v1.AccountService/LoginWithPAT"
 	AccountService_Logout_FullMethodName       = "/sandboxes.local.v1.AccountService/Logout"
 )
@@ -1275,6 +1276,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AccountServiceClient interface {
 	Login(ctx context.Context, in *AccountServiceLoginRequest, opts ...grpc.CallOption) (*AccountServiceLoginResponse, error)
+	LoginDevice(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[AccountServiceLoginDeviceRequest, AccountServiceLoginDeviceResponse], error)
 	LoginWithPAT(ctx context.Context, in *AccountServiceLoginWithPATRequest, opts ...grpc.CallOption) (*AccountServiceLoginWithPATResponse, error)
 	Logout(ctx context.Context, in *AccountServiceLogoutRequest, opts ...grpc.CallOption) (*AccountServiceLogoutResponse, error)
 }
@@ -1296,6 +1298,19 @@ func (c *accountServiceClient) Login(ctx context.Context, in *AccountServiceLogi
 	}
 	return out, nil
 }
+
+func (c *accountServiceClient) LoginDevice(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[AccountServiceLoginDeviceRequest, AccountServiceLoginDeviceResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &AccountService_ServiceDesc.Streams[0], AccountService_LoginDevice_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[AccountServiceLoginDeviceRequest, AccountServiceLoginDeviceResponse]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type AccountService_LoginDeviceClient = grpc.BidiStreamingClient[AccountServiceLoginDeviceRequest, AccountServiceLoginDeviceResponse]
 
 func (c *accountServiceClient) LoginWithPAT(ctx context.Context, in *AccountServiceLoginWithPATRequest, opts ...grpc.CallOption) (*AccountServiceLoginWithPATResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
@@ -1322,6 +1337,7 @@ func (c *accountServiceClient) Logout(ctx context.Context, in *AccountServiceLog
 // for forward compatibility.
 type AccountServiceServer interface {
 	Login(context.Context, *AccountServiceLoginRequest) (*AccountServiceLoginResponse, error)
+	LoginDevice(grpc.BidiStreamingServer[AccountServiceLoginDeviceRequest, AccountServiceLoginDeviceResponse]) error
 	LoginWithPAT(context.Context, *AccountServiceLoginWithPATRequest) (*AccountServiceLoginWithPATResponse, error)
 	Logout(context.Context, *AccountServiceLogoutRequest) (*AccountServiceLogoutResponse, error)
 	mustEmbedUnimplementedAccountServiceServer()
@@ -1336,6 +1352,9 @@ type UnimplementedAccountServiceServer struct{}
 
 func (UnimplementedAccountServiceServer) Login(context.Context, *AccountServiceLoginRequest) (*AccountServiceLoginResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedAccountServiceServer) LoginDevice(grpc.BidiStreamingServer[AccountServiceLoginDeviceRequest, AccountServiceLoginDeviceResponse]) error {
+	return status.Error(codes.Unimplemented, "method LoginDevice not implemented")
 }
 func (UnimplementedAccountServiceServer) LoginWithPAT(context.Context, *AccountServiceLoginWithPATRequest) (*AccountServiceLoginWithPATResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method LoginWithPAT not implemented")
@@ -1381,6 +1400,13 @@ func _AccountService_Login_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	return interceptor(ctx, in, info, handler)
 }
+
+func _AccountService_LoginDevice_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(AccountServiceServer).LoginDevice(&grpc.GenericServerStream[AccountServiceLoginDeviceRequest, AccountServiceLoginDeviceResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type AccountService_LoginDeviceServer = grpc.BidiStreamingServer[AccountServiceLoginDeviceRequest, AccountServiceLoginDeviceResponse]
 
 func _AccountService_LoginWithPAT_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AccountServiceLoginWithPATRequest)
@@ -1438,6 +1464,13 @@ var AccountService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AccountService_Logout_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "LoginDevice",
+			Handler:       _AccountService_LoginDevice_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "sandboxes/local/v1/sandbox.proto",
 }
