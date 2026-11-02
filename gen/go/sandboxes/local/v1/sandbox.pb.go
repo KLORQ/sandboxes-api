@@ -3304,6 +3304,102 @@ func (x *AccountServiceLogoutResponse) GetRemoved() bool {
 	return false
 }
 
+type AccountServiceStatusRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Provider      string                 `protobuf:"bytes,1,opt,name=provider,proto3" json:"provider,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AccountServiceStatusRequest) Reset() {
+	*x = AccountServiceStatusRequest{}
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[49]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccountServiceStatusRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccountServiceStatusRequest) ProtoMessage() {}
+
+func (x *AccountServiceStatusRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[49]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccountServiceStatusRequest.ProtoReflect.Descriptor instead.
+func (*AccountServiceStatusRequest) Descriptor() ([]byte, []int) {
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{49}
+}
+
+func (x *AccountServiceStatusRequest) GetProvider() string {
+	if x != nil {
+		return x.Provider
+	}
+	return ""
+}
+
+type AccountServiceStatusResponse struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Provider          string                 `protobuf:"bytes,1,opt,name=provider,proto3" json:"provider,omitempty"`
+	CredentialPresent bool                   `protobuf:"varint,2,opt,name=credential_present,json=credentialPresent,proto3" json:"credential_present,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *AccountServiceStatusResponse) Reset() {
+	*x = AccountServiceStatusResponse{}
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[50]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccountServiceStatusResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccountServiceStatusResponse) ProtoMessage() {}
+
+func (x *AccountServiceStatusResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[50]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccountServiceStatusResponse.ProtoReflect.Descriptor instead.
+func (*AccountServiceStatusResponse) Descriptor() ([]byte, []int) {
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{50}
+}
+
+func (x *AccountServiceStatusResponse) GetProvider() string {
+	if x != nil {
+		return x.Provider
+	}
+	return ""
+}
+
+func (x *AccountServiceStatusResponse) GetCredentialPresent() bool {
+	if x != nil {
+		return x.CredentialPresent
+	}
+	return false
+}
+
 // The device-login stream keeps the device code on the daemon. The user code
 // and verification URL are intentionally returned so the caller can complete
 // the provider's interactive handoff before polling begins.
@@ -3317,7 +3413,7 @@ type AccountServiceLoginDeviceRequest struct {
 
 func (x *AccountServiceLoginDeviceRequest) Reset() {
 	*x = AccountServiceLoginDeviceRequest{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[49]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[51]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3329,7 +3425,7 @@ func (x *AccountServiceLoginDeviceRequest) String() string {
 func (*AccountServiceLoginDeviceRequest) ProtoMessage() {}
 
 func (x *AccountServiceLoginDeviceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[49]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[51]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3342,7 +3438,7 @@ func (x *AccountServiceLoginDeviceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AccountServiceLoginDeviceRequest.ProtoReflect.Descriptor instead.
 func (*AccountServiceLoginDeviceRequest) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{49}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{51}
 }
 
 func (x *AccountServiceLoginDeviceRequest) GetProvider() string {
@@ -3370,7 +3466,7 @@ type AccountServiceLoginDeviceResponse struct {
 
 func (x *AccountServiceLoginDeviceResponse) Reset() {
 	*x = AccountServiceLoginDeviceResponse{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[50]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[52]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3382,7 +3478,7 @@ func (x *AccountServiceLoginDeviceResponse) String() string {
 func (*AccountServiceLoginDeviceResponse) ProtoMessage() {}
 
 func (x *AccountServiceLoginDeviceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[50]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[52]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3395,7 +3491,7 @@ func (x *AccountServiceLoginDeviceResponse) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use AccountServiceLoginDeviceResponse.ProtoReflect.Descriptor instead.
 func (*AccountServiceLoginDeviceResponse) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{50}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{52}
 }
 
 func (x *AccountServiceLoginDeviceResponse) GetUserCode() string {
@@ -3430,7 +3526,7 @@ type UpdatePolicyRequest struct {
 
 func (x *UpdatePolicyRequest) Reset() {
 	*x = UpdatePolicyRequest{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[51]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[53]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3442,7 +3538,7 @@ func (x *UpdatePolicyRequest) String() string {
 func (*UpdatePolicyRequest) ProtoMessage() {}
 
 func (x *UpdatePolicyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[51]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[53]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3455,7 +3551,7 @@ func (x *UpdatePolicyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePolicyRequest.ProtoReflect.Descriptor instead.
 func (*UpdatePolicyRequest) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{51}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{53}
 }
 
 func (x *UpdatePolicyRequest) GetId() string {
@@ -3488,7 +3584,7 @@ type UpdatePolicyResponse struct {
 
 func (x *UpdatePolicyResponse) Reset() {
 	*x = UpdatePolicyResponse{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[52]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[54]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3500,7 +3596,7 @@ func (x *UpdatePolicyResponse) String() string {
 func (*UpdatePolicyResponse) ProtoMessage() {}
 
 func (x *UpdatePolicyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[52]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[54]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3513,7 +3609,7 @@ func (x *UpdatePolicyResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePolicyResponse.ProtoReflect.Descriptor instead.
 func (*UpdatePolicyResponse) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{52}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{54}
 }
 
 func (x *UpdatePolicyResponse) GetSandbox() *Sandbox {
@@ -3534,7 +3630,7 @@ type MutatePolicyRequest struct {
 
 func (x *MutatePolicyRequest) Reset() {
 	*x = MutatePolicyRequest{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[53]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[55]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3546,7 +3642,7 @@ func (x *MutatePolicyRequest) String() string {
 func (*MutatePolicyRequest) ProtoMessage() {}
 
 func (x *MutatePolicyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[53]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[55]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3559,7 +3655,7 @@ func (x *MutatePolicyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MutatePolicyRequest.ProtoReflect.Descriptor instead.
 func (*MutatePolicyRequest) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{53}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{55}
 }
 
 func (x *MutatePolicyRequest) GetId() string {
@@ -3592,7 +3688,7 @@ type MutatePolicyResponse struct {
 
 func (x *MutatePolicyResponse) Reset() {
 	*x = MutatePolicyResponse{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[54]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[56]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3604,7 +3700,7 @@ func (x *MutatePolicyResponse) String() string {
 func (*MutatePolicyResponse) ProtoMessage() {}
 
 func (x *MutatePolicyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[54]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[56]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3617,7 +3713,7 @@ func (x *MutatePolicyResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MutatePolicyResponse.ProtoReflect.Descriptor instead.
 func (*MutatePolicyResponse) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{54}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{56}
 }
 
 func (x *MutatePolicyResponse) GetSandbox() *Sandbox {
@@ -3637,7 +3733,7 @@ type UpdatePortsRequest struct {
 
 func (x *UpdatePortsRequest) Reset() {
 	*x = UpdatePortsRequest{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[55]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[57]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3649,7 +3745,7 @@ func (x *UpdatePortsRequest) String() string {
 func (*UpdatePortsRequest) ProtoMessage() {}
 
 func (x *UpdatePortsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[55]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[57]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3662,7 +3758,7 @@ func (x *UpdatePortsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePortsRequest.ProtoReflect.Descriptor instead.
 func (*UpdatePortsRequest) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{55}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{57}
 }
 
 func (x *UpdatePortsRequest) GetId() string {
@@ -3688,7 +3784,7 @@ type UpdatePortsResponse struct {
 
 func (x *UpdatePortsResponse) Reset() {
 	*x = UpdatePortsResponse{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[56]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[58]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3700,7 +3796,7 @@ func (x *UpdatePortsResponse) String() string {
 func (*UpdatePortsResponse) ProtoMessage() {}
 
 func (x *UpdatePortsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[56]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[58]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3713,7 +3809,7 @@ func (x *UpdatePortsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePortsResponse.ProtoReflect.Descriptor instead.
 func (*UpdatePortsResponse) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{56}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{58}
 }
 
 func (x *UpdatePortsResponse) GetSandbox() *Sandbox {
@@ -3731,7 +3827,7 @@ type GetGlobalPolicyRequest struct {
 
 func (x *GetGlobalPolicyRequest) Reset() {
 	*x = GetGlobalPolicyRequest{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[57]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[59]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3743,7 +3839,7 @@ func (x *GetGlobalPolicyRequest) String() string {
 func (*GetGlobalPolicyRequest) ProtoMessage() {}
 
 func (x *GetGlobalPolicyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[57]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[59]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3756,7 +3852,7 @@ func (x *GetGlobalPolicyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetGlobalPolicyRequest.ProtoReflect.Descriptor instead.
 func (*GetGlobalPolicyRequest) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{57}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{59}
 }
 
 type GetGlobalPolicyResponse struct {
@@ -3769,7 +3865,7 @@ type GetGlobalPolicyResponse struct {
 
 func (x *GetGlobalPolicyResponse) Reset() {
 	*x = GetGlobalPolicyResponse{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[58]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[60]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3781,7 +3877,7 @@ func (x *GetGlobalPolicyResponse) String() string {
 func (*GetGlobalPolicyResponse) ProtoMessage() {}
 
 func (x *GetGlobalPolicyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[58]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[60]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3794,7 +3890,7 @@ func (x *GetGlobalPolicyResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetGlobalPolicyResponse.ProtoReflect.Descriptor instead.
 func (*GetGlobalPolicyResponse) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{58}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{60}
 }
 
 func (x *GetGlobalPolicyResponse) GetAllow() []*NetworkRule {
@@ -3821,7 +3917,7 @@ type MutateGlobalPolicyRequest struct {
 
 func (x *MutateGlobalPolicyRequest) Reset() {
 	*x = MutateGlobalPolicyRequest{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[59]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[61]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3833,7 +3929,7 @@ func (x *MutateGlobalPolicyRequest) String() string {
 func (*MutateGlobalPolicyRequest) ProtoMessage() {}
 
 func (x *MutateGlobalPolicyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[59]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[61]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3846,7 +3942,7 @@ func (x *MutateGlobalPolicyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MutateGlobalPolicyRequest.ProtoReflect.Descriptor instead.
 func (*MutateGlobalPolicyRequest) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{59}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{61}
 }
 
 func (x *MutateGlobalPolicyRequest) GetAction() string {
@@ -3873,7 +3969,7 @@ type MutateGlobalPolicyResponse struct {
 
 func (x *MutateGlobalPolicyResponse) Reset() {
 	*x = MutateGlobalPolicyResponse{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[60]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[62]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3885,7 +3981,7 @@ func (x *MutateGlobalPolicyResponse) String() string {
 func (*MutateGlobalPolicyResponse) ProtoMessage() {}
 
 func (x *MutateGlobalPolicyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[60]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[62]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3898,7 +3994,7 @@ func (x *MutateGlobalPolicyResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MutateGlobalPolicyResponse.ProtoReflect.Descriptor instead.
 func (*MutateGlobalPolicyResponse) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{60}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{62}
 }
 
 func (x *MutateGlobalPolicyResponse) GetAllow() []*NetworkRule {
@@ -3928,7 +4024,7 @@ type CheckPolicyRequest struct {
 
 func (x *CheckPolicyRequest) Reset() {
 	*x = CheckPolicyRequest{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[61]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[63]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3940,7 +4036,7 @@ func (x *CheckPolicyRequest) String() string {
 func (*CheckPolicyRequest) ProtoMessage() {}
 
 func (x *CheckPolicyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[61]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[63]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3953,7 +4049,7 @@ func (x *CheckPolicyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheckPolicyRequest.ProtoReflect.Descriptor instead.
 func (*CheckPolicyRequest) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{61}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{63}
 }
 
 func (x *CheckPolicyRequest) GetSandboxId() string {
@@ -4002,7 +4098,7 @@ type CheckPolicyResponse struct {
 
 func (x *CheckPolicyResponse) Reset() {
 	*x = CheckPolicyResponse{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[62]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[64]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4014,7 +4110,7 @@ func (x *CheckPolicyResponse) String() string {
 func (*CheckPolicyResponse) ProtoMessage() {}
 
 func (x *CheckPolicyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[62]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[64]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4027,7 +4123,7 @@ func (x *CheckPolicyResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheckPolicyResponse.ProtoReflect.Descriptor instead.
 func (*CheckPolicyResponse) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{62}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{64}
 }
 
 func (x *CheckPolicyResponse) GetAllowed() bool {
@@ -4059,7 +4155,7 @@ type GetVersionRequest struct {
 
 func (x *GetVersionRequest) Reset() {
 	*x = GetVersionRequest{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[63]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[65]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4071,7 +4167,7 @@ func (x *GetVersionRequest) String() string {
 func (*GetVersionRequest) ProtoMessage() {}
 
 func (x *GetVersionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[63]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[65]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4084,7 +4180,7 @@ func (x *GetVersionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetVersionRequest.ProtoReflect.Descriptor instead.
 func (*GetVersionRequest) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{63}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{65}
 }
 
 type GetVersionResponse struct {
@@ -4097,7 +4193,7 @@ type GetVersionResponse struct {
 
 func (x *GetVersionResponse) Reset() {
 	*x = GetVersionResponse{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[64]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[66]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4109,7 +4205,7 @@ func (x *GetVersionResponse) String() string {
 func (*GetVersionResponse) ProtoMessage() {}
 
 func (x *GetVersionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[64]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[66]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4122,7 +4218,7 @@ func (x *GetVersionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetVersionResponse.ProtoReflect.Descriptor instead.
 func (*GetVersionResponse) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{64}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{66}
 }
 
 func (x *GetVersionResponse) GetVersion() string {
@@ -4147,7 +4243,7 @@ type GetPolicyProfileRequest struct {
 
 func (x *GetPolicyProfileRequest) Reset() {
 	*x = GetPolicyProfileRequest{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[65]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[67]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4159,7 +4255,7 @@ func (x *GetPolicyProfileRequest) String() string {
 func (*GetPolicyProfileRequest) ProtoMessage() {}
 
 func (x *GetPolicyProfileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[65]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[67]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4172,7 +4268,7 @@ func (x *GetPolicyProfileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPolicyProfileRequest.ProtoReflect.Descriptor instead.
 func (*GetPolicyProfileRequest) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{65}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{67}
 }
 
 type GetPolicyProfileResponse struct {
@@ -4184,7 +4280,7 @@ type GetPolicyProfileResponse struct {
 
 func (x *GetPolicyProfileResponse) Reset() {
 	*x = GetPolicyProfileResponse{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[66]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[68]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4196,7 +4292,7 @@ func (x *GetPolicyProfileResponse) String() string {
 func (*GetPolicyProfileResponse) ProtoMessage() {}
 
 func (x *GetPolicyProfileResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[66]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[68]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4209,7 +4305,7 @@ func (x *GetPolicyProfileResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPolicyProfileResponse.ProtoReflect.Descriptor instead.
 func (*GetPolicyProfileResponse) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{66}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{68}
 }
 
 func (x *GetPolicyProfileResponse) GetProfile() string {
@@ -4228,7 +4324,7 @@ type SetPolicyProfileRequest struct {
 
 func (x *SetPolicyProfileRequest) Reset() {
 	*x = SetPolicyProfileRequest{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[67]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[69]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4240,7 +4336,7 @@ func (x *SetPolicyProfileRequest) String() string {
 func (*SetPolicyProfileRequest) ProtoMessage() {}
 
 func (x *SetPolicyProfileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[67]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[69]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4253,7 +4349,7 @@ func (x *SetPolicyProfileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetPolicyProfileRequest.ProtoReflect.Descriptor instead.
 func (*SetPolicyProfileRequest) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{67}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{69}
 }
 
 func (x *SetPolicyProfileRequest) GetProfile() string {
@@ -4272,7 +4368,7 @@ type SetPolicyProfileResponse struct {
 
 func (x *SetPolicyProfileResponse) Reset() {
 	*x = SetPolicyProfileResponse{}
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[68]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[70]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4284,7 +4380,7 @@ func (x *SetPolicyProfileResponse) String() string {
 func (*SetPolicyProfileResponse) ProtoMessage() {}
 
 func (x *SetPolicyProfileResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[68]
+	mi := &file_sandboxes_local_v1_sandbox_proto_msgTypes[70]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4297,7 +4393,7 @@ func (x *SetPolicyProfileResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetPolicyProfileResponse.ProtoReflect.Descriptor instead.
 func (*SetPolicyProfileResponse) Descriptor() ([]byte, []int) {
-	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{68}
+	return file_sandboxes_local_v1_sandbox_proto_rawDescGZIP(), []int{70}
 }
 
 func (x *SetPolicyProfileResponse) GetProfile() string {
@@ -4530,7 +4626,12 @@ const file_sandboxes_local_v1_sandbox_proto_rawDesc = "" +
 	"\x1bAccountServiceLogoutRequest\x12\x1a\n" +
 	"\bprovider\x18\x01 \x01(\tR\bprovider\"8\n" +
 	"\x1cAccountServiceLogoutResponse\x12\x18\n" +
-	"\aremoved\x18\x01 \x01(\bR\aremoved\"t\n" +
+	"\aremoved\x18\x01 \x01(\bR\aremoved\"9\n" +
+	"\x1bAccountServiceStatusRequest\x12\x1a\n" +
+	"\bprovider\x18\x01 \x01(\tR\bprovider\"i\n" +
+	"\x1cAccountServiceStatusResponse\x12\x1a\n" +
+	"\bprovider\x18\x01 \x01(\tR\bprovider\x12-\n" +
+	"\x12credential_present\x18\x02 \x01(\bR\x11credentialPresent\"t\n" +
 	" AccountServiceLoginDeviceRequest\x12\x1a\n" +
 	"\bprovider\x18\x01 \x01(\tR\bprovider\x124\n" +
 	"\x16continue_after_handoff\x18\x02 \x01(\bR\x14continueAfterHandoff\"\x91\x01\n" +
@@ -4646,12 +4747,13 @@ const file_sandboxes_local_v1_sandbox_proto_rawDesc = "" +
 	"\rSecretService\x12`\n" +
 	"\x03Set\x12+.sandboxes.local.v1.SecretServiceSetRequest\x1a,.sandboxes.local.v1.SecretServiceSetResponse\x12c\n" +
 	"\x04List\x12,.sandboxes.local.v1.SecretServiceListRequest\x1a-.sandboxes.local.v1.SecretServiceListResponse\x12i\n" +
-	"\x06Remove\x12..sandboxes.local.v1.SecretServiceRemoveRequest\x1a/.sandboxes.local.v1.SecretServiceRemoveResponse2\xe6\x03\n" +
+	"\x06Remove\x12..sandboxes.local.v1.SecretServiceRemoveRequest\x1a/.sandboxes.local.v1.SecretServiceRemoveResponse2\xd3\x04\n" +
 	"\x0eAccountService\x12h\n" +
 	"\x05Login\x12..sandboxes.local.v1.AccountServiceLoginRequest\x1a/.sandboxes.local.v1.AccountServiceLoginResponse\x12~\n" +
 	"\vLoginDevice\x124.sandboxes.local.v1.AccountServiceLoginDeviceRequest\x1a5.sandboxes.local.v1.AccountServiceLoginDeviceResponse(\x010\x01\x12}\n" +
 	"\fLoginWithPAT\x125.sandboxes.local.v1.AccountServiceLoginWithPATRequest\x1a6.sandboxes.local.v1.AccountServiceLoginWithPATResponse\x12k\n" +
-	"\x06Logout\x12/.sandboxes.local.v1.AccountServiceLogoutRequest\x1a0.sandboxes.local.v1.AccountServiceLogoutResponseBBZ@github.com/KLORQ/sandboxes-api/gen/go/sandboxes/local/v1;localv1b\x06proto3"
+	"\x06Logout\x12/.sandboxes.local.v1.AccountServiceLogoutRequest\x1a0.sandboxes.local.v1.AccountServiceLogoutResponse\x12k\n" +
+	"\x06Status\x12/.sandboxes.local.v1.AccountServiceStatusRequest\x1a0.sandboxes.local.v1.AccountServiceStatusResponseBBZ@github.com/KLORQ/sandboxes-api/gen/go/sandboxes/local/v1;localv1b\x06proto3"
 
 var (
 	file_sandboxes_local_v1_sandbox_proto_rawDescOnce sync.Once
@@ -4666,7 +4768,7 @@ func file_sandboxes_local_v1_sandbox_proto_rawDescGZIP() []byte {
 }
 
 var file_sandboxes_local_v1_sandbox_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_sandboxes_local_v1_sandbox_proto_msgTypes = make([]protoimpl.MessageInfo, 70)
+var file_sandboxes_local_v1_sandbox_proto_msgTypes = make([]protoimpl.MessageInfo, 72)
 var file_sandboxes_local_v1_sandbox_proto_goTypes = []any{
 	(SandboxState)(0),                               // 0: sandboxes.local.v1.SandboxState
 	(OperationKind)(0),                              // 1: sandboxes.local.v1.OperationKind
@@ -4721,27 +4823,29 @@ var file_sandboxes_local_v1_sandbox_proto_goTypes = []any{
 	(*AccountServiceLoginWithPATResponse)(nil),      // 50: sandboxes.local.v1.AccountServiceLoginWithPATResponse
 	(*AccountServiceLogoutRequest)(nil),             // 51: sandboxes.local.v1.AccountServiceLogoutRequest
 	(*AccountServiceLogoutResponse)(nil),            // 52: sandboxes.local.v1.AccountServiceLogoutResponse
-	(*AccountServiceLoginDeviceRequest)(nil),        // 53: sandboxes.local.v1.AccountServiceLoginDeviceRequest
-	(*AccountServiceLoginDeviceResponse)(nil),       // 54: sandboxes.local.v1.AccountServiceLoginDeviceResponse
-	(*UpdatePolicyRequest)(nil),                     // 55: sandboxes.local.v1.UpdatePolicyRequest
-	(*UpdatePolicyResponse)(nil),                    // 56: sandboxes.local.v1.UpdatePolicyResponse
-	(*MutatePolicyRequest)(nil),                     // 57: sandboxes.local.v1.MutatePolicyRequest
-	(*MutatePolicyResponse)(nil),                    // 58: sandboxes.local.v1.MutatePolicyResponse
-	(*UpdatePortsRequest)(nil),                      // 59: sandboxes.local.v1.UpdatePortsRequest
-	(*UpdatePortsResponse)(nil),                     // 60: sandboxes.local.v1.UpdatePortsResponse
-	(*GetGlobalPolicyRequest)(nil),                  // 61: sandboxes.local.v1.GetGlobalPolicyRequest
-	(*GetGlobalPolicyResponse)(nil),                 // 62: sandboxes.local.v1.GetGlobalPolicyResponse
-	(*MutateGlobalPolicyRequest)(nil),               // 63: sandboxes.local.v1.MutateGlobalPolicyRequest
-	(*MutateGlobalPolicyResponse)(nil),              // 64: sandboxes.local.v1.MutateGlobalPolicyResponse
-	(*CheckPolicyRequest)(nil),                      // 65: sandboxes.local.v1.CheckPolicyRequest
-	(*CheckPolicyResponse)(nil),                     // 66: sandboxes.local.v1.CheckPolicyResponse
-	(*GetVersionRequest)(nil),                       // 67: sandboxes.local.v1.GetVersionRequest
-	(*GetVersionResponse)(nil),                      // 68: sandboxes.local.v1.GetVersionResponse
-	(*GetPolicyProfileRequest)(nil),                 // 69: sandboxes.local.v1.GetPolicyProfileRequest
-	(*GetPolicyProfileResponse)(nil),                // 70: sandboxes.local.v1.GetPolicyProfileResponse
-	(*SetPolicyProfileRequest)(nil),                 // 71: sandboxes.local.v1.SetPolicyProfileRequest
-	(*SetPolicyProfileResponse)(nil),                // 72: sandboxes.local.v1.SetPolicyProfileResponse
-	nil,                                             // 73: sandboxes.local.v1.CreateRequest.EnvEntry
+	(*AccountServiceStatusRequest)(nil),             // 53: sandboxes.local.v1.AccountServiceStatusRequest
+	(*AccountServiceStatusResponse)(nil),            // 54: sandboxes.local.v1.AccountServiceStatusResponse
+	(*AccountServiceLoginDeviceRequest)(nil),        // 55: sandboxes.local.v1.AccountServiceLoginDeviceRequest
+	(*AccountServiceLoginDeviceResponse)(nil),       // 56: sandboxes.local.v1.AccountServiceLoginDeviceResponse
+	(*UpdatePolicyRequest)(nil),                     // 57: sandboxes.local.v1.UpdatePolicyRequest
+	(*UpdatePolicyResponse)(nil),                    // 58: sandboxes.local.v1.UpdatePolicyResponse
+	(*MutatePolicyRequest)(nil),                     // 59: sandboxes.local.v1.MutatePolicyRequest
+	(*MutatePolicyResponse)(nil),                    // 60: sandboxes.local.v1.MutatePolicyResponse
+	(*UpdatePortsRequest)(nil),                      // 61: sandboxes.local.v1.UpdatePortsRequest
+	(*UpdatePortsResponse)(nil),                     // 62: sandboxes.local.v1.UpdatePortsResponse
+	(*GetGlobalPolicyRequest)(nil),                  // 63: sandboxes.local.v1.GetGlobalPolicyRequest
+	(*GetGlobalPolicyResponse)(nil),                 // 64: sandboxes.local.v1.GetGlobalPolicyResponse
+	(*MutateGlobalPolicyRequest)(nil),               // 65: sandboxes.local.v1.MutateGlobalPolicyRequest
+	(*MutateGlobalPolicyResponse)(nil),              // 66: sandboxes.local.v1.MutateGlobalPolicyResponse
+	(*CheckPolicyRequest)(nil),                      // 67: sandboxes.local.v1.CheckPolicyRequest
+	(*CheckPolicyResponse)(nil),                     // 68: sandboxes.local.v1.CheckPolicyResponse
+	(*GetVersionRequest)(nil),                       // 69: sandboxes.local.v1.GetVersionRequest
+	(*GetVersionResponse)(nil),                      // 70: sandboxes.local.v1.GetVersionResponse
+	(*GetPolicyProfileRequest)(nil),                 // 71: sandboxes.local.v1.GetPolicyProfileRequest
+	(*GetPolicyProfileResponse)(nil),                // 72: sandboxes.local.v1.GetPolicyProfileResponse
+	(*SetPolicyProfileRequest)(nil),                 // 73: sandboxes.local.v1.SetPolicyProfileRequest
+	(*SetPolicyProfileResponse)(nil),                // 74: sandboxes.local.v1.SetPolicyProfileResponse
+	nil,                                             // 75: sandboxes.local.v1.CreateRequest.EnvEntry
 }
 var file_sandboxes_local_v1_sandbox_proto_depIdxs = []int32{
 	0,  // 0: sandboxes.local.v1.Sandbox.state:type_name -> sandboxes.local.v1.SandboxState
@@ -4755,7 +4859,7 @@ var file_sandboxes_local_v1_sandbox_proto_depIdxs = []int32{
 	5,  // 8: sandboxes.local.v1.CreateRequest.ports:type_name -> sandboxes.local.v1.Port
 	4,  // 9: sandboxes.local.v1.CreateRequest.allow:type_name -> sandboxes.local.v1.NetworkRule
 	4,  // 10: sandboxes.local.v1.CreateRequest.deny:type_name -> sandboxes.local.v1.NetworkRule
-	73, // 11: sandboxes.local.v1.CreateRequest.env:type_name -> sandboxes.local.v1.CreateRequest.EnvEntry
+	75, // 11: sandboxes.local.v1.CreateRequest.env:type_name -> sandboxes.local.v1.CreateRequest.EnvEntry
 	7,  // 12: sandboxes.local.v1.GetResponse.sandbox:type_name -> sandboxes.local.v1.Sandbox
 	7,  // 13: sandboxes.local.v1.ListResponse.items:type_name -> sandboxes.local.v1.Sandbox
 	7,  // 14: sandboxes.local.v1.WatchResponse.sandbox:type_name -> sandboxes.local.v1.Sandbox
@@ -4787,7 +4891,7 @@ var file_sandboxes_local_v1_sandbox_proto_depIdxs = []int32{
 	4,  // 40: sandboxes.local.v1.MutateGlobalPolicyResponse.allow:type_name -> sandboxes.local.v1.NetworkRule
 	4,  // 41: sandboxes.local.v1.MutateGlobalPolicyResponse.deny:type_name -> sandboxes.local.v1.NetworkRule
 	9,  // 42: sandboxes.local.v1.SandboxService.Create:input_type -> sandboxes.local.v1.CreateRequest
-	67, // 43: sandboxes.local.v1.SandboxService.GetVersion:input_type -> sandboxes.local.v1.GetVersionRequest
+	69, // 43: sandboxes.local.v1.SandboxService.GetVersion:input_type -> sandboxes.local.v1.GetVersionRequest
 	10, // 44: sandboxes.local.v1.SandboxService.Get:input_type -> sandboxes.local.v1.GetRequest
 	11, // 45: sandboxes.local.v1.SandboxService.List:input_type -> sandboxes.local.v1.ListRequest
 	14, // 46: sandboxes.local.v1.SandboxService.Start:input_type -> sandboxes.local.v1.StartRequest
@@ -4796,14 +4900,14 @@ var file_sandboxes_local_v1_sandbox_proto_depIdxs = []int32{
 	19, // 49: sandboxes.local.v1.SandboxService.Watch:input_type -> sandboxes.local.v1.WatchRequest
 	25, // 50: sandboxes.local.v1.SandboxService.Exec:input_type -> sandboxes.local.v1.ExecRequest
 	29, // 51: sandboxes.local.v1.SandboxService.ExecSession:input_type -> sandboxes.local.v1.ExecSessionRequest
-	55, // 52: sandboxes.local.v1.SandboxService.UpdatePolicy:input_type -> sandboxes.local.v1.UpdatePolicyRequest
-	57, // 53: sandboxes.local.v1.SandboxService.MutatePolicy:input_type -> sandboxes.local.v1.MutatePolicyRequest
-	59, // 54: sandboxes.local.v1.SandboxService.UpdatePorts:input_type -> sandboxes.local.v1.UpdatePortsRequest
-	69, // 55: sandboxes.local.v1.SandboxService.GetPolicyProfile:input_type -> sandboxes.local.v1.GetPolicyProfileRequest
-	71, // 56: sandboxes.local.v1.SandboxService.SetPolicyProfile:input_type -> sandboxes.local.v1.SetPolicyProfileRequest
-	61, // 57: sandboxes.local.v1.SandboxService.GetGlobalPolicy:input_type -> sandboxes.local.v1.GetGlobalPolicyRequest
-	63, // 58: sandboxes.local.v1.SandboxService.MutateGlobalPolicy:input_type -> sandboxes.local.v1.MutateGlobalPolicyRequest
-	65, // 59: sandboxes.local.v1.SandboxService.CheckPolicy:input_type -> sandboxes.local.v1.CheckPolicyRequest
+	57, // 52: sandboxes.local.v1.SandboxService.UpdatePolicy:input_type -> sandboxes.local.v1.UpdatePolicyRequest
+	59, // 53: sandboxes.local.v1.SandboxService.MutatePolicy:input_type -> sandboxes.local.v1.MutatePolicyRequest
+	61, // 54: sandboxes.local.v1.SandboxService.UpdatePorts:input_type -> sandboxes.local.v1.UpdatePortsRequest
+	71, // 55: sandboxes.local.v1.SandboxService.GetPolicyProfile:input_type -> sandboxes.local.v1.GetPolicyProfileRequest
+	73, // 56: sandboxes.local.v1.SandboxService.SetPolicyProfile:input_type -> sandboxes.local.v1.SetPolicyProfileRequest
+	63, // 57: sandboxes.local.v1.SandboxService.GetGlobalPolicy:input_type -> sandboxes.local.v1.GetGlobalPolicyRequest
+	65, // 58: sandboxes.local.v1.SandboxService.MutateGlobalPolicy:input_type -> sandboxes.local.v1.MutateGlobalPolicyRequest
+	67, // 59: sandboxes.local.v1.SandboxService.CheckPolicy:input_type -> sandboxes.local.v1.CheckPolicyRequest
 	17, // 60: sandboxes.local.v1.OperationService.Get:input_type -> sandboxes.local.v1.OperationServiceGetRequest
 	18, // 61: sandboxes.local.v1.OperationService.Wait:input_type -> sandboxes.local.v1.OperationServiceWaitRequest
 	33, // 62: sandboxes.local.v1.RegistryCredentialService.Login:input_type -> sandboxes.local.v1.RegistryCredentialServiceLoginRequest
@@ -4813,41 +4917,43 @@ var file_sandboxes_local_v1_sandbox_proto_depIdxs = []int32{
 	43, // 66: sandboxes.local.v1.SecretService.List:input_type -> sandboxes.local.v1.SecretServiceListRequest
 	45, // 67: sandboxes.local.v1.SecretService.Remove:input_type -> sandboxes.local.v1.SecretServiceRemoveRequest
 	47, // 68: sandboxes.local.v1.AccountService.Login:input_type -> sandboxes.local.v1.AccountServiceLoginRequest
-	53, // 69: sandboxes.local.v1.AccountService.LoginDevice:input_type -> sandboxes.local.v1.AccountServiceLoginDeviceRequest
+	55, // 69: sandboxes.local.v1.AccountService.LoginDevice:input_type -> sandboxes.local.v1.AccountServiceLoginDeviceRequest
 	49, // 70: sandboxes.local.v1.AccountService.LoginWithPAT:input_type -> sandboxes.local.v1.AccountServiceLoginWithPATRequest
 	51, // 71: sandboxes.local.v1.AccountService.Logout:input_type -> sandboxes.local.v1.AccountServiceLogoutRequest
-	21, // 72: sandboxes.local.v1.SandboxService.Create:output_type -> sandboxes.local.v1.CreateResponse
-	68, // 73: sandboxes.local.v1.SandboxService.GetVersion:output_type -> sandboxes.local.v1.GetVersionResponse
-	12, // 74: sandboxes.local.v1.SandboxService.Get:output_type -> sandboxes.local.v1.GetResponse
-	13, // 75: sandboxes.local.v1.SandboxService.List:output_type -> sandboxes.local.v1.ListResponse
-	22, // 76: sandboxes.local.v1.SandboxService.Start:output_type -> sandboxes.local.v1.StartResponse
-	23, // 77: sandboxes.local.v1.SandboxService.Stop:output_type -> sandboxes.local.v1.StopResponse
-	24, // 78: sandboxes.local.v1.SandboxService.Delete:output_type -> sandboxes.local.v1.DeleteResponse
-	20, // 79: sandboxes.local.v1.SandboxService.Watch:output_type -> sandboxes.local.v1.WatchResponse
-	26, // 80: sandboxes.local.v1.SandboxService.Exec:output_type -> sandboxes.local.v1.ExecResponse
-	30, // 81: sandboxes.local.v1.SandboxService.ExecSession:output_type -> sandboxes.local.v1.ExecSessionResponse
-	56, // 82: sandboxes.local.v1.SandboxService.UpdatePolicy:output_type -> sandboxes.local.v1.UpdatePolicyResponse
-	58, // 83: sandboxes.local.v1.SandboxService.MutatePolicy:output_type -> sandboxes.local.v1.MutatePolicyResponse
-	60, // 84: sandboxes.local.v1.SandboxService.UpdatePorts:output_type -> sandboxes.local.v1.UpdatePortsResponse
-	70, // 85: sandboxes.local.v1.SandboxService.GetPolicyProfile:output_type -> sandboxes.local.v1.GetPolicyProfileResponse
-	72, // 86: sandboxes.local.v1.SandboxService.SetPolicyProfile:output_type -> sandboxes.local.v1.SetPolicyProfileResponse
-	62, // 87: sandboxes.local.v1.SandboxService.GetGlobalPolicy:output_type -> sandboxes.local.v1.GetGlobalPolicyResponse
-	64, // 88: sandboxes.local.v1.SandboxService.MutateGlobalPolicy:output_type -> sandboxes.local.v1.MutateGlobalPolicyResponse
-	66, // 89: sandboxes.local.v1.SandboxService.CheckPolicy:output_type -> sandboxes.local.v1.CheckPolicyResponse
-	31, // 90: sandboxes.local.v1.OperationService.Get:output_type -> sandboxes.local.v1.OperationServiceGetResponse
-	32, // 91: sandboxes.local.v1.OperationService.Wait:output_type -> sandboxes.local.v1.OperationServiceWaitResponse
-	34, // 92: sandboxes.local.v1.RegistryCredentialService.Login:output_type -> sandboxes.local.v1.RegistryCredentialServiceLoginResponse
-	39, // 93: sandboxes.local.v1.RegistryCredentialService.Logout:output_type -> sandboxes.local.v1.RegistryCredentialServiceLogoutResponse
-	38, // 94: sandboxes.local.v1.RegistryCredentialService.List:output_type -> sandboxes.local.v1.RegistryCredentialServiceListResponse
-	42, // 95: sandboxes.local.v1.SecretService.Set:output_type -> sandboxes.local.v1.SecretServiceSetResponse
-	44, // 96: sandboxes.local.v1.SecretService.List:output_type -> sandboxes.local.v1.SecretServiceListResponse
-	46, // 97: sandboxes.local.v1.SecretService.Remove:output_type -> sandboxes.local.v1.SecretServiceRemoveResponse
-	48, // 98: sandboxes.local.v1.AccountService.Login:output_type -> sandboxes.local.v1.AccountServiceLoginResponse
-	54, // 99: sandboxes.local.v1.AccountService.LoginDevice:output_type -> sandboxes.local.v1.AccountServiceLoginDeviceResponse
-	50, // 100: sandboxes.local.v1.AccountService.LoginWithPAT:output_type -> sandboxes.local.v1.AccountServiceLoginWithPATResponse
-	52, // 101: sandboxes.local.v1.AccountService.Logout:output_type -> sandboxes.local.v1.AccountServiceLogoutResponse
-	72, // [72:102] is the sub-list for method output_type
-	42, // [42:72] is the sub-list for method input_type
+	53, // 72: sandboxes.local.v1.AccountService.Status:input_type -> sandboxes.local.v1.AccountServiceStatusRequest
+	21, // 73: sandboxes.local.v1.SandboxService.Create:output_type -> sandboxes.local.v1.CreateResponse
+	70, // 74: sandboxes.local.v1.SandboxService.GetVersion:output_type -> sandboxes.local.v1.GetVersionResponse
+	12, // 75: sandboxes.local.v1.SandboxService.Get:output_type -> sandboxes.local.v1.GetResponse
+	13, // 76: sandboxes.local.v1.SandboxService.List:output_type -> sandboxes.local.v1.ListResponse
+	22, // 77: sandboxes.local.v1.SandboxService.Start:output_type -> sandboxes.local.v1.StartResponse
+	23, // 78: sandboxes.local.v1.SandboxService.Stop:output_type -> sandboxes.local.v1.StopResponse
+	24, // 79: sandboxes.local.v1.SandboxService.Delete:output_type -> sandboxes.local.v1.DeleteResponse
+	20, // 80: sandboxes.local.v1.SandboxService.Watch:output_type -> sandboxes.local.v1.WatchResponse
+	26, // 81: sandboxes.local.v1.SandboxService.Exec:output_type -> sandboxes.local.v1.ExecResponse
+	30, // 82: sandboxes.local.v1.SandboxService.ExecSession:output_type -> sandboxes.local.v1.ExecSessionResponse
+	58, // 83: sandboxes.local.v1.SandboxService.UpdatePolicy:output_type -> sandboxes.local.v1.UpdatePolicyResponse
+	60, // 84: sandboxes.local.v1.SandboxService.MutatePolicy:output_type -> sandboxes.local.v1.MutatePolicyResponse
+	62, // 85: sandboxes.local.v1.SandboxService.UpdatePorts:output_type -> sandboxes.local.v1.UpdatePortsResponse
+	72, // 86: sandboxes.local.v1.SandboxService.GetPolicyProfile:output_type -> sandboxes.local.v1.GetPolicyProfileResponse
+	74, // 87: sandboxes.local.v1.SandboxService.SetPolicyProfile:output_type -> sandboxes.local.v1.SetPolicyProfileResponse
+	64, // 88: sandboxes.local.v1.SandboxService.GetGlobalPolicy:output_type -> sandboxes.local.v1.GetGlobalPolicyResponse
+	66, // 89: sandboxes.local.v1.SandboxService.MutateGlobalPolicy:output_type -> sandboxes.local.v1.MutateGlobalPolicyResponse
+	68, // 90: sandboxes.local.v1.SandboxService.CheckPolicy:output_type -> sandboxes.local.v1.CheckPolicyResponse
+	31, // 91: sandboxes.local.v1.OperationService.Get:output_type -> sandboxes.local.v1.OperationServiceGetResponse
+	32, // 92: sandboxes.local.v1.OperationService.Wait:output_type -> sandboxes.local.v1.OperationServiceWaitResponse
+	34, // 93: sandboxes.local.v1.RegistryCredentialService.Login:output_type -> sandboxes.local.v1.RegistryCredentialServiceLoginResponse
+	39, // 94: sandboxes.local.v1.RegistryCredentialService.Logout:output_type -> sandboxes.local.v1.RegistryCredentialServiceLogoutResponse
+	38, // 95: sandboxes.local.v1.RegistryCredentialService.List:output_type -> sandboxes.local.v1.RegistryCredentialServiceListResponse
+	42, // 96: sandboxes.local.v1.SecretService.Set:output_type -> sandboxes.local.v1.SecretServiceSetResponse
+	44, // 97: sandboxes.local.v1.SecretService.List:output_type -> sandboxes.local.v1.SecretServiceListResponse
+	46, // 98: sandboxes.local.v1.SecretService.Remove:output_type -> sandboxes.local.v1.SecretServiceRemoveResponse
+	48, // 99: sandboxes.local.v1.AccountService.Login:output_type -> sandboxes.local.v1.AccountServiceLoginResponse
+	56, // 100: sandboxes.local.v1.AccountService.LoginDevice:output_type -> sandboxes.local.v1.AccountServiceLoginDeviceResponse
+	50, // 101: sandboxes.local.v1.AccountService.LoginWithPAT:output_type -> sandboxes.local.v1.AccountServiceLoginWithPATResponse
+	52, // 102: sandboxes.local.v1.AccountService.Logout:output_type -> sandboxes.local.v1.AccountServiceLogoutResponse
+	54, // 103: sandboxes.local.v1.AccountService.Status:output_type -> sandboxes.local.v1.AccountServiceStatusResponse
+	73, // [73:104] is the sub-list for method output_type
+	42, // [42:73] is the sub-list for method input_type
 	42, // [42:42] is the sub-list for extension type_name
 	42, // [42:42] is the sub-list for extension extendee
 	0,  // [0:42] is the sub-list for field type_name
@@ -4880,7 +4986,7 @@ func file_sandboxes_local_v1_sandbox_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sandboxes_local_v1_sandbox_proto_rawDesc), len(file_sandboxes_local_v1_sandbox_proto_rawDesc)),
 			NumEnums:      4,
-			NumMessages:   70,
+			NumMessages:   72,
 			NumExtensions: 0,
 			NumServices:   5,
 		},

@@ -348,6 +348,15 @@ message AccountServiceLogoutResponse {
   bool removed = 1;
 }
 
+message AccountServiceStatusRequest {
+  string provider = 1;
+}
+
+message AccountServiceStatusResponse {
+  string provider = 1;
+  bool credential_present = 2;
+}
+
 // The device-login stream keeps the device code on the daemon. The user code
 // and verification URL are intentionally returned so the caller can complete
 // the provider's interactive handoff before polling begins.
@@ -486,4 +495,5 @@ service AccountService {
   rpc LoginDevice(stream AccountServiceLoginDeviceRequest) returns (stream AccountServiceLoginDeviceResponse);
   rpc LoginWithPAT(AccountServiceLoginWithPATRequest) returns (AccountServiceLoginWithPATResponse);
   rpc Logout(AccountServiceLogoutRequest) returns (AccountServiceLogoutResponse);
+  rpc Status(AccountServiceStatusRequest) returns (AccountServiceStatusResponse);
 }
