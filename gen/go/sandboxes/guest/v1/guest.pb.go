@@ -146,7 +146,7 @@ const file_sandboxes_guest_v1_guest_proto_rawDesc = "" +
 	"\x04data\x18\x01 \x01(\fR\x04data\x12\x1b\n" +
 	"\texit_code\x18\x02 \x01(\x05R\bexitCode2]\n" +
 	"\fGuestService\x12M\n" +
-	"\x04Exec\x12\x1f.sandboxes.guest.v1.ExecRequest\x1a .sandboxes.guest.v1.ExecResponse(\x010\x01BDZBgithub.com/quoiner/sandboxes-api/gen/go/sandboxes/guest/v1;guestv1b\x06proto3"
+	"\x04Exec\x12\x1f.sandboxes.guest.v1.ExecRequest\x1a .sandboxes.guest.v1.ExecResponse(\x010\x01BDZBgithub.com/lickren/sandboxes-api/gen/go/sandboxes/guest/v1;guestv1b\x06proto3"
 
 var (
 	file_sandboxes_guest_v1_guest_proto_rawDescOnce sync.Once

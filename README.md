@@ -1,5 +1,9 @@
 # sandboxes-api
 
+## Import path migration
+
+The canonical Go module path is now `github.com/lickren/sandboxes-api` (previously `github.com/quoiner/sandboxes-api`). Update imports and `go.mod` requirements when moving to a release that includes this change. The old module path is not kept as a compatibility alias.
+
 Status: pre-alpha.
 
 Public wire contracts for the sandboxes platform. This repository is the single
@@ -32,7 +36,7 @@ gen/go/                    generated Go, checked in
 Generated code is produced with `buf` and must not be edited by hand.
 
 `RegistryCredentialService.Login/Logout` transports registry credentials only
-between `qsbx` and the local daemon. The daemon stores them in the host OS
+between `lsbx` and the local daemon. The daemon stores them in the host OS
 credential vault; responses never include secret values. This API does not
 claim that registry auth has been verified or that guest pulls are enabled.
 
