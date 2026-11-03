@@ -1,5 +1,9 @@
 # sandboxes-api
 
+## Import path migration
+
+The canonical Go module path is now `github.com/lickren/sandboxes-api` (previously `github.com/quoiner/sandboxes-api`). Update imports and `go.mod` requirements when moving to a release that includes this change. The old module path is not kept as a compatibility alias.
+
 Status: pre-alpha.
 
 Public wire contracts for the sandboxes platform. This repository is the single
