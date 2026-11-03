@@ -4753,7 +4753,7 @@ const file_sandboxes_local_v1_sandbox_proto_rawDesc = "" +
 	"\vLoginDevice\x124.sandboxes.local.v1.AccountServiceLoginDeviceRequest\x1a5.sandboxes.local.v1.AccountServiceLoginDeviceResponse(\x010\x01\x12}\n" +
 	"\fLoginWithPAT\x125.sandboxes.local.v1.AccountServiceLoginWithPATRequest\x1a6.sandboxes.local.v1.AccountServiceLoginWithPATResponse\x12k\n" +
 	"\x06Logout\x12/.sandboxes.local.v1.AccountServiceLogoutRequest\x1a0.sandboxes.local.v1.AccountServiceLogoutResponse\x12k\n" +
-	"\x06Status\x12/.sandboxes.local.v1.AccountServiceStatusRequest\x1a0.sandboxes.local.v1.AccountServiceStatusResponseBDZBgithub.com/lickren/sandboxes-api/gen/go/sandboxes/local/v1;localv1b\x06proto3"
+	"\x06Status\x12/.sandboxes.local.v1.AccountServiceStatusRequest\x1a0.sandboxes.local.v1.AccountServiceStatusResponseBDZBgithub.com/rheic/sandboxes-api/gen/go/sandboxes/local/v1;localv1b\x06proto3"
 
 var (
 	file_sandboxes_local_v1_sandbox_proto_rawDescOnce sync.Once
