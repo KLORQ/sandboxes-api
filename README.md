@@ -32,7 +32,7 @@ gen/go/                    generated Go, checked in
 Generated code is produced with `buf` and must not be edited by hand.
 
 `RegistryCredentialService.Login/Logout` transports registry credentials only
-between `qsbx` and the local daemon. The daemon stores them in the host OS
+between `lsbx` and the local daemon. The daemon stores them in the host OS
 credential vault; responses never include secret values. This API does not
 claim that registry auth has been verified or that guest pulls are enabled.
 
