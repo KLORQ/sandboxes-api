@@ -9,7 +9,8 @@ permissions:
   contents: read
 
 jobs:
-  go:
+  dependencies:
+    name: Dependencies
     runs-on: ubuntu-latest
     env:
       GOTOOLCHAIN: local
@@ -19,37 +20,151 @@ jobs:
         with:
           go-version: '1.27.3'
           cache: true
-      - name: Contract drift
+      - name: Download and verify dependencies
+        run: go mod download && go mod verify
+
+  tidy:
+    name: Module Tidy
+    runs-on: ubuntu-latest
+    env:
+      GOTOOLCHAIN: local
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.3'
+          cache: true
+      - name: Check module files are tidy
+        run: go mod tidy && git diff --exit-code -- go.mod go.sum
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      GOTOOLCHAIN: local
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.3'
+          cache: true
+      - name: Build packages
+        run: go build ./...
+
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    env:
+      GOTOOLCHAIN: local
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.3'
+          cache: true
+      - name: Check Go formatting
+        run: test -z "$(gofmt -l .)"
+
+  vet:
+    name: Vet
+    runs-on: ubuntu-latest
+    env:
+      GOTOOLCHAIN: local
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.3'
+          cache: true
+      - name: Run go vet
+        run: go vet ./...
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    env:
+      GOTOOLCHAIN: local
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.3'
+          cache: true
+      - name: Run race tests
+        run: go test -race -count=1 ./...
+
+  contract:
+    name: Contract
+    runs-on: ubuntu-latest
+    env:
+      GOTOOLCHAIN: local
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.3'
+          cache: true
+      - name: Verify protobuf contract generation
         run: |
           go install github.com/bufbuild/buf/cmd/buf@v1.50.0
           go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.11
           go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.6.0
-          export PATH="$(go env GOPATH)/bin:$PATH"
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
           buf lint
           buf generate
           git diff --exit-code
-      - name: Format
-        run: test -z "$(gofmt -l .)"
-      - name: Vet
-        run: go vet ./...
-      - name: Test
-        run: go test -race -count=1 ./...
-      - name: Install analyzers
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    env:
+      GOTOOLCHAIN: local
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.3'
+          cache: true
+      - name: Install pinned analyzers
         run: |
           go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.14.0
-          go install golang.org/x/vuln/cmd/govulncheck@v1.9.0
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
-      - name: Lint
+      - name: Run strict lint
         run: |
           golangci-lint config verify
           golangci-lint run ./...
-      - name: Vulnerability check
-        run: govulncheck ./...
-      - name: Generate CycloneDX module SBOM
-        run: |
-          go install github.com/CycloneDX/cyclonedx-gomod/cmd/cyclonedx-gomod@v1.12.0
-          cyclonedx-gomod mod -json -licenses -test -type library \
-            -output "$RUNNER_TEMP/sandboxes-api.cdx.json" .
+
+  vulnerability:
+    name: Vulnerability
+    runs-on: ubuntu-latest
+    env:
+      GOTOOLCHAIN: local
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.3'
+          cache: true
+      - name: Install govulncheck
+        run: go install golang.org/x/vuln/cmd/govulncheck@v1.9.0
+      - name: Scan reachable vulnerabilities
+        run: "$(go env GOPATH)/bin/govulncheck" ./...
+
+  sbom:
+    name: Sbom
+    runs-on: ubuntu-latest
+    env:
+      GOTOOLCHAIN: local
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.3'
+          cache: true
+      - name: Install CycloneDX generator
+        run: go install github.com/CycloneDX/cyclonedx-gomod/cmd/cyclonedx-gomod@v1.12.0
+      - name: Generate module SBOM
+        run: cyclonedx-gomod mod -json -licenses -test -type library -output "$RUNNER_TEMP/sandboxes-api.cdx.json" .
       - uses: actions/upload-artifact@v4
         with:
           name: sandboxes-api-sbom-${{ github.sha }}
