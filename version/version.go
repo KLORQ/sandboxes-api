@@ -2,7 +2,7 @@
 package version
 
 // Version is the current module version.
-const Version = "0.0.10"
+const Version = "0.0.12"
 
 // SourceSHA256 fingerprints the local sandbox contract used to generate bindings.
-const SourceSHA256 = "201520dd1938254dfbec6f2e89086e5db1ff275caec1f7badd8b64cfb20ba55b"
+const SourceSHA256 = "ad4261cf6480d9183969d690b04c7efea87d8aceff85b2fe2e38d4eceb32c3f6"

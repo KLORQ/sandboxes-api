@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package sandboxes.local.v1;
 
-option go_package = "github.com/KLORQ/sandboxes-api/gen/go/sandboxes/local/v1;localv1";
+option go_package = "github.com/quoiner/sandboxes-api/gen/go/sandboxes/local/v1;localv1";
 
 enum SandboxState {
   SANDBOX_STATE_UNSPECIFIED = 0;
@@ -348,6 +348,29 @@ message AccountServiceLogoutResponse {
   bool removed = 1;
 }
 
+message AccountServiceStatusRequest {
+  string provider = 1;
+}
+
+message AccountServiceStatusResponse {
+  string provider = 1;
+  bool credential_present = 2;
+}
+
+// The device-login stream keeps the device code on the daemon. The user code
+// and verification URL are intentionally returned so the caller can complete
+// the provider's interactive handoff before polling begins.
+message AccountServiceLoginDeviceRequest {
+  string provider = 1;
+  bool continue_after_handoff = 2;
+}
+
+message AccountServiceLoginDeviceResponse {
+  string user_code = 1;
+  string verification_uri = 2;
+  bool authenticated = 3;
+}
+
 message UpdatePolicyRequest {
   string id = 1;
   repeated NetworkRule allow = 2;
@@ -469,6 +492,8 @@ service SecretService {
 
 service AccountService {
   rpc Login(AccountServiceLoginRequest) returns (AccountServiceLoginResponse);
+  rpc LoginDevice(stream AccountServiceLoginDeviceRequest) returns (stream AccountServiceLoginDeviceResponse);
   rpc LoginWithPAT(AccountServiceLoginWithPATRequest) returns (AccountServiceLoginWithPATResponse);
   rpc Logout(AccountServiceLogoutRequest) returns (AccountServiceLogoutResponse);
+  rpc Status(AccountServiceStatusRequest) returns (AccountServiceStatusResponse);
 }

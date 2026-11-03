@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package sandboxes.guest.v1;
 
-option go_package = "github.com/KLORQ/sandboxes-api/gen/go/sandboxes/guest/v1;guestv1";
+option go_package = "github.com/quoiner/sandboxes-api/gen/go/sandboxes/guest/v1;guestv1";
 
 message ExecRequest {
   repeated string argv = 1;
