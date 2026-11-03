@@ -1,4 +1,4 @@
-module github.com/lickren/sandboxes-api
+module github.com/rheic/sandboxes-api
 
 go 1.27
 
