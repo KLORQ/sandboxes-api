@@ -118,6 +118,7 @@ message CreateRequest {
   string policy_profile = 14;
   // Runs the sandbox with the dedicated privileged Docker profile.
   bool privileged = 15;
+  // OAuth kit metadata only; never put real access or refresh tokens here.
   repeated OAuthCredential oauth_credentials = 16;
 }
 
@@ -132,6 +133,7 @@ message OAuthCredential {
   OAuthCredentialFile credential_file = 5;
   OAuthResponseFields response_fields = 6;
   bool passthrough = 7;
+  // Carried for Docker v2 schema compatibility; it does not grant access.
   repeated string skip_if_env = 8;
 }
 
@@ -147,6 +149,7 @@ message OAuthSentinels {
 
 message OAuthCredentialFile {
   string path = 1;
+  // JSON-encoded structure object; structure takes precedence over template.
   string structure_json = 2;
   string template = 3;
 }

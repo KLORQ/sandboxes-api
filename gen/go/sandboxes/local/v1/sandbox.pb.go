@@ -776,7 +776,8 @@ type CreateRequest struct {
 	Env           map[string]string `protobuf:"bytes,13,rep,name=env,proto3" json:"env,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	PolicyProfile string            `protobuf:"bytes,14,opt,name=policy_profile,json=policyProfile,proto3" json:"policy_profile,omitempty"`
 	// Runs the sandbox with the dedicated privileged Docker profile.
-	Privileged       bool               `protobuf:"varint,15,opt,name=privileged,proto3" json:"privileged,omitempty"`
+	Privileged bool `protobuf:"varint,15,opt,name=privileged,proto3" json:"privileged,omitempty"`
+	// OAuth kit metadata only; never put real access or refresh tokens here.
 	OauthCredentials []*OAuthCredential `protobuf:"bytes,16,rep,name=oauth_credentials,json=oauthCredentials,proto3" json:"oauth_credentials,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
@@ -936,9 +937,10 @@ type OAuthCredential struct {
 	CredentialFile *OAuthCredentialFile   `protobuf:"bytes,5,opt,name=credential_file,json=credentialFile,proto3" json:"credential_file,omitempty"`
 	ResponseFields *OAuthResponseFields   `protobuf:"bytes,6,opt,name=response_fields,json=responseFields,proto3" json:"response_fields,omitempty"`
 	Passthrough    bool                   `protobuf:"varint,7,opt,name=passthrough,proto3" json:"passthrough,omitempty"`
-	SkipIfEnv      []string               `protobuf:"bytes,8,rep,name=skip_if_env,json=skipIfEnv,proto3" json:"skip_if_env,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// Carried for Docker v2 schema compatibility; it does not grant access.
+	SkipIfEnv     []string `protobuf:"bytes,8,rep,name=skip_if_env,json=skipIfEnv,proto3" json:"skip_if_env,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *OAuthCredential) Reset() {
@@ -1132,10 +1134,11 @@ func (x *OAuthSentinels) GetRefreshToken() string {
 }
 
 type OAuthCredentialFile struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Path          string                 `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
-	StructureJson string                 `protobuf:"bytes,2,opt,name=structure_json,json=structureJson,proto3" json:"structure_json,omitempty"`
-	Template      string                 `protobuf:"bytes,3,opt,name=template,proto3" json:"template,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Path  string                 `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
+	// JSON-encoded structure object; structure takes precedence over template.
+	StructureJson string `protobuf:"bytes,2,opt,name=structure_json,json=structureJson,proto3" json:"structure_json,omitempty"`
+	Template      string `protobuf:"bytes,3,opt,name=template,proto3" json:"template,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
