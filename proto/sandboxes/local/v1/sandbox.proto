@@ -348,6 +348,17 @@ message SecretServiceSetResponse {
   SecretSummary secret = 1;
 }
 
+message SecretServiceCreateRequest {
+  string service = 1;
+  string scope = 2;
+  string sandbox_name = 3;
+  bytes value = 4;
+}
+
+message SecretServiceCreateResponse {
+  SecretSummary secret = 1;
+}
+
 message SecretServiceListRequest {}
 
 message SecretServiceListResponse {
@@ -528,6 +539,7 @@ service RegistryCredentialService {
 
 service SecretService {
   rpc Set(SecretServiceSetRequest) returns (SecretServiceSetResponse);
+  rpc Create(SecretServiceCreateRequest) returns (SecretServiceCreateResponse);
   rpc List(SecretServiceListRequest) returns (SecretServiceListResponse);
   rpc Remove(SecretServiceRemoveRequest) returns (SecretServiceRemoveResponse);
 }
