@@ -118,6 +118,45 @@ message CreateRequest {
   string policy_profile = 14;
   // Runs the sandbox with the dedicated privileged Docker profile.
   bool privileged = 15;
+  repeated OAuthCredential oauth_credentials = 16;
+}
+
+// OAuthCredential mirrors the Docker Sandboxes v2 OAuth kit declaration.
+// Values are configuration metadata; real tokens remain host-side unless the
+// explicitly weaker passthrough mode is selected.
+message OAuthCredential {
+  string service = 1;
+  OAuthTokenEndpoint token_endpoint = 2;
+  repeated string resource_hosts = 3;
+  OAuthSentinels sentinels = 4;
+  OAuthCredentialFile credential_file = 5;
+  OAuthResponseFields response_fields = 6;
+  bool passthrough = 7;
+  repeated string skip_if_env = 8;
+}
+
+message OAuthTokenEndpoint {
+  string host = 1;
+  string path = 2;
+}
+
+message OAuthSentinels {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+message OAuthCredentialFile {
+  string path = 1;
+  string structure_json = 2;
+  string template = 3;
+}
+
+message OAuthResponseFields {
+  string access_token = 1;
+  string refresh_token = 2;
+  string expires_in = 3;
+  string scope = 4;
+  string id_token = 5;
 }
 
 message GetRequest {
