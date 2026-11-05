@@ -1088,6 +1088,7 @@ var RegistryCredentialService_ServiceDesc = grpc.ServiceDesc{
 
 const (
 	SecretService_Set_FullMethodName    = "/sandboxes.local.v1.SecretService/Set"
+	SecretService_Create_FullMethodName = "/sandboxes.local.v1.SecretService/Create"
 	SecretService_List_FullMethodName   = "/sandboxes.local.v1.SecretService/List"
 	SecretService_Remove_FullMethodName = "/sandboxes.local.v1.SecretService/Remove"
 )
@@ -1097,6 +1098,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SecretServiceClient interface {
 	Set(ctx context.Context, in *SecretServiceSetRequest, opts ...grpc.CallOption) (*SecretServiceSetResponse, error)
+	Create(ctx context.Context, in *SecretServiceCreateRequest, opts ...grpc.CallOption) (*SecretServiceCreateResponse, error)
 	List(ctx context.Context, in *SecretServiceListRequest, opts ...grpc.CallOption) (*SecretServiceListResponse, error)
 	Remove(ctx context.Context, in *SecretServiceRemoveRequest, opts ...grpc.CallOption) (*SecretServiceRemoveResponse, error)
 }
@@ -1113,6 +1115,16 @@ func (c *secretServiceClient) Set(ctx context.Context, in *SecretServiceSetReque
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SecretServiceSetResponse)
 	err := c.cc.Invoke(ctx, SecretService_Set_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *secretServiceClient) Create(ctx context.Context, in *SecretServiceCreateRequest, opts ...grpc.CallOption) (*SecretServiceCreateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SecretServiceCreateResponse)
+	err := c.cc.Invoke(ctx, SecretService_Create_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1144,6 +1156,7 @@ func (c *secretServiceClient) Remove(ctx context.Context, in *SecretServiceRemov
 // for forward compatibility.
 type SecretServiceServer interface {
 	Set(context.Context, *SecretServiceSetRequest) (*SecretServiceSetResponse, error)
+	Create(context.Context, *SecretServiceCreateRequest) (*SecretServiceCreateResponse, error)
 	List(context.Context, *SecretServiceListRequest) (*SecretServiceListResponse, error)
 	Remove(context.Context, *SecretServiceRemoveRequest) (*SecretServiceRemoveResponse, error)
 	mustEmbedUnimplementedSecretServiceServer()
@@ -1158,6 +1171,9 @@ type UnimplementedSecretServiceServer struct{}
 
 func (UnimplementedSecretServiceServer) Set(context.Context, *SecretServiceSetRequest) (*SecretServiceSetResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Set not implemented")
+}
+func (UnimplementedSecretServiceServer) Create(context.Context, *SecretServiceCreateRequest) (*SecretServiceCreateResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Create not implemented")
 }
 func (UnimplementedSecretServiceServer) List(context.Context, *SecretServiceListRequest) (*SecretServiceListResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
@@ -1200,6 +1216,24 @@ func _SecretService_Set_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SecretServiceServer).Set(ctx, req.(*SecretServiceSetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SecretService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SecretServiceCreateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SecretServiceServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SecretService_Create_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SecretServiceServer).Create(ctx, req.(*SecretServiceCreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1250,6 +1284,10 @@ var SecretService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Set",
 			Handler:    _SecretService_Set_Handler,
+		},
+		{
+			MethodName: "Create",
+			Handler:    _SecretService_Create_Handler,
 		},
 		{
 			MethodName: "List",

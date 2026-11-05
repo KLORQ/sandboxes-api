@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.0.15 — 2026-11-05
+
+### Added
+
+- Add sandbox-scoped OAuth metadata to local Create using nested messages aligned with the Docker Kits v2 declaration: token endpoint, resource hosts, sentinels, credential file, response fields, passthrough, and `skipIfEnv`.
+
+### Compatibility
+
+- This contract carries kit metadata only. Daemons must fail closed when custom OAuth interception is unavailable; the contract alone does not imply runtime support.
+
 ## v0.0.12 — 2026-11-03
 
 ### Added
