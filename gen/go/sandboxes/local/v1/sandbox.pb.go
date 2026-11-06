@@ -4919,8 +4919,8 @@ type MCPCallRequest struct {
 	SandboxId  string                 `protobuf:"bytes,1,opt,name=sandbox_id,json=sandboxId,proto3" json:"sandbox_id,omitempty"`
 	ServerName string                 `protobuf:"bytes,2,opt,name=server_name,json=serverName,proto3" json:"server_name,omitempty"`
 	ToolName   string                 `protobuf:"bytes,3,opt,name=tool_name,json=toolName,proto3" json:"tool_name,omitempty"`
-	// UTF-8 JSON object containing tool arguments. The daemon enforces a
-	// bounded request size and validates the JSON before forwarding it.
+	// UTF-8 JSON object containing tool arguments, at most 1 MiB. The daemon
+	// validates the JSON before forwarding it.
 	ArgumentsJson string `protobuf:"bytes,4,opt,name=arguments_json,json=argumentsJson,proto3" json:"arguments_json,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -4986,7 +4986,7 @@ func (x *MCPCallRequest) GetArgumentsJson() string {
 
 type MCPCallResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// UTF-8 JSON tool result. The daemon enforces a bounded response size.
+	// UTF-8 JSON tool result, at most 4 MiB.
 	ResultJson    string `protobuf:"bytes,1,opt,name=result_json,json=resultJson,proto3" json:"result_json,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache

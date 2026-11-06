@@ -524,13 +524,13 @@ message MCPCallRequest {
   string sandbox_id = 1;
   string server_name = 2;
   string tool_name = 3;
-  // UTF-8 JSON object containing tool arguments. The daemon enforces a
-  // bounded request size and validates the JSON before forwarding it.
+  // UTF-8 JSON object containing tool arguments, at most 1 MiB. The daemon
+  // validates the JSON before forwarding it.
   string arguments_json = 4;
 }
 
 message MCPCallResponse {
-  // UTF-8 JSON tool result. The daemon enforces a bounded response size.
+  // UTF-8 JSON tool result, at most 4 MiB.
   string result_json = 1;
 }
 
