@@ -66,6 +66,14 @@ func TestMCPApprovalAndRegistrationContracts(t *testing.T) {
 			t.Fatalf("SandboxService.%s RPC is missing from the generated descriptor", method)
 		}
 	}
+	for name, descriptor := range map[string]protoreflect.MessageDescriptor{
+		"MCPApproveCallRequest":         (&localv1.MCPApproveCallRequest{}).ProtoReflect().Descriptor(),
+		"MCPApproveRegistrationRequest": (&localv1.MCPApproveRegistrationRequest{}).ProtoReflect().Descriptor(),
+	} {
+		if descriptor.Fields().ByName("approved") != nil {
+			t.Fatalf("%s accepts a caller-provided approval decision", name)
+		}
+	}
 
 	want := &localv1.MCPCallResponse{ApprovalRequired: true, ApprovalId: "challenge-test", ApprovalReason: "MCP tool execution"}
 	encoded, err := proto.Marshal(want)
