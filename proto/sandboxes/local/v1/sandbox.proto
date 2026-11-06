@@ -542,9 +542,11 @@ message MCPCallResponse {
 }
 
 message MCPApproveCallRequest {
-  // One-use daemon-issued challenge returned by MCPCall.
+  // One-use daemon-issued challenge returned by MCPCall. This only selects
+  // the pending operation; it is not proof of user approval. The daemon must
+  // obtain approval through its trusted host approval provider before execution.
   string approval_id = 1;
-  bool approved = 2;
+  reserved 2;
 }
 
 message MCPApproveCallResponse {
@@ -567,14 +569,16 @@ message MCPRegisterServerRequest {
 message MCPRegisterServerResponse {
   MCPServerSummary server = 1;
   // Registration never starts the server. Host process execution begins only
-  // after a separate approval challenge and explicit approval.
+  // after the daemon's trusted host approval provider authorizes the challenge.
   bool approval_required = 2;
   string approval_id = 3;
 }
 
 message MCPApproveRegistrationRequest {
+  // This selects the pending registration; it is not proof of user approval.
+  // The daemon must consult its trusted host approval provider.
   string approval_id = 1;
-  bool approved = 2;
+  reserved 2;
 }
 
 message MCPApproveRegistrationResponse {

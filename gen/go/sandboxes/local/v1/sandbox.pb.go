@@ -5059,9 +5059,10 @@ func (x *MCPCallResponse) GetApprovalReason() string {
 
 type MCPApproveCallRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// One-use daemon-issued challenge returned by MCPCall.
+	// One-use daemon-issued challenge returned by MCPCall. This only selects
+	// the pending operation; it is not proof of user approval. The daemon must
+	// obtain approval through its trusted host approval provider before execution.
 	ApprovalId    string `protobuf:"bytes,1,opt,name=approval_id,json=approvalId,proto3" json:"approval_id,omitempty"`
-	Approved      bool   `protobuf:"varint,2,opt,name=approved,proto3" json:"approved,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5101,13 +5102,6 @@ func (x *MCPApproveCallRequest) GetApprovalId() string {
 		return x.ApprovalId
 	}
 	return ""
-}
-
-func (x *MCPApproveCallRequest) GetApproved() bool {
-	if x != nil {
-		return x.Approved
-	}
-	return false
 }
 
 type MCPApproveCallResponse struct {
@@ -5232,7 +5226,7 @@ type MCPRegisterServerResponse struct {
 	state  protoimpl.MessageState `protogen:"open.v1"`
 	Server *MCPServerSummary      `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
 	// Registration never starts the server. Host process execution begins only
-	// after a separate approval challenge and explicit approval.
+	// after the daemon's trusted host approval provider authorizes the challenge.
 	ApprovalRequired bool   `protobuf:"varint,2,opt,name=approval_required,json=approvalRequired,proto3" json:"approval_required,omitempty"`
 	ApprovalId       string `protobuf:"bytes,3,opt,name=approval_id,json=approvalId,proto3" json:"approval_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
@@ -5291,9 +5285,10 @@ func (x *MCPRegisterServerResponse) GetApprovalId() string {
 }
 
 type MCPApproveRegistrationRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ApprovalId    string                 `protobuf:"bytes,1,opt,name=approval_id,json=approvalId,proto3" json:"approval_id,omitempty"`
-	Approved      bool                   `protobuf:"varint,2,opt,name=approved,proto3" json:"approved,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// This selects the pending registration; it is not proof of user approval.
+	// The daemon must consult its trusted host approval provider.
+	ApprovalId    string `protobuf:"bytes,1,opt,name=approval_id,json=approvalId,proto3" json:"approval_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5333,13 +5328,6 @@ func (x *MCPApproveRegistrationRequest) GetApprovalId() string {
 		return x.ApprovalId
 	}
 	return ""
-}
-
-func (x *MCPApproveRegistrationRequest) GetApproved() bool {
-	if x != nil {
-		return x.Approved
-	}
-	return false
 }
 
 type MCPApproveRegistrationResponse struct {
@@ -6288,11 +6276,10 @@ const file_sandboxes_local_v1_sandbox_proto_rawDesc = "" +
 	"\x11approval_required\x18\x02 \x01(\bR\x10approvalRequired\x12\x1f\n" +
 	"\vapproval_id\x18\x03 \x01(\tR\n" +
 	"approvalId\x12'\n" +
-	"\x0fapproval_reason\x18\x04 \x01(\tR\x0eapprovalReason\"T\n" +
+	"\x0fapproval_reason\x18\x04 \x01(\tR\x0eapprovalReason\">\n" +
 	"\x15MCPApproveCallRequest\x12\x1f\n" +
 	"\vapproval_id\x18\x01 \x01(\tR\n" +
-	"approvalId\x12\x1a\n" +
-	"\bapproved\x18\x02 \x01(\bR\bapproved\"9\n" +
+	"approvalIdJ\x04\b\x02\x10\x03\"9\n" +
 	"\x16MCPApproveCallResponse\x12\x1f\n" +
 	"\vresult_json\x18\x01 \x01(\tR\n" +
 	"resultJson\"\x93\x01\n" +
@@ -6305,11 +6292,10 @@ const file_sandboxes_local_v1_sandbox_proto_rawDesc = "" +
 	"\x06server\x18\x01 \x01(\v2$.sandboxes.local.v1.MCPServerSummaryR\x06server\x12+\n" +
 	"\x11approval_required\x18\x02 \x01(\bR\x10approvalRequired\x12\x1f\n" +
 	"\vapproval_id\x18\x03 \x01(\tR\n" +
-	"approvalId\"\\\n" +
+	"approvalId\"F\n" +
 	"\x1dMCPApproveRegistrationRequest\x12\x1f\n" +
 	"\vapproval_id\x18\x01 \x01(\tR\n" +
-	"approvalId\x12\x1a\n" +
-	"\bapproved\x18\x02 \x01(\bR\bapproved\"^\n" +
+	"approvalIdJ\x04\b\x02\x10\x03\"^\n" +
 	"\x1eMCPApproveRegistrationResponse\x12<\n" +
 	"\x06server\x18\x01 \x01(\v2$.sandboxes.local.v1.MCPServerSummaryR\x06server\",\n" +
 	"\x16MCPRemoveServerRequest\x12\x12\n" +
