@@ -5040,15 +5040,16 @@ type MCPServerSummary struct {
 	Gateway string `protobuf:"bytes,2,opt,name=gateway,proto3" json:"gateway,omitempty"`
 	// transport is an extensible lowercase label such as stdio, streamable-http,
 	// sse, or oci.
-	Transport           string `protobuf:"bytes,3,opt,name=transport,proto3" json:"transport,omitempty"`
-	Loaded              bool   `protobuf:"varint,4,opt,name=loaded,proto3" json:"loaded,omitempty"`
-	Usable              bool   `protobuf:"varint,5,opt,name=usable,proto3" json:"usable,omitempty"`
-	AuthRequired        bool   `protobuf:"varint,6,opt,name=auth_required,json=authRequired,proto3" json:"auth_required,omitempty"`
-	AuthConfigured      bool   `protobuf:"varint,7,opt,name=auth_configured,json=authConfigured,proto3" json:"auth_configured,omitempty"`
-	HasCustomHeaders    bool   `protobuf:"varint,8,opt,name=has_custom_headers,json=hasCustomHeaders,proto3" json:"has_custom_headers,omitempty"`
-	CustomHeadersUsable bool   `protobuf:"varint,9,opt,name=custom_headers_usable,json=customHeadersUsable,proto3" json:"custom_headers_usable,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	Transport                     string `protobuf:"bytes,3,opt,name=transport,proto3" json:"transport,omitempty"`
+	Loaded                        bool   `protobuf:"varint,4,opt,name=loaded,proto3" json:"loaded,omitempty"`
+	Usable                        bool   `protobuf:"varint,5,opt,name=usable,proto3" json:"usable,omitempty"`
+	AuthRequired                  bool   `protobuf:"varint,6,opt,name=auth_required,json=authRequired,proto3" json:"auth_required,omitempty"`
+	AuthConfigured                bool   `protobuf:"varint,7,opt,name=auth_configured,json=authConfigured,proto3" json:"auth_configured,omitempty"`
+	HasCustomHeaders              bool   `protobuf:"varint,8,opt,name=has_custom_headers,json=hasCustomHeaders,proto3" json:"has_custom_headers,omitempty"`
+	CustomHeadersSupported        bool   `protobuf:"varint,9,opt,name=custom_headers_supported,json=customHeadersSupported,proto3" json:"custom_headers_supported,omitempty"`
+	CustomHeaderSecretsConfigured bool   `protobuf:"varint,10,opt,name=custom_header_secrets_configured,json=customHeaderSecretsConfigured,proto3" json:"custom_header_secrets_configured,omitempty"`
+	unknownFields                 protoimpl.UnknownFields
+	sizeCache                     protoimpl.SizeCache
 }
 
 func (x *MCPServerSummary) Reset() {
@@ -5137,9 +5138,16 @@ func (x *MCPServerSummary) GetHasCustomHeaders() bool {
 	return false
 }
 
-func (x *MCPServerSummary) GetCustomHeadersUsable() bool {
+func (x *MCPServerSummary) GetCustomHeadersSupported() bool {
 	if x != nil {
-		return x.CustomHeadersUsable
+		return x.CustomHeadersSupported
+	}
+	return false
+}
+
+func (x *MCPServerSummary) GetCustomHeaderSecretsConfigured() bool {
+	if x != nil {
+		return x.CustomHeaderSecretsConfigured
 	}
 	return false
 }
@@ -5831,7 +5839,7 @@ const file_sandboxes_local_v1_sandbox_proto_rawDesc = "" +
 	"\x0earguments_json\x18\x04 \x01(\tR\rargumentsJson\"2\n" +
 	"\x0fMCPCallResponse\x12\x1f\n" +
 	"\vresult_json\x18\x01 \x01(\tR\n" +
-	"resultJson\"\xbe\x02\n" +
+	"resultJson\"\x8d\x03\n" +
 	"\x10MCPServerSummary\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
 	"\agateway\x18\x02 \x01(\tR\agateway\x12\x1c\n" +
@@ -5840,8 +5848,10 @@ const file_sandboxes_local_v1_sandbox_proto_rawDesc = "" +
 	"\x06usable\x18\x05 \x01(\bR\x06usable\x12#\n" +
 	"\rauth_required\x18\x06 \x01(\bR\fauthRequired\x12'\n" +
 	"\x0fauth_configured\x18\a \x01(\bR\x0eauthConfigured\x12,\n" +
-	"\x12has_custom_headers\x18\b \x01(\bR\x10hasCustomHeaders\x122\n" +
-	"\x15custom_headers_usable\x18\t \x01(\bR\x13customHeadersUsable\"6\n" +
+	"\x12has_custom_headers\x18\b \x01(\bR\x10hasCustomHeaders\x128\n" +
+	"\x18custom_headers_supported\x18\t \x01(\bR\x16customHeadersSupported\x12G\n" +
+	" custom_header_secrets_configured\x18\n" +
+	" \x01(\bR\x1dcustomHeaderSecretsConfigured\"6\n" +
 	"\x15ListMCPServersRequest\x12\x1d\n" +
 	"\n" +
 	"sandbox_id\x18\x01 \x01(\tR\tsandboxId\"X\n" +

@@ -550,7 +550,8 @@ message MCPServerSummary {
   bool auth_required = 6;
   bool auth_configured = 7;
   bool has_custom_headers = 8;
-  bool custom_headers_usable = 9;
+  bool custom_headers_supported = 9;
+  bool custom_header_secrets_configured = 10;
 }
 
 // ListMCPServers returns only daemon-known MCP server summaries. It never

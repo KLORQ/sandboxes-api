@@ -37,7 +37,8 @@ func TestListMCPServersContractRoundTrip(t *testing.T) {
 	want := &localv1.ListMCPServersResponse{Servers: []*localv1.MCPServerSummary{{
 		Name: "fixture", Gateway: "local", Transport: "stdio", Loaded: true,
 		Usable: true, AuthRequired: true, AuthConfigured: false,
-		HasCustomHeaders: true, CustomHeadersUsable: false,
+		HasCustomHeaders: true, CustomHeadersSupported: true,
+		CustomHeaderSecretsConfigured: false,
 	}}}
 	encoded, err := proto.Marshal(want)
 	if err != nil {
