@@ -331,11 +331,25 @@ message RegistryCredentialServiceLogoutResponse {
   bool removed = 1;
 }
 
+// SecretSource stores a host-side resolver configuration instead of a
+// credential value. A command is user-supplied host shell text and is replayed
+// by the daemon on verification/refresh. This message must never be sent to a guest.
+message SecretSource {
+  string reference = 1;
+  string refresh = 2;
+  bool no_verify = 3;
+  bool show_error = 4;
+  string command = 5;
+  string op_account = 6;
+  string aws_profile = 7;
+}
+
 message SecretServiceSetRequest {
   string service = 1;
   string scope = 2;
   string sandbox_name = 3;
   bytes value = 4;
+  SecretSource source = 5;
 }
 
 message SecretSummary {
@@ -353,6 +367,7 @@ message SecretServiceCreateRequest {
   string scope = 2;
   string sandbox_name = 3;
   bytes value = 4;
+  SecretSource source = 5;
 }
 
 message SecretServiceCreateResponse {

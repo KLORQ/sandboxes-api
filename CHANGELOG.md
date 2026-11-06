@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.0.16 — 2026-11-06
+
+### Added
+
+- Add an optional host-side dynamic secret source to service-secret set/create RPCs, including a 1Password/AWS reference or shell command, refresh policy, verification controls, and captured provider account/profile selectors.
+
+### Compatibility
+
+- Existing value-based secret requests are unchanged. Older daemons ignore the additive field and reject the empty value; SDK clients must check the daemon API version before sending a dynamic source.
+
 ## v0.0.15 — 2026-11-05
 
 ### Added
