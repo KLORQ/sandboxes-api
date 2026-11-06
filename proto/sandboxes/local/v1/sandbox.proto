@@ -556,6 +556,8 @@ message MCPRegisterServerRequest {
   string name = 1;
   // Explicit host executable path; never interpreted by a shell.
   string command = 2;
+  // Non-secret command configuration only. Daemon registry metadata is stored
+  // in local state; credentials must use a host credential broker instead.
   repeated string arguments = 3;
   // Absolute host working directory. The daemon validates and pins its
   // identity before launching this command.

@@ -5159,7 +5159,9 @@ type MCPRegisterServerRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	Name  string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// Explicit host executable path; never interpreted by a shell.
-	Command   string   `protobuf:"bytes,2,opt,name=command,proto3" json:"command,omitempty"`
+	Command string `protobuf:"bytes,2,opt,name=command,proto3" json:"command,omitempty"`
+	// Non-secret command configuration only. Daemon registry metadata is stored
+	// in local state; credentials must use a host credential broker instead.
 	Arguments []string `protobuf:"bytes,3,rep,name=arguments,proto3" json:"arguments,omitempty"`
 	// Absolute host working directory. The daemon validates and pins its
 	// identity before launching this command.
