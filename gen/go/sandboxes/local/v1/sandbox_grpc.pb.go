@@ -37,6 +37,8 @@ const (
 	SandboxService_GetGlobalPolicy_FullMethodName    = "/sandboxes.local.v1.SandboxService/GetGlobalPolicy"
 	SandboxService_MutateGlobalPolicy_FullMethodName = "/sandboxes.local.v1.SandboxService/MutateGlobalPolicy"
 	SandboxService_CheckPolicy_FullMethodName        = "/sandboxes.local.v1.SandboxService/CheckPolicy"
+	SandboxService_RefreshPolicies_FullMethodName    = "/sandboxes.local.v1.SandboxService/RefreshPolicies"
+	SandboxService_ResetGlobalPolicy_FullMethodName  = "/sandboxes.local.v1.SandboxService/ResetGlobalPolicy"
 )
 
 // SandboxServiceClient is the client API for SandboxService service.
@@ -61,6 +63,8 @@ type SandboxServiceClient interface {
 	GetGlobalPolicy(ctx context.Context, in *GetGlobalPolicyRequest, opts ...grpc.CallOption) (*GetGlobalPolicyResponse, error)
 	MutateGlobalPolicy(ctx context.Context, in *MutateGlobalPolicyRequest, opts ...grpc.CallOption) (*MutateGlobalPolicyResponse, error)
 	CheckPolicy(ctx context.Context, in *CheckPolicyRequest, opts ...grpc.CallOption) (*CheckPolicyResponse, error)
+	RefreshPolicies(ctx context.Context, in *RefreshPoliciesRequest, opts ...grpc.CallOption) (*RefreshPoliciesResponse, error)
+	ResetGlobalPolicy(ctx context.Context, in *ResetGlobalPolicyRequest, opts ...grpc.CallOption) (*ResetGlobalPolicyResponse, error)
 }
 
 type sandboxServiceClient struct {
@@ -272,6 +276,26 @@ func (c *sandboxServiceClient) CheckPolicy(ctx context.Context, in *CheckPolicyR
 	return out, nil
 }
 
+func (c *sandboxServiceClient) RefreshPolicies(ctx context.Context, in *RefreshPoliciesRequest, opts ...grpc.CallOption) (*RefreshPoliciesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RefreshPoliciesResponse)
+	err := c.cc.Invoke(ctx, SandboxService_RefreshPolicies_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sandboxServiceClient) ResetGlobalPolicy(ctx context.Context, in *ResetGlobalPolicyRequest, opts ...grpc.CallOption) (*ResetGlobalPolicyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ResetGlobalPolicyResponse)
+	err := c.cc.Invoke(ctx, SandboxService_ResetGlobalPolicy_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SandboxServiceServer is the server API for SandboxService service.
 // All implementations must embed UnimplementedSandboxServiceServer
 // for forward compatibility.
@@ -294,6 +318,8 @@ type SandboxServiceServer interface {
 	GetGlobalPolicy(context.Context, *GetGlobalPolicyRequest) (*GetGlobalPolicyResponse, error)
 	MutateGlobalPolicy(context.Context, *MutateGlobalPolicyRequest) (*MutateGlobalPolicyResponse, error)
 	CheckPolicy(context.Context, *CheckPolicyRequest) (*CheckPolicyResponse, error)
+	RefreshPolicies(context.Context, *RefreshPoliciesRequest) (*RefreshPoliciesResponse, error)
+	ResetGlobalPolicy(context.Context, *ResetGlobalPolicyRequest) (*ResetGlobalPolicyResponse, error)
 	mustEmbedUnimplementedSandboxServiceServer()
 }
 
@@ -357,6 +383,12 @@ func (UnimplementedSandboxServiceServer) MutateGlobalPolicy(context.Context, *Mu
 }
 func (UnimplementedSandboxServiceServer) CheckPolicy(context.Context, *CheckPolicyRequest) (*CheckPolicyResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CheckPolicy not implemented")
+}
+func (UnimplementedSandboxServiceServer) RefreshPolicies(context.Context, *RefreshPoliciesRequest) (*RefreshPoliciesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RefreshPolicies not implemented")
+}
+func (UnimplementedSandboxServiceServer) ResetGlobalPolicy(context.Context, *ResetGlobalPolicyRequest) (*ResetGlobalPolicyResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ResetGlobalPolicy not implemented")
 }
 func (UnimplementedSandboxServiceServer) mustEmbedUnimplementedSandboxServiceServer() {}
 func (UnimplementedSandboxServiceServer) testEmbeddedByValue()                        {}
@@ -678,6 +710,42 @@ func _SandboxService_CheckPolicy_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SandboxService_RefreshPolicies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RefreshPoliciesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).RefreshPolicies(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_RefreshPolicies_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).RefreshPolicies(ctx, req.(*RefreshPoliciesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SandboxService_ResetGlobalPolicy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResetGlobalPolicyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).ResetGlobalPolicy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_ResetGlobalPolicy_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).ResetGlobalPolicy(ctx, req.(*ResetGlobalPolicyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SandboxService_ServiceDesc is the grpc.ServiceDesc for SandboxService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -744,6 +812,14 @@ var SandboxService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CheckPolicy",
 			Handler:    _SandboxService_CheckPolicy_Handler,
+		},
+		{
+			MethodName: "RefreshPolicies",
+			Handler:    _SandboxService_RefreshPolicies_Handler,
+		},
+		{
+			MethodName: "ResetGlobalPolicy",
+			Handler:    _SandboxService_ResetGlobalPolicy_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

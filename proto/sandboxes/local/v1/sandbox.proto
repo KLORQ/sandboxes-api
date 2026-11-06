@@ -485,6 +485,23 @@ message MutateGlobalPolicyResponse {
   repeated NetworkRule deny = 2;
 }
 
+message RefreshPoliciesRequest {}
+
+message RefreshPoliciesResponse {
+  // applied is the number of running sandboxes that accepted the refresh.
+  int32 applied = 1;
+  // skipped is the number of sandboxes that did not need a refresh.
+  int32 skipped = 2;
+}
+
+message ResetGlobalPolicyRequest {}
+
+message ResetGlobalPolicyResponse {
+  repeated NetworkRule allow = 1;
+  repeated NetworkRule deny = 2;
+  string profile = 3;
+}
+
 message CheckPolicyRequest {
   string sandbox_id = 1;
   string protocol = 2;
@@ -525,6 +542,8 @@ service SandboxService {
   rpc GetGlobalPolicy(GetGlobalPolicyRequest) returns (GetGlobalPolicyResponse);
   rpc MutateGlobalPolicy(MutateGlobalPolicyRequest) returns (MutateGlobalPolicyResponse);
   rpc CheckPolicy(CheckPolicyRequest) returns (CheckPolicyResponse);
+  rpc RefreshPolicies(RefreshPoliciesRequest) returns (RefreshPoliciesResponse);
+  rpc ResetGlobalPolicy(ResetGlobalPolicyRequest) returns (ResetGlobalPolicyResponse);
 }
 
 message GetPolicyProfileRequest {}
