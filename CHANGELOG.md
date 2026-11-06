@@ -8,6 +8,8 @@
 - Add a redacted `SandboxService.ListMCPServers` inventory contract for local
   `mcp ls`; it exposes gateway/transport and usability flags, never credentials
   or OAuth identity details, and must not start servers or auth flows.
+- Add explicit stdio registration/removal contracts and one-use registration approval.
+- Add one-use MCP call approval challenges; approval IDs are daemon-issued, expire, and are consumed server-side rather than acting as client-supplied grants on `MCPCall`.
 
 ## v0.0.16 — 2026-11-06
 

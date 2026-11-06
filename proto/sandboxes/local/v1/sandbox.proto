@@ -532,6 +532,59 @@ message MCPCallRequest {
 message MCPCallResponse {
   // UTF-8 JSON tool result, at most 4 MiB.
   string result_json = 1;
+  // When true, the daemon created a short-lived one-use approval challenge.
+  // No tool was executed and result_json is empty. Clients must display the
+  // challenge to the user and call MCPApproveCall before returning a result.
+  bool approval_required = 2;
+  string approval_id = 3;
+  // Human-readable, non-secret explanation for the approval prompt.
+  string approval_reason = 4;
+}
+
+message MCPApproveCallRequest {
+  // One-use daemon-issued challenge returned by MCPCall.
+  string approval_id = 1;
+  bool approved = 2;
+}
+
+message MCPApproveCallResponse {
+  // UTF-8 JSON tool result, at most 4 MiB when approved and executed.
+  string result_json = 1;
+}
+
+message MCPRegisterServerRequest {
+  string name = 1;
+  // Explicit host executable path; never interpreted by a shell.
+  string command = 2;
+  repeated string arguments = 3;
+  // Absolute host working directory. The daemon validates and pins its
+  // identity before launching this command.
+  string working_directory = 4;
+}
+
+message MCPRegisterServerResponse {
+  MCPServerSummary server = 1;
+  // Registration never starts the server. Host process execution begins only
+  // after a separate approval challenge and explicit approval.
+  bool approval_required = 2;
+  string approval_id = 3;
+}
+
+message MCPApproveRegistrationRequest {
+  string approval_id = 1;
+  bool approved = 2;
+}
+
+message MCPApproveRegistrationResponse {
+  MCPServerSummary server = 1;
+}
+
+message MCPRemoveServerRequest {
+  string name = 1;
+}
+
+message MCPRemoveServerResponse {
+  bool removed = 1;
 }
 
 // MCPServerSummary is a redacted view of a server in the daemon-owned registry.
@@ -593,7 +646,11 @@ service SandboxService {
   rpc MutateGlobalPolicy(MutateGlobalPolicyRequest) returns (MutateGlobalPolicyResponse);
   rpc CheckPolicy(CheckPolicyRequest) returns (CheckPolicyResponse);
   rpc ListMCPServers(ListMCPServersRequest) returns (ListMCPServersResponse);
+  rpc MCPRegisterServer(MCPRegisterServerRequest) returns (MCPRegisterServerResponse);
+  rpc MCPApproveRegistration(MCPApproveRegistrationRequest) returns (MCPApproveRegistrationResponse);
+  rpc MCPRemoveServer(MCPRemoveServerRequest) returns (MCPRemoveServerResponse);
   rpc MCPCall(MCPCallRequest) returns (MCPCallResponse);
+  rpc MCPApproveCall(MCPApproveCallRequest) returns (MCPApproveCallResponse);
   rpc RefreshPolicies(RefreshPoliciesRequest) returns (RefreshPoliciesResponse);
   rpc ResetGlobalPolicy(ResetGlobalPolicyRequest) returns (ResetGlobalPolicyResponse);
 }
