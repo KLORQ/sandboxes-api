@@ -5,6 +5,9 @@
 - Add the local `SandboxService.MCPCall` contract for invoking a named MCP tool
   in a sandbox. Daemon-side registry lookup, policy enforcement, bounded
   payload validation, and approval remain required before execution.
+- Add a redacted `SandboxService.ListMCPServers` inventory contract for local
+  `mcp ls`; it exposes gateway/transport and usability flags, never credentials
+  or OAuth identity details, and must not start servers or auth flows.
 
 ## v0.0.16 — 2026-11-06
 

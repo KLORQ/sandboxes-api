@@ -32,3 +32,27 @@ func TestMCPCallContractRoundTrip(t *testing.T) {
 		t.Fatal("SandboxService.MCPCall RPC is missing from the generated descriptor")
 	}
 }
+
+func TestListMCPServersContractRoundTrip(t *testing.T) {
+	want := &localv1.ListMCPServersResponse{Servers: []*localv1.MCPServerSummary{{
+		Name: "fixture", Gateway: "local", Transport: "stdio", Loaded: true,
+		Usable: true, AuthRequired: true, AuthConfigured: false,
+		HasCustomHeaders: true, CustomHeadersUsable: false,
+	}}}
+	encoded, err := proto.Marshal(want)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var got localv1.ListMCPServersResponse
+	if err := proto.Unmarshal(encoded, &got); err != nil {
+		t.Fatal(err)
+	}
+	if !proto.Equal(want, &got) {
+		t.Fatalf("round-trip mismatch: got %v, want %v", &got, want)
+	}
+
+	service := localv1.File_sandboxes_local_v1_sandbox_proto.Services().ByName("SandboxService")
+	if service == nil || service.Methods().ByName("ListMCPServers") == nil {
+		t.Fatal("SandboxService.ListMCPServers RPC is missing from the generated descriptor")
+	}
+}
