@@ -516,6 +516,24 @@ message CheckPolicyResponse {
   string reason = 3;
 }
 
+// MCPCall invokes one tool on an MCP server registered for a sandbox. The
+// daemon resolves the server from its own registry, authorizes the tool
+// against current policy, and obtains any required user approval. Client input
+// is never an approval grant or an executable command.
+message MCPCallRequest {
+  string sandbox_id = 1;
+  string server_name = 2;
+  string tool_name = 3;
+  // UTF-8 JSON object containing tool arguments. The daemon enforces a
+  // bounded request size and validates the JSON before forwarding it.
+  string arguments_json = 4;
+}
+
+message MCPCallResponse {
+  // UTF-8 JSON tool result. The daemon enforces a bounded response size.
+  string result_json = 1;
+}
+
 message GetVersionRequest {}
 
 message GetVersionResponse {
@@ -542,6 +560,7 @@ service SandboxService {
   rpc GetGlobalPolicy(GetGlobalPolicyRequest) returns (GetGlobalPolicyResponse);
   rpc MutateGlobalPolicy(MutateGlobalPolicyRequest) returns (MutateGlobalPolicyResponse);
   rpc CheckPolicy(CheckPolicyRequest) returns (CheckPolicyResponse);
+  rpc MCPCall(MCPCallRequest) returns (MCPCallResponse);
   rpc RefreshPolicies(RefreshPoliciesRequest) returns (RefreshPoliciesResponse);
   rpc ResetGlobalPolicy(ResetGlobalPolicyRequest) returns (ResetGlobalPolicyResponse);
 }

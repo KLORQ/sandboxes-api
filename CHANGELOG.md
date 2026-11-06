@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add the local `SandboxService.MCPCall` contract for invoking a named MCP tool
+  in a sandbox. Daemon-side registry lookup, policy enforcement, bounded
+  payload validation, and approval remain required before execution.
+
 ## v0.0.16 — 2026-11-06
 
 ### Added

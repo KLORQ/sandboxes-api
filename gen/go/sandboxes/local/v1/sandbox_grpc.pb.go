@@ -37,6 +37,7 @@ const (
 	SandboxService_GetGlobalPolicy_FullMethodName    = "/sandboxes.local.v1.SandboxService/GetGlobalPolicy"
 	SandboxService_MutateGlobalPolicy_FullMethodName = "/sandboxes.local.v1.SandboxService/MutateGlobalPolicy"
 	SandboxService_CheckPolicy_FullMethodName        = "/sandboxes.local.v1.SandboxService/CheckPolicy"
+	SandboxService_MCPCall_FullMethodName            = "/sandboxes.local.v1.SandboxService/MCPCall"
 	SandboxService_RefreshPolicies_FullMethodName    = "/sandboxes.local.v1.SandboxService/RefreshPolicies"
 	SandboxService_ResetGlobalPolicy_FullMethodName  = "/sandboxes.local.v1.SandboxService/ResetGlobalPolicy"
 )
@@ -63,6 +64,7 @@ type SandboxServiceClient interface {
 	GetGlobalPolicy(ctx context.Context, in *GetGlobalPolicyRequest, opts ...grpc.CallOption) (*GetGlobalPolicyResponse, error)
 	MutateGlobalPolicy(ctx context.Context, in *MutateGlobalPolicyRequest, opts ...grpc.CallOption) (*MutateGlobalPolicyResponse, error)
 	CheckPolicy(ctx context.Context, in *CheckPolicyRequest, opts ...grpc.CallOption) (*CheckPolicyResponse, error)
+	MCPCall(ctx context.Context, in *MCPCallRequest, opts ...grpc.CallOption) (*MCPCallResponse, error)
 	RefreshPolicies(ctx context.Context, in *RefreshPoliciesRequest, opts ...grpc.CallOption) (*RefreshPoliciesResponse, error)
 	ResetGlobalPolicy(ctx context.Context, in *ResetGlobalPolicyRequest, opts ...grpc.CallOption) (*ResetGlobalPolicyResponse, error)
 }
@@ -276,6 +278,16 @@ func (c *sandboxServiceClient) CheckPolicy(ctx context.Context, in *CheckPolicyR
 	return out, nil
 }
 
+func (c *sandboxServiceClient) MCPCall(ctx context.Context, in *MCPCallRequest, opts ...grpc.CallOption) (*MCPCallResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MCPCallResponse)
+	err := c.cc.Invoke(ctx, SandboxService_MCPCall_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *sandboxServiceClient) RefreshPolicies(ctx context.Context, in *RefreshPoliciesRequest, opts ...grpc.CallOption) (*RefreshPoliciesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(RefreshPoliciesResponse)
@@ -318,6 +330,7 @@ type SandboxServiceServer interface {
 	GetGlobalPolicy(context.Context, *GetGlobalPolicyRequest) (*GetGlobalPolicyResponse, error)
 	MutateGlobalPolicy(context.Context, *MutateGlobalPolicyRequest) (*MutateGlobalPolicyResponse, error)
 	CheckPolicy(context.Context, *CheckPolicyRequest) (*CheckPolicyResponse, error)
+	MCPCall(context.Context, *MCPCallRequest) (*MCPCallResponse, error)
 	RefreshPolicies(context.Context, *RefreshPoliciesRequest) (*RefreshPoliciesResponse, error)
 	ResetGlobalPolicy(context.Context, *ResetGlobalPolicyRequest) (*ResetGlobalPolicyResponse, error)
 	mustEmbedUnimplementedSandboxServiceServer()
@@ -383,6 +396,9 @@ func (UnimplementedSandboxServiceServer) MutateGlobalPolicy(context.Context, *Mu
 }
 func (UnimplementedSandboxServiceServer) CheckPolicy(context.Context, *CheckPolicyRequest) (*CheckPolicyResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CheckPolicy not implemented")
+}
+func (UnimplementedSandboxServiceServer) MCPCall(context.Context, *MCPCallRequest) (*MCPCallResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method MCPCall not implemented")
 }
 func (UnimplementedSandboxServiceServer) RefreshPolicies(context.Context, *RefreshPoliciesRequest) (*RefreshPoliciesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method RefreshPolicies not implemented")
@@ -710,6 +726,24 @@ func _SandboxService_CheckPolicy_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SandboxService_MCPCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MCPCallRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).MCPCall(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_MCPCall_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).MCPCall(ctx, req.(*MCPCallRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _SandboxService_RefreshPolicies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RefreshPoliciesRequest)
 	if err := dec(in); err != nil {
@@ -812,6 +846,10 @@ var SandboxService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CheckPolicy",
 			Handler:    _SandboxService_CheckPolicy_Handler,
+		},
+		{
+			MethodName: "MCPCall",
+			Handler:    _SandboxService_MCPCall_Handler,
 		},
 		{
 			MethodName: "RefreshPolicies",
