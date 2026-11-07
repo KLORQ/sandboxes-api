@@ -517,9 +517,11 @@ message CheckPolicyResponse {
 }
 
 // MCPCall invokes one tool on an MCP server registered for a sandbox. The
-// daemon resolves the server from its own registry, authorizes the tool
-// against current policy, and obtains any required user approval. Client input
-// is never an approval grant or an executable command.
+// daemon resolves the server from its own registry, verifies that the sandbox
+// is running, and obtains any required approval through a trusted host
+// provider. Client input is never an approval grant or an executable command.
+// Deployments must enforce applicable policy before host execution; this RPC
+// does not itself define or evaluate an MCP policy.
 message MCPCallRequest {
   string sandbox_id = 1;
   string server_name = 2;

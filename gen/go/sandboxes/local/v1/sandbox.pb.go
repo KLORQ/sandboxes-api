@@ -4911,9 +4911,11 @@ func (x *CheckPolicyResponse) GetReason() string {
 }
 
 // MCPCall invokes one tool on an MCP server registered for a sandbox. The
-// daemon resolves the server from its own registry, authorizes the tool
-// against current policy, and obtains any required user approval. Client input
-// is never an approval grant or an executable command.
+// daemon resolves the server from its own registry, verifies that the sandbox
+// is running, and obtains any required approval through a trusted host
+// provider. Client input is never an approval grant or an executable command.
+// Deployments must enforce applicable policy before host execution; this RPC
+// does not itself define or evaluate an MCP policy.
 type MCPCallRequest struct {
 	state      protoimpl.MessageState `protogen:"open.v1"`
 	SandboxId  string                 `protobuf:"bytes,1,opt,name=sandbox_id,json=sandboxId,proto3" json:"sandbox_id,omitempty"`
