@@ -19,26 +19,32 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SandboxService_Create_FullMethodName             = "/sandboxes.local.v1.SandboxService/Create"
-	SandboxService_GetVersion_FullMethodName         = "/sandboxes.local.v1.SandboxService/GetVersion"
-	SandboxService_Get_FullMethodName                = "/sandboxes.local.v1.SandboxService/Get"
-	SandboxService_List_FullMethodName               = "/sandboxes.local.v1.SandboxService/List"
-	SandboxService_Start_FullMethodName              = "/sandboxes.local.v1.SandboxService/Start"
-	SandboxService_Stop_FullMethodName               = "/sandboxes.local.v1.SandboxService/Stop"
-	SandboxService_Delete_FullMethodName             = "/sandboxes.local.v1.SandboxService/Delete"
-	SandboxService_Watch_FullMethodName              = "/sandboxes.local.v1.SandboxService/Watch"
-	SandboxService_Exec_FullMethodName               = "/sandboxes.local.v1.SandboxService/Exec"
-	SandboxService_ExecSession_FullMethodName        = "/sandboxes.local.v1.SandboxService/ExecSession"
-	SandboxService_UpdatePolicy_FullMethodName       = "/sandboxes.local.v1.SandboxService/UpdatePolicy"
-	SandboxService_MutatePolicy_FullMethodName       = "/sandboxes.local.v1.SandboxService/MutatePolicy"
-	SandboxService_UpdatePorts_FullMethodName        = "/sandboxes.local.v1.SandboxService/UpdatePorts"
-	SandboxService_GetPolicyProfile_FullMethodName   = "/sandboxes.local.v1.SandboxService/GetPolicyProfile"
-	SandboxService_SetPolicyProfile_FullMethodName   = "/sandboxes.local.v1.SandboxService/SetPolicyProfile"
-	SandboxService_GetGlobalPolicy_FullMethodName    = "/sandboxes.local.v1.SandboxService/GetGlobalPolicy"
-	SandboxService_MutateGlobalPolicy_FullMethodName = "/sandboxes.local.v1.SandboxService/MutateGlobalPolicy"
-	SandboxService_CheckPolicy_FullMethodName        = "/sandboxes.local.v1.SandboxService/CheckPolicy"
-	SandboxService_RefreshPolicies_FullMethodName    = "/sandboxes.local.v1.SandboxService/RefreshPolicies"
-	SandboxService_ResetGlobalPolicy_FullMethodName  = "/sandboxes.local.v1.SandboxService/ResetGlobalPolicy"
+	SandboxService_Create_FullMethodName                 = "/sandboxes.local.v1.SandboxService/Create"
+	SandboxService_GetVersion_FullMethodName             = "/sandboxes.local.v1.SandboxService/GetVersion"
+	SandboxService_Get_FullMethodName                    = "/sandboxes.local.v1.SandboxService/Get"
+	SandboxService_List_FullMethodName                   = "/sandboxes.local.v1.SandboxService/List"
+	SandboxService_Start_FullMethodName                  = "/sandboxes.local.v1.SandboxService/Start"
+	SandboxService_Stop_FullMethodName                   = "/sandboxes.local.v1.SandboxService/Stop"
+	SandboxService_Delete_FullMethodName                 = "/sandboxes.local.v1.SandboxService/Delete"
+	SandboxService_Watch_FullMethodName                  = "/sandboxes.local.v1.SandboxService/Watch"
+	SandboxService_Exec_FullMethodName                   = "/sandboxes.local.v1.SandboxService/Exec"
+	SandboxService_ExecSession_FullMethodName            = "/sandboxes.local.v1.SandboxService/ExecSession"
+	SandboxService_UpdatePolicy_FullMethodName           = "/sandboxes.local.v1.SandboxService/UpdatePolicy"
+	SandboxService_MutatePolicy_FullMethodName           = "/sandboxes.local.v1.SandboxService/MutatePolicy"
+	SandboxService_UpdatePorts_FullMethodName            = "/sandboxes.local.v1.SandboxService/UpdatePorts"
+	SandboxService_GetPolicyProfile_FullMethodName       = "/sandboxes.local.v1.SandboxService/GetPolicyProfile"
+	SandboxService_SetPolicyProfile_FullMethodName       = "/sandboxes.local.v1.SandboxService/SetPolicyProfile"
+	SandboxService_GetGlobalPolicy_FullMethodName        = "/sandboxes.local.v1.SandboxService/GetGlobalPolicy"
+	SandboxService_MutateGlobalPolicy_FullMethodName     = "/sandboxes.local.v1.SandboxService/MutateGlobalPolicy"
+	SandboxService_CheckPolicy_FullMethodName            = "/sandboxes.local.v1.SandboxService/CheckPolicy"
+	SandboxService_ListMCPServers_FullMethodName         = "/sandboxes.local.v1.SandboxService/ListMCPServers"
+	SandboxService_MCPRegisterServer_FullMethodName      = "/sandboxes.local.v1.SandboxService/MCPRegisterServer"
+	SandboxService_MCPApproveRegistration_FullMethodName = "/sandboxes.local.v1.SandboxService/MCPApproveRegistration"
+	SandboxService_MCPRemoveServer_FullMethodName        = "/sandboxes.local.v1.SandboxService/MCPRemoveServer"
+	SandboxService_MCPCall_FullMethodName                = "/sandboxes.local.v1.SandboxService/MCPCall"
+	SandboxService_MCPApproveCall_FullMethodName         = "/sandboxes.local.v1.SandboxService/MCPApproveCall"
+	SandboxService_RefreshPolicies_FullMethodName        = "/sandboxes.local.v1.SandboxService/RefreshPolicies"
+	SandboxService_ResetGlobalPolicy_FullMethodName      = "/sandboxes.local.v1.SandboxService/ResetGlobalPolicy"
 )
 
 // SandboxServiceClient is the client API for SandboxService service.
@@ -63,6 +69,12 @@ type SandboxServiceClient interface {
 	GetGlobalPolicy(ctx context.Context, in *GetGlobalPolicyRequest, opts ...grpc.CallOption) (*GetGlobalPolicyResponse, error)
 	MutateGlobalPolicy(ctx context.Context, in *MutateGlobalPolicyRequest, opts ...grpc.CallOption) (*MutateGlobalPolicyResponse, error)
 	CheckPolicy(ctx context.Context, in *CheckPolicyRequest, opts ...grpc.CallOption) (*CheckPolicyResponse, error)
+	ListMCPServers(ctx context.Context, in *ListMCPServersRequest, opts ...grpc.CallOption) (*ListMCPServersResponse, error)
+	MCPRegisterServer(ctx context.Context, in *MCPRegisterServerRequest, opts ...grpc.CallOption) (*MCPRegisterServerResponse, error)
+	MCPApproveRegistration(ctx context.Context, in *MCPApproveRegistrationRequest, opts ...grpc.CallOption) (*MCPApproveRegistrationResponse, error)
+	MCPRemoveServer(ctx context.Context, in *MCPRemoveServerRequest, opts ...grpc.CallOption) (*MCPRemoveServerResponse, error)
+	MCPCall(ctx context.Context, in *MCPCallRequest, opts ...grpc.CallOption) (*MCPCallResponse, error)
+	MCPApproveCall(ctx context.Context, in *MCPApproveCallRequest, opts ...grpc.CallOption) (*MCPApproveCallResponse, error)
 	RefreshPolicies(ctx context.Context, in *RefreshPoliciesRequest, opts ...grpc.CallOption) (*RefreshPoliciesResponse, error)
 	ResetGlobalPolicy(ctx context.Context, in *ResetGlobalPolicyRequest, opts ...grpc.CallOption) (*ResetGlobalPolicyResponse, error)
 }
@@ -276,6 +288,66 @@ func (c *sandboxServiceClient) CheckPolicy(ctx context.Context, in *CheckPolicyR
 	return out, nil
 }
 
+func (c *sandboxServiceClient) ListMCPServers(ctx context.Context, in *ListMCPServersRequest, opts ...grpc.CallOption) (*ListMCPServersResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListMCPServersResponse)
+	err := c.cc.Invoke(ctx, SandboxService_ListMCPServers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sandboxServiceClient) MCPRegisterServer(ctx context.Context, in *MCPRegisterServerRequest, opts ...grpc.CallOption) (*MCPRegisterServerResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MCPRegisterServerResponse)
+	err := c.cc.Invoke(ctx, SandboxService_MCPRegisterServer_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sandboxServiceClient) MCPApproveRegistration(ctx context.Context, in *MCPApproveRegistrationRequest, opts ...grpc.CallOption) (*MCPApproveRegistrationResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MCPApproveRegistrationResponse)
+	err := c.cc.Invoke(ctx, SandboxService_MCPApproveRegistration_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sandboxServiceClient) MCPRemoveServer(ctx context.Context, in *MCPRemoveServerRequest, opts ...grpc.CallOption) (*MCPRemoveServerResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MCPRemoveServerResponse)
+	err := c.cc.Invoke(ctx, SandboxService_MCPRemoveServer_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sandboxServiceClient) MCPCall(ctx context.Context, in *MCPCallRequest, opts ...grpc.CallOption) (*MCPCallResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MCPCallResponse)
+	err := c.cc.Invoke(ctx, SandboxService_MCPCall_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sandboxServiceClient) MCPApproveCall(ctx context.Context, in *MCPApproveCallRequest, opts ...grpc.CallOption) (*MCPApproveCallResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MCPApproveCallResponse)
+	err := c.cc.Invoke(ctx, SandboxService_MCPApproveCall_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *sandboxServiceClient) RefreshPolicies(ctx context.Context, in *RefreshPoliciesRequest, opts ...grpc.CallOption) (*RefreshPoliciesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(RefreshPoliciesResponse)
@@ -318,6 +390,12 @@ type SandboxServiceServer interface {
 	GetGlobalPolicy(context.Context, *GetGlobalPolicyRequest) (*GetGlobalPolicyResponse, error)
 	MutateGlobalPolicy(context.Context, *MutateGlobalPolicyRequest) (*MutateGlobalPolicyResponse, error)
 	CheckPolicy(context.Context, *CheckPolicyRequest) (*CheckPolicyResponse, error)
+	ListMCPServers(context.Context, *ListMCPServersRequest) (*ListMCPServersResponse, error)
+	MCPRegisterServer(context.Context, *MCPRegisterServerRequest) (*MCPRegisterServerResponse, error)
+	MCPApproveRegistration(context.Context, *MCPApproveRegistrationRequest) (*MCPApproveRegistrationResponse, error)
+	MCPRemoveServer(context.Context, *MCPRemoveServerRequest) (*MCPRemoveServerResponse, error)
+	MCPCall(context.Context, *MCPCallRequest) (*MCPCallResponse, error)
+	MCPApproveCall(context.Context, *MCPApproveCallRequest) (*MCPApproveCallResponse, error)
 	RefreshPolicies(context.Context, *RefreshPoliciesRequest) (*RefreshPoliciesResponse, error)
 	ResetGlobalPolicy(context.Context, *ResetGlobalPolicyRequest) (*ResetGlobalPolicyResponse, error)
 	mustEmbedUnimplementedSandboxServiceServer()
@@ -383,6 +461,24 @@ func (UnimplementedSandboxServiceServer) MutateGlobalPolicy(context.Context, *Mu
 }
 func (UnimplementedSandboxServiceServer) CheckPolicy(context.Context, *CheckPolicyRequest) (*CheckPolicyResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CheckPolicy not implemented")
+}
+func (UnimplementedSandboxServiceServer) ListMCPServers(context.Context, *ListMCPServersRequest) (*ListMCPServersResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListMCPServers not implemented")
+}
+func (UnimplementedSandboxServiceServer) MCPRegisterServer(context.Context, *MCPRegisterServerRequest) (*MCPRegisterServerResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method MCPRegisterServer not implemented")
+}
+func (UnimplementedSandboxServiceServer) MCPApproveRegistration(context.Context, *MCPApproveRegistrationRequest) (*MCPApproveRegistrationResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method MCPApproveRegistration not implemented")
+}
+func (UnimplementedSandboxServiceServer) MCPRemoveServer(context.Context, *MCPRemoveServerRequest) (*MCPRemoveServerResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method MCPRemoveServer not implemented")
+}
+func (UnimplementedSandboxServiceServer) MCPCall(context.Context, *MCPCallRequest) (*MCPCallResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method MCPCall not implemented")
+}
+func (UnimplementedSandboxServiceServer) MCPApproveCall(context.Context, *MCPApproveCallRequest) (*MCPApproveCallResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method MCPApproveCall not implemented")
 }
 func (UnimplementedSandboxServiceServer) RefreshPolicies(context.Context, *RefreshPoliciesRequest) (*RefreshPoliciesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method RefreshPolicies not implemented")
@@ -710,6 +806,114 @@ func _SandboxService_CheckPolicy_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SandboxService_ListMCPServers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListMCPServersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).ListMCPServers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_ListMCPServers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).ListMCPServers(ctx, req.(*ListMCPServersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SandboxService_MCPRegisterServer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MCPRegisterServerRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).MCPRegisterServer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_MCPRegisterServer_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).MCPRegisterServer(ctx, req.(*MCPRegisterServerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SandboxService_MCPApproveRegistration_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MCPApproveRegistrationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).MCPApproveRegistration(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_MCPApproveRegistration_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).MCPApproveRegistration(ctx, req.(*MCPApproveRegistrationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SandboxService_MCPRemoveServer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MCPRemoveServerRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).MCPRemoveServer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_MCPRemoveServer_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).MCPRemoveServer(ctx, req.(*MCPRemoveServerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SandboxService_MCPCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MCPCallRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).MCPCall(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_MCPCall_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).MCPCall(ctx, req.(*MCPCallRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SandboxService_MCPApproveCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MCPApproveCallRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SandboxServiceServer).MCPApproveCall(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SandboxService_MCPApproveCall_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SandboxServiceServer).MCPApproveCall(ctx, req.(*MCPApproveCallRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _SandboxService_RefreshPolicies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RefreshPoliciesRequest)
 	if err := dec(in); err != nil {
@@ -812,6 +1016,30 @@ var SandboxService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CheckPolicy",
 			Handler:    _SandboxService_CheckPolicy_Handler,
+		},
+		{
+			MethodName: "ListMCPServers",
+			Handler:    _SandboxService_ListMCPServers_Handler,
+		},
+		{
+			MethodName: "MCPRegisterServer",
+			Handler:    _SandboxService_MCPRegisterServer_Handler,
+		},
+		{
+			MethodName: "MCPApproveRegistration",
+			Handler:    _SandboxService_MCPApproveRegistration_Handler,
+		},
+		{
+			MethodName: "MCPRemoveServer",
+			Handler:    _SandboxService_MCPRemoveServer_Handler,
+		},
+		{
+			MethodName: "MCPCall",
+			Handler:    _SandboxService_MCPCall_Handler,
+		},
+		{
+			MethodName: "MCPApproveCall",
+			Handler:    _SandboxService_MCPApproveCall_Handler,
 		},
 		{
 			MethodName: "RefreshPolicies",

@@ -516,6 +516,117 @@ message CheckPolicyResponse {
   string reason = 3;
 }
 
+// MCPCall invokes one tool on an MCP server registered for a sandbox. The
+// daemon resolves the server from its own registry, verifies that the sandbox
+// is running, and obtains any required approval through a trusted host
+// provider. Client input is never an approval grant or an executable command.
+// Deployments must enforce applicable policy before host execution; this RPC
+// does not itself define or evaluate an MCP policy.
+message MCPCallRequest {
+  string sandbox_id = 1;
+  string server_name = 2;
+  string tool_name = 3;
+  // UTF-8 JSON object containing tool arguments, at most 1 MiB. The daemon
+  // validates the JSON before forwarding it.
+  string arguments_json = 4;
+}
+
+message MCPCallResponse {
+  // UTF-8 JSON tool result, at most 4 MiB.
+  string result_json = 1;
+  // When true, the daemon created a short-lived one-use approval challenge.
+  // No tool was executed and result_json is empty. Clients must display the
+  // challenge to the user and call MCPApproveCall before returning a result.
+  bool approval_required = 2;
+  string approval_id = 3;
+  // Human-readable, non-secret explanation for the approval prompt.
+  string approval_reason = 4;
+}
+
+message MCPApproveCallRequest {
+  // One-use daemon-issued challenge returned by MCPCall. This only selects
+  // the pending operation; it is not proof of user approval. The daemon must
+  // obtain approval through its trusted host approval provider before execution.
+  string approval_id = 1;
+  reserved 2;
+}
+
+message MCPApproveCallResponse {
+  // UTF-8 JSON tool result, at most 4 MiB when approved and executed.
+  string result_json = 1;
+}
+
+message MCPRegisterServerRequest {
+  string name = 1;
+  // Explicit host executable path; never interpreted by a shell.
+  string command = 2;
+  // Non-secret command configuration only. Daemon registry metadata is stored
+  // in local state; credentials must use a host credential broker instead.
+  repeated string arguments = 3;
+  // Absolute host working directory. The daemon validates and pins its
+  // identity before launching this command.
+  string working_directory = 4;
+}
+
+message MCPRegisterServerResponse {
+  MCPServerSummary server = 1;
+  // Registration never starts the server. Host process execution begins only
+  // after the daemon's trusted host approval provider authorizes the challenge.
+  bool approval_required = 2;
+  string approval_id = 3;
+}
+
+message MCPApproveRegistrationRequest {
+  // This selects the pending registration; it is not proof of user approval.
+  // The daemon must consult its trusted host approval provider.
+  string approval_id = 1;
+  reserved 2;
+}
+
+message MCPApproveRegistrationResponse {
+  MCPServerSummary server = 1;
+}
+
+message MCPRemoveServerRequest {
+  string name = 1;
+}
+
+message MCPRemoveServerResponse {
+  bool removed = 1;
+}
+
+// MCPServerSummary is a redacted view of a server in the daemon-owned registry.
+// It intentionally excludes command arguments, headers, credentials, and
+// OAuth identity details.
+message MCPServerSummary {
+  string name = 1;
+  // gateway identifies the local gateway or remote control plane responsible
+  // for the server; it is a display value, not an address or authorization.
+  string gateway = 2;
+  // transport is an extensible lowercase label such as stdio, streamable-http,
+  // sse, or oci.
+  string transport = 3;
+  bool loaded = 4;
+  bool usable = 5;
+  bool auth_required = 6;
+  bool auth_configured = 7;
+  bool has_custom_headers = 8;
+  bool custom_headers_supported = 9;
+  bool custom_header_secrets_configured = 10;
+}
+
+// ListMCPServers returns only daemon-known MCP server summaries. It never
+// starts servers or authentication flows. An optional sandbox ID limits the
+// result to servers requested by that sandbox and includes skipped entries so
+// callers can explain why a server is unavailable.
+message ListMCPServersRequest {
+  string sandbox_id = 1;
+}
+
+message ListMCPServersResponse {
+  repeated MCPServerSummary servers = 1;
+}
+
 message GetVersionRequest {}
 
 message GetVersionResponse {
@@ -542,6 +653,12 @@ service SandboxService {
   rpc GetGlobalPolicy(GetGlobalPolicyRequest) returns (GetGlobalPolicyResponse);
   rpc MutateGlobalPolicy(MutateGlobalPolicyRequest) returns (MutateGlobalPolicyResponse);
   rpc CheckPolicy(CheckPolicyRequest) returns (CheckPolicyResponse);
+  rpc ListMCPServers(ListMCPServersRequest) returns (ListMCPServersResponse);
+  rpc MCPRegisterServer(MCPRegisterServerRequest) returns (MCPRegisterServerResponse);
+  rpc MCPApproveRegistration(MCPApproveRegistrationRequest) returns (MCPApproveRegistrationResponse);
+  rpc MCPRemoveServer(MCPRemoveServerRequest) returns (MCPRemoveServerResponse);
+  rpc MCPCall(MCPCallRequest) returns (MCPCallResponse);
+  rpc MCPApproveCall(MCPApproveCallRequest) returns (MCPApproveCallResponse);
   rpc RefreshPolicies(RefreshPoliciesRequest) returns (RefreshPoliciesResponse);
   rpc ResetGlobalPolicy(ResetGlobalPolicyRequest) returns (ResetGlobalPolicyResponse);
 }

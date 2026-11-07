@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.0.18 — 2026-11-07
+
+- Add the local `SandboxService.MCPCall` contract for invoking a named MCP tool
+  in a sandbox. Daemon-side registry lookup, policy enforcement, bounded
+  payload validation, and approval remain required before execution.
+- Add a redacted `SandboxService.ListMCPServers` inventory contract for local
+  `mcp ls`; it exposes gateway/transport and usability flags, never credentials
+  or OAuth identity details, and must not start servers or auth flows.
+- Add explicit stdio registration/removal contracts and one-use registration approval challenges.
+- Add one-use MCP call approval challenges. The approval RPC carries only the challenge ID; it is not proof of consent. The daemon must obtain approval through a trusted host approval provider before execution.
+- Document that persisted stdio command arguments are non-secret configuration; credentials require a host credential broker.
+
 ## v0.0.16 — 2026-11-06
 
 ### Added
