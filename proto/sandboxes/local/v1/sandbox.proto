@@ -564,7 +564,8 @@ message MCPApproveCallResponse {
 
 message MCPRegisterServerRequest {
   string name = 1;
-  // Explicit host executable path; never interpreted by a shell.
+  // Explicit host executable path; never interpreted by a shell. Exactly one
+  // of command or url must be set.
   string command = 2;
   // Non-secret command configuration only. Daemon registry metadata is stored
   // in local state; credentials must use a host credential broker instead.
@@ -572,6 +573,13 @@ message MCPRegisterServerRequest {
   // Absolute host working directory. The daemon validates and pins its
   // identity before launching this command.
   string working_directory = 4;
+  // Remote streamable-HTTP transport: an https URL constrained by the
+  // daemon's fail-closed host allowlist. Exactly one of command or url must
+  // be set.
+  string url = 5;
+  // Static, non-secret request headers for the remote transport. Secret
+  // material must come from the host credential broker, never from here.
+  map<string, string> headers = 6;
 }
 
 message MCPRegisterServerResponse {

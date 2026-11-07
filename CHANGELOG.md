@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.0.20 — 2026-11-07
+
+- Add optional `url` and non-secret `headers` to `MCPRegisterServerRequest`
+  for the remote streamable-HTTP MCP transport. Exactly one of `command` or
+  `url` must be set; remote hosts are constrained by the daemon's fail-closed
+  allowlist.
+
 ## v0.0.19 — 2026-11-07
 
 - Add presence-only refresh metadata (`refresh_present`, `refresh_coordinated`)
