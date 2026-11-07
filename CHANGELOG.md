@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.19 — 2026-11-07
+
+- Add presence-only refresh metadata (`refresh_present`, `refresh_coordinated`)
+  to `AccountService.Status`. No token material, expiry values or validity
+  claims are exposed.
+
 ## v0.0.18 — 2026-11-07
 
 - Add the local `SandboxService.MCPCall` contract for invoking a named MCP tool

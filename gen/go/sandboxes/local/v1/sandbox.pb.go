@@ -3929,8 +3929,14 @@ type AccountServiceStatusResponse struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	Provider          string                 `protobuf:"bytes,1,opt,name=provider,proto3" json:"provider,omitempty"`
 	CredentialPresent bool                   `protobuf:"varint,2,opt,name=credential_present,json=credentialPresent,proto3" json:"credential_present,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// refresh_present reports that a usable refresh token is stored, without
+	// exposing token material, expiry values or validity claims.
+	RefreshPresent bool `protobuf:"varint,3,opt,name=refresh_present,json=refreshPresent,proto3" json:"refresh_present,omitempty"`
+	// refresh_coordinated reports that the daemon coordinates refresh for this
+	// credential (single-flight rotation); false means no refresh is scheduled.
+	RefreshCoordinated bool `protobuf:"varint,4,opt,name=refresh_coordinated,json=refreshCoordinated,proto3" json:"refresh_coordinated,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *AccountServiceStatusResponse) Reset() {
@@ -3973,6 +3979,20 @@ func (x *AccountServiceStatusResponse) GetProvider() string {
 func (x *AccountServiceStatusResponse) GetCredentialPresent() bool {
 	if x != nil {
 		return x.CredentialPresent
+	}
+	return false
+}
+
+func (x *AccountServiceStatusResponse) GetRefreshPresent() bool {
+	if x != nil {
+		return x.RefreshPresent
+	}
+	return false
+}
+
+func (x *AccountServiceStatusResponse) GetRefreshCoordinated() bool {
+	if x != nil {
+		return x.RefreshCoordinated
 	}
 	return false
 }
@@ -6207,10 +6227,12 @@ const file_sandboxes_local_v1_sandbox_proto_rawDesc = "" +
 	"\x1cAccountServiceLogoutResponse\x12\x18\n" +
 	"\aremoved\x18\x01 \x01(\bR\aremoved\"9\n" +
 	"\x1bAccountServiceStatusRequest\x12\x1a\n" +
-	"\bprovider\x18\x01 \x01(\tR\bprovider\"i\n" +
+	"\bprovider\x18\x01 \x01(\tR\bprovider\"\xc3\x01\n" +
 	"\x1cAccountServiceStatusResponse\x12\x1a\n" +
 	"\bprovider\x18\x01 \x01(\tR\bprovider\x12-\n" +
-	"\x12credential_present\x18\x02 \x01(\bR\x11credentialPresent\"t\n" +
+	"\x12credential_present\x18\x02 \x01(\bR\x11credentialPresent\x12'\n" +
+	"\x0frefresh_present\x18\x03 \x01(\bR\x0erefreshPresent\x12/\n" +
+	"\x13refresh_coordinated\x18\x04 \x01(\bR\x12refreshCoordinated\"t\n" +
 	" AccountServiceLoginDeviceRequest\x12\x1a\n" +
 	"\bprovider\x18\x01 \x01(\tR\bprovider\x124\n" +
 	"\x16continue_after_handoff\x18\x02 \x01(\bR\x14continueAfterHandoff\"\x91\x01\n" +

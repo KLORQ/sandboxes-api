@@ -423,6 +423,12 @@ message AccountServiceStatusRequest {
 message AccountServiceStatusResponse {
   string provider = 1;
   bool credential_present = 2;
+  // refresh_present reports that a usable refresh token is stored, without
+  // exposing token material, expiry values or validity claims.
+  bool refresh_present = 3;
+  // refresh_coordinated reports that the daemon coordinates refresh for this
+  // credential (single-flight rotation); false means no refresh is scheduled.
+  bool refresh_coordinated = 4;
 }
 
 // The device-login stream keeps the device code on the daemon. The user code
