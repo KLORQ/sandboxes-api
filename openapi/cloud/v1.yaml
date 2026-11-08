@@ -3,12 +3,14 @@ info:
   title: RHEIC Sandboxes Cloud API
   version: v1
   description: >-
-    Single-operator self-hosted control-plane preview contract. This API stores signed organization
-    policy metadata and structured audit events. It never accepts sandbox
-    secrets or request bodies. It does not implement daemon policy sync/apply,
-    offline last-known-good behavior, or org-scoped roles. OIDC authorization
-    is not part of this preview; the operator uses a locally provisioned
-    bearer credential.
+    Single-operator self-hosted control-plane preview contract. This API stores
+    signed organization policy metadata and structured audit events. It never
+    accepts sandbox secrets or request bodies. Credentials are role-scoped
+    bearer tokens (`admin`, `reader`) provisioned from a protected local file;
+    an optional OIDC mode validates asymmetric JWTs and maps `org`/`role`
+    claims. Daemon policy sync/apply, offline last-known-good behavior,
+    multi-tenancy, audit SIEM export and browser OIDC login are not
+    implemented.
 servers:
   - url: https://{host}
     variables:
@@ -29,8 +31,10 @@ paths:
       - $ref: '#/components/parameters/OrgID'
     get:
       operationId: getPolicyBundle
+      summary: Read the latest signed policy bundle
       security:
-        - AdminBearer: []
+        - RoleBearer: []
+        - OIDCBearer: []
       responses:
         '200':
           description: Latest verified, unexpired signed policy bundle
@@ -40,14 +44,18 @@ paths:
                 $ref: '#/components/schemas/SignedPolicyBundle'
         '401':
           $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
         '404':
           $ref: '#/components/responses/Error'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
     put:
       operationId: publishPolicyBundle
+      summary: Publish a strictly newer signed policy bundle (admin)
       security:
-        - AdminBearer: []
+        - RoleBearer: []
+        - OIDCBearer: []
       requestBody:
         required: true
         content:
@@ -60,6 +68,8 @@ paths:
         '400':
           $ref: '#/components/responses/Error'
         '401':
+          $ref: '#/components/responses/Error'
+        '403':
           $ref: '#/components/responses/Error'
         '409':
           description: Revision is not strictly newer than the stored revision
@@ -78,8 +88,10 @@ paths:
       - $ref: '#/components/parameters/OrgID'
     post:
       operationId: ingestAuditEvents
+      summary: Ingest structured audit events (admin)
       security:
-        - AdminBearer: []
+        - RoleBearer: []
+        - OIDCBearer: []
       description: >-
         Accepts one to 1000 newline-delimited structured events, up to 1 MiB.
         Unknown fields and payload/detail fields are rejected.
@@ -97,11 +109,60 @@ paths:
           $ref: '#/components/responses/Error'
         '401':
           $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+    get:
+      operationId: exportAuditEvents
+      summary: Export one bounded page of audit events (admin or reader)
+      description: >-
+        Returns a bounded JSON object, not NDJSON. Events are ordered by
+        ascending `id`. `after` is an exclusive ID cursor; new events do not
+        replay or skip already exported events. `nextCursor` is empty on the
+        last page. Each response is restricted to the org in the path.
+      security:
+        - RoleBearer: []
+        - OIDCBearer: []
+      parameters:
+        - $ref: '#/components/parameters/AuditLimit'
+        - $ref: '#/components/parameters/AuditAfter'
+      responses:
+        '200':
+          description: One page of audit events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditPage'
+        '400':
+          description: Invalid limit or cursor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
 components:
   securitySchemes:
-    AdminBearer:
+    RoleBearer:
       type: http
       scheme: bearer
+      description: >-
+        Static role-scoped credential loaded from the server's protected
+        credentials file. `admin` authorizes policy publish and audit ingest;
+        `reader` authorizes policy read and audit export. Static credentials
+        are installation-wide, not org-scoped. Tokens are accepted only in the
+        Authorization header and are never accepted from a query parameter.
+    OIDCBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >-
+        Optional OIDC JWT validated against the configured issuer, audience and
+        JWKS. Only RS256 and EdDSA are accepted. The `org` claim scopes the
+        token to one organization; the `role` claim is `admin` or `reader`. A
+        token scoped to one org is rejected on another org path. Browser login,
+        token issuance, introspection and revocation are not implemented.
   parameters:
     OrgID:
       name: org
@@ -110,6 +171,24 @@ components:
       schema:
         type: string
         pattern: '^[a-zA-Z0-9][a-zA-Z0-9._-]{0,127}$'
+    AuditLimit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 500
+        default: 100
+    AuditAfter:
+      name: after
+      in: query
+      required: false
+      description: Exclusive event ID cursor from a previous `nextCursor`.
+      schema:
+        type: integer
+        format: int64
+        minimum: 0
   schemas:
     SignedPolicyBundle:
       type: object
@@ -121,7 +200,9 @@ components:
         signature:
           type: string
           contentEncoding: base64
-          description: Ed25519 signature over UTF-8 JSON encoding of payload.
+          description: >-
+            Standard padded Base64 of the Ed25519 signature over the version-1
+            canonical policy-payload byte encoding, not over JSON text.
     PolicyPayload:
       type: object
       additionalProperties: false
@@ -183,6 +264,49 @@ components:
           enum: [allow, deny]
         ruleId:
           type: string
+    AuditRecord:
+      type: object
+      additionalProperties: false
+      required: [id, occurredAt, sandboxId, operationId, action, resource, decision]
+      properties:
+        id:
+          type: integer
+          format: int64
+          minimum: 1
+          description: Stable storage identifier and pagination cursor.
+        occurredAt:
+          type: string
+          format: date-time
+        sandboxId:
+          type: string
+        operationId:
+          type: string
+        action:
+          type: string
+        resource:
+          type: string
+          enum: [sandbox, network, filesystem, registry, mcp, secret]
+        decision:
+          type: string
+          enum: [allow, deny]
+        ruleId:
+          type: string
+    AuditPage:
+      type: object
+      additionalProperties: false
+      required: [events, nextCursor]
+      properties:
+        events:
+          type: array
+          maxItems: 500
+          items:
+            $ref: '#/components/schemas/AuditRecord'
+        nextCursor:
+          type: string
+          pattern: '^[0-9]*$'
+          description: >-
+            Empty on the last page; otherwise the exclusive `after` value for
+            the next request.
     Error:
       type: object
       additionalProperties: false
