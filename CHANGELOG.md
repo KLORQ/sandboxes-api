@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.23 — 2026-11-08
+
+- Add the `secret_headers` MCP registration field for host-vault placeholder
+  templates, keeping credential values out of the registration RPC and state.
+
 ## v0.0.20 — 2026-11-07
 
 - Add optional `url` and non-secret `headers` to `MCPRegisterServerRequest`

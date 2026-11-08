@@ -580,6 +580,10 @@ message MCPRegisterServerRequest {
   // Static, non-secret request headers for the remote transport. Secret
   // material must come from the host credential broker, never from here.
   map<string, string> headers = 6;
+  // Host-vault-backed request header templates. Values may contain only
+  // literal formatting text and ${placeholder} references; secret material
+  // itself must never cross this RPC or be persisted in registry state.
+  map<string, string> secret_headers = 7;
 }
 
 message MCPRegisterServerResponse {
