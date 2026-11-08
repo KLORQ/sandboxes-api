@@ -1,5 +1,8 @@
 # sandboxes-api
 
+<img src="docs/assets/rheic-shark.png" alt="Rheic shark logo" width="180">
+
+
 ## Import path migration
 
 The canonical Go module path is now `github.com/rheic/sandboxes-api` (previously `github.com/quoiner/sandboxes-api`). Update imports and `go.mod` requirements when moving to a release that includes this change. The old module path is not kept as a compatibility alias.
@@ -44,6 +47,12 @@ claim that registry auth has been verified or that guest pulls are enabled.
 OAuth credentials, device codes, or PKCE values. The daemon resolves endpoints
 and the public client registration from host configuration. Login is a bounded
 unary call; logout reports only whether local account state was removed.
+
+Remote MCP registration separates `headers` (static, non-secret values) from
+`secret_headers` (templates containing `${placeholder}` references). The latter
+crosses the local RPC only as references; the daemon resolves values from the
+host vault when sending each remote request. Do not put credentials in the
+static `headers` field.
 
 ## Development
 
