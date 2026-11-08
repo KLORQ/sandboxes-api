@@ -2,5 +2,204 @@ openapi: 3.2.0
 info:
   title: RHEIC Sandboxes Cloud API
   version: v1
-  description: Pre-alpha contract placeholder.
-paths: {}
+  description: >-
+    Single-operator self-hosted control-plane preview contract. This API stores signed organization
+    policy metadata and structured audit events. It never accepts sandbox
+    secrets or request bodies. It does not implement daemon policy sync/apply,
+    offline last-known-good behavior, or org-scoped roles. OIDC authorization
+    is not part of this preview; the operator uses a locally provisioned
+    bearer credential.
+servers:
+  - url: https://{host}
+    variables:
+      host:
+        default: localhost:8443
+paths:
+  /healthz:
+    get:
+      operationId: health
+      summary: Check server and database health
+      responses:
+        '204':
+          description: Healthy
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /v1/orgs/{org}/policy:
+    parameters:
+      - $ref: '#/components/parameters/OrgID'
+    get:
+      operationId: getPolicyBundle
+      security:
+        - AdminBearer: []
+      responses:
+        '200':
+          description: Latest verified, unexpired signed policy bundle
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignedPolicyBundle'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    put:
+      operationId: publishPolicyBundle
+      security:
+        - AdminBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignedPolicyBundle'
+      responses:
+        '201':
+          description: Newer signed bundle stored
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '409':
+          description: Revision is not strictly newer than the stored revision
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid, expired, or incorrectly signed bundle
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/orgs/{org}/audit:
+    parameters:
+      - $ref: '#/components/parameters/OrgID'
+    post:
+      operationId: ingestAuditEvents
+      security:
+        - AdminBearer: []
+      description: >-
+        Accepts one to 1000 newline-delimited structured events, up to 1 MiB.
+        Unknown fields and payload/detail fields are rejected.
+      requestBody:
+        required: true
+        content:
+          application/x-ndjson:
+            schema:
+              type: string
+              maxLength: 1048576
+      responses:
+        '202':
+          description: Events committed atomically
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+components:
+  securitySchemes:
+    AdminBearer:
+      type: http
+      scheme: bearer
+  parameters:
+    OrgID:
+      name: org
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^[a-zA-Z0-9][a-zA-Z0-9._-]{0,127}$'
+  schemas:
+    SignedPolicyBundle:
+      type: object
+      additionalProperties: false
+      required: [payload, signature]
+      properties:
+        payload:
+          $ref: '#/components/schemas/PolicyPayload'
+        signature:
+          type: string
+          contentEncoding: base64
+          description: Ed25519 signature over UTF-8 JSON encoding of payload.
+    PolicyPayload:
+      type: object
+      additionalProperties: false
+      required: [schemaVersion, orgId, revision, issuedAt, expiresAt, rules]
+      properties:
+        schemaVersion:
+          type: integer
+          const: 1
+        orgId:
+          type: string
+        revision:
+          type: integer
+          minimum: 1
+        issuedAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+        rules:
+          type: array
+          maxItems: 10000
+          items:
+            $ref: '#/components/schemas/PolicyRule'
+    PolicyRule:
+      type: object
+      additionalProperties: false
+      required: [resource, action, ruleId]
+      properties:
+        resource:
+          type: string
+          minLength: 1
+          maxLength: 512
+        action:
+          type: string
+          enum: [allow, deny]
+        ruleId:
+          type: string
+          maxLength: 256
+    AuditEvent:
+      type: object
+      additionalProperties: false
+      required: [occurredAt, sandboxId, operationId, action, resource, decision]
+      properties:
+        occurredAt:
+          type: string
+          format: date-time
+        sandboxId:
+          type: string
+        operationId:
+          type: string
+        action:
+          type: string
+        resource:
+          type: string
+          enum: [sandbox, network, filesystem, registry, mcp, secret]
+        decision:
+          type: string
+          enum: [allow, deny]
+        ruleId:
+          type: string
+    Error:
+      type: object
+      additionalProperties: false
+      required: [code]
+      properties:
+        code:
+          type: string
+  responses:
+    Error:
+      description: Request rejected
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ServiceUnavailable:
+      description: Service or stored policy unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
