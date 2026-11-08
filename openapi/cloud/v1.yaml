@@ -3,10 +3,12 @@ info:
   title: RHEIC Sandboxes Cloud API
   version: v1
   description: >-
-    Self-hosted control-plane MVP contract. This API stores signed organization
+    Single-operator self-hosted control-plane preview contract. This API stores signed organization
     policy metadata and structured audit events. It never accepts sandbox
-    secrets or request bodies. OIDC authorization is not part of this MVP; the
-    initial operator deployment uses a locally provisioned bearer credential.
+    secrets or request bodies. It does not implement daemon policy sync/apply,
+    offline last-known-good behavior, or org-scoped roles. OIDC authorization
+    is not part of this preview; the operator uses a locally provisioned
+    bearer credential.
 servers:
   - url: https://{host}
     variables:
