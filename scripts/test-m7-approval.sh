@@ -31,9 +31,27 @@ done
 printf 'PASS: commit-bound inline condition present in %s gated workflow\n' "$matched"
 
 workflow="$root/.github/workflows/m7-pretag-approval.yml"
-grep -Fq '  create_tag:' "$workflow"
-grep -Fq '    needs: m7_approval' "$workflow"
-grep -Fq '      contents: write' "$workflow"
-grep -Fq 'scripts/validate-release-candidate.sh "$VERSION"' "$workflow"
-grep -Fq 'git push origin "refs/tags/$tag"' "$workflow"
-printf 'PASS: release tag creation requires the approved M7 job and candidate revalidation\n'
+[[ "$(grep -Ec '^  create_tag:$' "$workflow")" -eq 1 ]]
+create_tag_job=$(awk '
+  /^  create_tag:$/ { in_job = 1 }
+  in_job && /^  [[:alnum:]_-]+:$/ && $0 != "  create_tag:" { exit }
+  in_job { print }
+' "$workflow")
+grep -Fq '    needs: m7_approval' <<<"$create_tag_job"
+grep -Fq '      contents: write' <<<"$create_tag_job"
+grep -Fq '      actions: write' <<<"$create_tag_job"
+grep -Fq '[[ "$GITHUB_REF" == "refs/heads/main" ]]' <<<"$create_tag_job"
+grep -Fq '[[ "$GITHUB_WORKFLOW_SHA" == "$GITHUB_SHA" ]]' <<<"$create_tag_job"
+grep -Fq 'ref=refs/tags/$tag' <<<"$create_tag_job"
+grep -Fq 'object=$GITHUB_SHA' <<<"$create_tag_job"
+if [[ -f "$root/.github/workflows/release.yml" ]]; then
+  grep -Fq 'actions/workflows/release.yml/dispatches' <<<"$create_tag_job"
+  grep -Fq '  workflow_dispatch:' "$root/.github/workflows/release.yml"
+fi
+grep -Fq 'GH_TOKEN: ${{ github.token }}' <<<"$create_tag_job"
+[[ "$(grep -Fc 'contents: write' "$workflow")" -eq 1 ]]
+if grep -Eq -- '--force|--force-with-lease' <<<"$create_tag_job"; then
+  printf 'release tag workflow must never force-update refs\n' >&2
+  exit 1
+fi
+printf 'PASS: tag creation is isolated to the exact-SHA approved job and uses a non-force GitHub API ref create\n'

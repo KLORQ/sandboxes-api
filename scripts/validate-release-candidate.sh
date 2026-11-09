@@ -21,6 +21,14 @@ if [[ "$head" != "$GITHUB_SHA" ]]; then
   printf 'release validation SHA does not match checked out commit\n' >&2
   exit 1
 fi
+first_heading=$(awk '/^## / { print; exit }' "$root/CHANGELOG.md")
+case "$first_heading" in
+  "## v$version"|"## v$version "*) ;;
+  *)
+    printf 'release version must match the newest changelog entry\n' >&2
+    exit 1
+    ;;
+esac
 tag_ref="refs/tags/v$version"
 if ! remote_tags=$(git ls-remote --refs origin "$tag_ref"); then
   printf 'could not check remote release tag\n' >&2

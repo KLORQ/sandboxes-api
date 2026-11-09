@@ -93,6 +93,11 @@ jobs:
           cache: true
       - name: Run race tests
         run: go test -race -count=1 ./...
+      - name: Run release gate controls
+        run: |
+          scripts/test-m7-approval.sh
+          scripts/test-release-candidate.sh
+          scripts/test-release-notes.sh
 
   contract:
     name: Contract

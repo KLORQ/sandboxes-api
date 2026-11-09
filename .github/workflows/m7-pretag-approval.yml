@@ -21,7 +21,7 @@ jobs:
       GOTOOLCHAIN: local
       VERSION: ${{ inputs.version }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # releases/v4 commit
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ github.sha }}
           fetch-depth: 1
@@ -63,21 +63,25 @@ jobs:
     needs: m7_approval
     runs-on: ubuntu-24.04
     permissions:
+      actions: write
       contents: write
     env:
       VERSION: ${{ inputs.version }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # releases/v4 commit
-        with:
-          ref: ${{ github.sha }}
-          fetch-depth: 0
-      - name: Revalidate and create immutable release tag
+      - name: Recheck workflow identity and create immutable tag ref
+        env:
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          scripts/test-release-notes.sh
-          scripts/test-release-candidate.sh
-          scripts/validate-release-candidate.sh "$VERSION"
+          [[ "$GITHUB_REF" == "refs/heads/main" ]]
+          [[ "$GITHUB_WORKFLOW_SHA" == "$GITHUB_SHA" ]]
           tag="v$VERSION"
-          git tag -a "$tag" "$GITHUB_SHA" -m "$tag"
-          git push origin "refs/tags/$tag"
+          tag_object=$(gh api --method POST "repos/$GITHUB_REPOSITORY/git/tags" \
+            -f "tag=$tag" -f "message=$tag" -f "object=$GITHUB_SHA" -f type=commit --jq '.sha')
+          gh api --method POST "repos/$GITHUB_REPOSITORY/git/refs" \
+            -f "ref=refs/tags/$tag" -f "sha=$tag_object" >/dev/null
+          if [[ "$GITHUB_REPOSITORY" == rheic/sandboxes-daemon || "$GITHUB_REPOSITORY" == rheic/sandboxes-cli ]]; then
+            gh api --method POST "repos/$GITHUB_REPOSITORY/actions/workflows/release.yml/dispatches" \
+              -f "ref=$tag"
+          fi
