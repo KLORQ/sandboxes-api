@@ -1,0 +1,59 @@
+name: M7 pre-tag approval
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Candidate semver without the v prefix
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate release candidate
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    env:
+      GOTOOLCHAIN: local
+      VERSION: ${{ inputs.version }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Validate main commit, changelog, and absent tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REF" == "refs/heads/main" ]]
+          [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          [[ "$(git rev-parse HEAD)" == "$GITHUB_SHA" ]]
+          if [[ -n "$(git ls-remote --refs origin "refs/tags/v$VERSION")" ]]; then
+            echo "Release blocked: tag v$VERSION already exists." >&2
+            exit 1
+          fi
+          scripts/test-release-notes.sh
+          scripts/extract-release-notes.sh "$VERSION" >/dev/null
+
+  m7_approval:
+    name: M7 external review approval
+    needs: validate
+    runs-on: ubuntu-24.04
+    environment: m7-external-security-review
+    permissions: {}
+    env:
+      M7_EXTERNAL_SECURITY_REVIEW_APPROVED: ${{ vars.M7_EXTERNAL_SECURITY_REVIEW_APPROVED }}
+    steps:
+      - name: Require explicit M7 approval
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$M7_EXTERNAL_SECURITY_REVIEW_APPROVED" != "true" ]]; then
+            echo "Release blocked: configure the protected M7 review environment after independent review." >&2
+            exit 1
+          fi
