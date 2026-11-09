@@ -22,6 +22,8 @@ matched=0
 for workflow in "$root"/.github/workflows/*.yml; do
   if grep -Fq 'M7_EXTERNAL_SECURITY_REVIEW_APPROVED_COMMIT' "$workflow"; then
     grep -Fq "$condition" "$workflow"
+    grep -Fq 'M7_EXTERNAL_SECURITY_REVIEW_APPROVED_COMMIT: ${{ vars.M7_EXTERNAL_SECURITY_REVIEW_APPROVED_COMMIT }}' "$workflow"
+    grep -Fq 'environment: m7-external-security-review' "$workflow"
     matched=$((matched + 1))
   fi
 done
