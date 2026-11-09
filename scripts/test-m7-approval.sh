@@ -39,19 +39,30 @@ create_tag_job=$(awk '
 ' "$workflow")
 grep -Fq '    needs: m7_approval' <<<"$create_tag_job"
 grep -Fq '      contents: write' <<<"$create_tag_job"
-grep -Fq '      actions: write' <<<"$create_tag_job"
 grep -Fq '[[ "$GITHUB_REF" == "refs/heads/main" ]]' <<<"$create_tag_job"
 grep -Fq '[[ "$GITHUB_WORKFLOW_SHA" == "$GITHUB_SHA" ]]' <<<"$create_tag_job"
+grep -Fq '[[ "$VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]' <<<"$create_tag_job"
 grep -Fq 'ref=refs/tags/$tag' <<<"$create_tag_job"
 grep -Fq 'object=$GITHUB_SHA' <<<"$create_tag_job"
-if [[ -f "$root/.github/workflows/release.yml" ]]; then
-  grep -Fq 'actions/workflows/release.yml/dispatches' <<<"$create_tag_job"
-  grep -Fq '  workflow_dispatch:' "$root/.github/workflows/release.yml"
-fi
+grep -Fq 'sha=$tag_object' <<<"$create_tag_job"
 grep -Fq 'GH_TOKEN: ${{ github.token }}' <<<"$create_tag_job"
+! grep -Fq 'actions/checkout' <<<"$create_tag_job"
+! grep -Fq 'scripts/' <<<"$create_tag_job"
 [[ "$(grep -Fc 'contents: write' "$workflow")" -eq 1 ]]
 if grep -Eq -- '--force|--force-with-lease' <<<"$create_tag_job"; then
   printf 'release tag workflow must never force-update refs\n' >&2
   exit 1
 fi
-printf 'PASS: tag creation is isolated to the exact-SHA approved job and uses a non-force GitHub API ref create\n'
+dispatch_job=$(awk '
+  /^  dispatch_release:$/ { in_job = 1 }
+  in_job && /^  [[:alnum:]_-]+:$/ && $0 != "  dispatch_release:" { exit }
+  in_job { print }
+' "$workflow")
+grep -Fq '    needs: create_tag' <<<"$dispatch_job"
+grep -Fq '      actions: write' <<<"$dispatch_job"
+grep -Fq 'actions/workflows/release.yml/dispatches' <<<"$dispatch_job"
+[[ "$(grep -Fc 'actions: write' "$workflow")" -eq 1 ]]
+if [[ -f "$root/.github/workflows/release.yml" ]]; then
+  grep -Fq '  workflow_dispatch:' "$root/.github/workflows/release.yml"
+fi
+printf 'PASS: tag write token is isolated; release dispatch has a separate minimal job\n'

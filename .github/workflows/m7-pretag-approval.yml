@@ -63,7 +63,6 @@ jobs:
     needs: m7_approval
     runs-on: ubuntu-24.04
     permissions:
-      actions: write
       contents: write
     env:
       VERSION: ${{ inputs.version }}
@@ -76,12 +75,24 @@ jobs:
           set -euo pipefail
           [[ "$GITHUB_REF" == "refs/heads/main" ]]
           [[ "$GITHUB_WORKFLOW_SHA" == "$GITHUB_SHA" ]]
+          [[ "$VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
           tag="v$VERSION"
           tag_object=$(gh api --method POST "repos/$GITHUB_REPOSITORY/git/tags" \
             -f "tag=$tag" -f "message=$tag" -f "object=$GITHUB_SHA" -f type=commit --jq '.sha')
           gh api --method POST "repos/$GITHUB_REPOSITORY/git/refs" \
             -f "ref=refs/tags/$tag" -f "sha=$tag_object" >/dev/null
-          if [[ "$GITHUB_REPOSITORY" == rheic/sandboxes-daemon || "$GITHUB_REPOSITORY" == rheic/sandboxes-cli ]]; then
-            gh api --method POST "repos/$GITHUB_REPOSITORY/actions/workflows/release.yml/dispatches" \
-              -f "ref=$tag"
-          fi
+
+  dispatch_release:
+    name: Dispatch tag-triggered release workflow
+    needs: create_tag
+    if: github.repository == 'rheic/sandboxes-daemon' || github.repository == 'rheic/sandboxes-cli'
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: write
+    env:
+      TAG: v${{ inputs.version }}
+    steps:
+      - name: Start release workflow for the approved tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/actions/workflows/release.yml/dispatches" -f "ref=$TAG"
