@@ -30,15 +30,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          [[ "$GITHUB_REF" == "refs/heads/main" ]]
-          [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
-          [[ "$(git rev-parse HEAD)" == "$GITHUB_SHA" ]]
-          if [[ -n "$(git ls-remote --refs origin "refs/tags/v$VERSION")" ]]; then
-            echo "Release blocked: tag v$VERSION already exists." >&2
-            exit 1
-          fi
           scripts/test-release-notes.sh
-          scripts/extract-release-notes.sh "$VERSION" >/dev/null
+          scripts/test-release-candidate.sh
+          scripts/validate-release-candidate.sh "$VERSION"
 
   quality:
     name: Run full CI on the candidate SHA
