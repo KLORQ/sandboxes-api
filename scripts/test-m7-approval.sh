@@ -29,3 +29,11 @@ for workflow in "$root"/.github/workflows/*.yml; do
 done
 [[ "$matched" -eq 1 ]]
 printf 'PASS: commit-bound inline condition present in %s gated workflow\n' "$matched"
+
+workflow="$root/.github/workflows/m7-pretag-approval.yml"
+grep -Fq '  create_tag:' "$workflow"
+grep -Fq '    needs: m7_approval' "$workflow"
+grep -Fq '      contents: write' "$workflow"
+grep -Fq 'scripts/validate-release-candidate.sh "$VERSION"' "$workflow"
+grep -Fq 'git push origin "refs/tags/$tag"' "$workflow"
+printf 'PASS: release tag creation requires the approved M7 job and candidate revalidation\n'
