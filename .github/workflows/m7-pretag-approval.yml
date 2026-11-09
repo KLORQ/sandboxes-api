@@ -40,9 +40,14 @@ jobs:
           scripts/test-release-notes.sh
           scripts/extract-release-notes.sh "$VERSION" >/dev/null
 
+  quality:
+    name: Run full CI on the candidate SHA
+    needs: validate
+    uses: ./.github/workflows/ci.yml
+
   m7_approval:
     name: M7 external review approval
-    needs: validate
+    needs: [validate, quality]
     runs-on: ubuntu-24.04
     environment: m7-external-security-review
     permissions: {}
