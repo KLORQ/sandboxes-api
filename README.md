@@ -18,7 +18,9 @@ Go code, stable error codes, and version/capability metadata.
 - no business logic;
 - no runtime, storage, or network implementations;
 - generated code is never edited by hand;
-- breaking contract changes require a major version and a migration note.
+- breaking contract changes before `1.0.0` follow the project's alpha policy:
+  they may ship with an explicit forward-migration note and contract tests;
+  after `1.0.0`, a breaking change requires a major version and migration note.
 
 Policy migration (unreleased): `UpdatePolicy` whole-policy replacement is
 rejected by the updated daemon because concurrent replacements can restore a
