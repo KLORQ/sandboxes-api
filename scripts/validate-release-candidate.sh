@@ -31,4 +31,3 @@ if [[ -n "$remote_tags" ]]; then
   exit 1
 fi
 "$root/scripts/extract-release-notes.sh" "$version" >/dev/null
-

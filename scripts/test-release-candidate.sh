@@ -65,4 +65,3 @@ if (cd "$tmp/checkout" && GITHUB_REF=refs/heads/main GITHUB_SHA="$sha" "$helper"
 fi
 
 printf 'PASS: 1 positive and 5 negative pre-tag controls\n'
-
