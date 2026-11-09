@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.24 — 2026-11-09
+
+- Deprecate static remote MCP request headers; supported daemons reject them
+  because sensitivity cannot be inferred from custom header names.
+- Require host-vault-backed `secret_headers` templates for all remote MCP headers.
+
 ## v0.0.23 — 2026-11-08
 
 - Bind M7 pre-tag approval to the exact reviewed commit.

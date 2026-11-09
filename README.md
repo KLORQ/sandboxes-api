@@ -48,11 +48,11 @@ OAuth credentials, device codes, or PKCE values. The daemon resolves endpoints
 and the public client registration from host configuration. Login is a bounded
 unary call; logout reports only whether local account state was removed.
 
-Remote MCP registration separates `headers` (static, non-secret values) from
-`secret_headers` (templates containing `${placeholder}` references). The latter
-crosses the local RPC only as references; the daemon resolves values from the
-host vault when sending each remote request. Do not put credentials in the
-static `headers` field.
+All remote MCP request headers must use `secret_headers` templates containing
+`${placeholder}` references. The references cross the local RPC; the daemon
+resolves values from the host vault when sending each request. The legacy
+`headers` field is deprecated and supported daemons reject it because a custom
+header name cannot prove that its value is non-secret.
 
 ## Development
 

@@ -5187,8 +5187,9 @@ type MCPRegisterServerRequest struct {
 	// daemon's fail-closed host allowlist. Exactly one of command or url must
 	// be set.
 	Url string `protobuf:"bytes,5,opt,name=url,proto3" json:"url,omitempty"`
-	// Static, non-secret request headers for the remote transport. Secret
-	// material must come from the host credential broker, never from here.
+	// Deprecated: static remote request headers are rejected by supported
+	// daemons because sensitivity cannot be inferred from a custom header name.
+	// Use secret_headers with host-vault placeholder references.
 	Headers map[string]string `protobuf:"bytes,6,rep,name=headers,proto3" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// Host-vault-backed request header templates. Values may contain only
 	// literal formatting text and ${placeholder} references; secret material

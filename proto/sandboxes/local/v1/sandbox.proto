@@ -577,8 +577,9 @@ message MCPRegisterServerRequest {
   // daemon's fail-closed host allowlist. Exactly one of command or url must
   // be set.
   string url = 5;
-  // Static, non-secret request headers for the remote transport. Secret
-  // material must come from the host credential broker, never from here.
+  // Deprecated: static remote request headers are rejected by supported
+  // daemons because sensitivity cannot be inferred from a custom header name.
+  // Use secret_headers with host-vault placeholder references.
   map<string, string> headers = 6;
   // Host-vault-backed request header templates. Values may contain only
   // literal formatting text and ${placeholder} references; secret material
