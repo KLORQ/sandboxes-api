@@ -39,3 +39,8 @@ if "$extract" 0.0x42 "$fixture" >"$actual" 2>"$tmp_dir/error"; then
   printf 'accepted invalid version argument\n' >&2
   exit 1
 fi
+
+if "$extract" 0.0.042 "$fixture" >"$actual" 2>"$tmp_dir/error"; then
+  printf 'accepted version with a leading zero\n' >&2
+  exit 1
+fi

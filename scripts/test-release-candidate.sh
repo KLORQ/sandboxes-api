@@ -37,31 +37,24 @@ if ! (cd "$tmp/checkout" && GITHUB_REF=refs/heads/main GITHUB_SHA="$sha" "$helpe
 fi
 expect_failure() {
   local name=$1
-  shift
-  if (cd "$tmp/checkout" && env "$@" "$helper" 0.0.1) >/dev/null 2>&1; then
+  local version=$2
+  shift 2
+  if (cd "$tmp/checkout" && env "$@" "$helper" "$version") >/dev/null 2>&1; then
     printf 'pre-tag validation accepted negative control: %s\n' "$name" >&2
     exit 1
   fi
 }
-expect_failure wrong-ref GITHUB_REF=refs/heads/feature/release GITHUB_SHA="$sha"
-expect_failure wrong-sha GITHUB_REF=refs/heads/main GITHUB_SHA=0000000000000000000000000000000000000000
-if (cd "$tmp/checkout" && GITHUB_REF=refs/heads/main GITHUB_SHA="$sha" "$helper" 0.0.x) >/dev/null 2>&1; then
-  printf 'pre-tag validation accepted invalid version syntax\n' >&2
-  exit 1
-fi
+expect_failure wrong-ref 0.0.1 GITHUB_REF=refs/heads/feature/release GITHUB_SHA="$sha"
+expect_failure wrong-sha 0.0.1 GITHUB_REF=refs/heads/main GITHUB_SHA=0000000000000000000000000000000000000000
+expect_failure invalid-version 0.0.x GITHUB_REF=refs/heads/main GITHUB_SHA="$sha"
+expect_failure leading-zero-version 0.0.01 GITHUB_REF=refs/heads/main GITHUB_SHA="$sha"
 
 git -C "$tmp/checkout" remote set-url origin "$tmp/missing-origin.git"
-if (cd "$tmp/checkout" && GITHUB_REF=refs/heads/main GITHUB_SHA="$sha" "$helper" 0.0.1) >/dev/null 2>&1; then
-  printf 'pre-tag validation accepted an unavailable origin\n' >&2
-  exit 1
-fi
+expect_failure unavailable-origin 0.0.1 GITHUB_REF=refs/heads/main GITHUB_SHA="$sha"
 git -C "$tmp/checkout" remote set-url origin "$tmp/origin.git"
 
 git -C "$tmp/checkout" tag v0.0.2
 git -C "$tmp/checkout" push origin refs/tags/v0.0.2 >/dev/null 2>&1
-if (cd "$tmp/checkout" && GITHUB_REF=refs/heads/main GITHUB_SHA="$sha" "$helper" 0.0.2) >/dev/null 2>&1; then
-  printf 'pre-tag validation accepted an existing remote tag\n' >&2
-  exit 1
-fi
+expect_failure existing-remote-tag 0.0.2 GITHUB_REF=refs/heads/main GITHUB_SHA="$sha"
 
-printf 'PASS: 1 positive and 5 negative pre-tag controls\n'
+printf 'PASS: 1 positive and 6 negative pre-tag controls\n'
