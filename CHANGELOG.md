@@ -2,6 +2,7 @@
 
 ## v0.0.23 — 2026-11-08
 
+- Bind M7 pre-tag approval to the exact reviewed commit.
 - Add the `secret_headers` MCP registration field for host-vault placeholder
   templates, keeping credential values out of the registration RPC and state.
 

@@ -32,6 +32,7 @@ jobs:
           set -euo pipefail
           scripts/test-release-notes.sh
           scripts/test-release-candidate.sh
+          scripts/test-m7-approval.sh
           scripts/validate-release-candidate.sh "$VERSION"
 
   quality:
@@ -46,13 +47,13 @@ jobs:
     environment: m7-external-security-review
     permissions: {}
     env:
-      M7_EXTERNAL_SECURITY_REVIEW_APPROVED: ${{ vars.M7_EXTERNAL_SECURITY_REVIEW_APPROVED }}
+      M7_EXTERNAL_SECURITY_REVIEW_APPROVED_COMMIT: ${{ vars.M7_EXTERNAL_SECURITY_REVIEW_APPROVED_COMMIT }}
     steps:
       - name: Require explicit M7 approval
         shell: bash
         run: |
           set -euo pipefail
-          if [[ "$M7_EXTERNAL_SECURITY_REVIEW_APPROVED" != "true" ]]; then
-            echo "Release blocked: configure the protected M7 review environment after independent review." >&2
+          if [[ ! "$M7_EXTERNAL_SECURITY_REVIEW_APPROVED_COMMIT" =~ ^[0-9a-f]{40}$ || "$M7_EXTERNAL_SECURITY_REVIEW_APPROVED_COMMIT" != "$GITHUB_SHA" ]]; then
+            echo "Release blocked: M7 approval must name this exact reviewed commit in the protected environment." >&2
             exit 1
           fi
