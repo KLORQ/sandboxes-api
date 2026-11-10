@@ -66,6 +66,11 @@ func TestMCPApprovalAndRegistrationContracts(t *testing.T) {
 			t.Fatalf("SandboxService.%s RPC is missing from the generated descriptor", method)
 		}
 	}
+	registrationDescriptor := (&localv1.MCPRegisterServerRequest{}).ProtoReflect().Descriptor()
+	secretHeaders := registrationDescriptor.Fields().ByName("secret_headers")
+	if secretHeaders == nil || secretHeaders.Number() != 7 || !secretHeaders.IsMap() {
+		t.Fatal("MCP registration secret_headers map field 7 is missing")
+	}
 	for name, descriptor := range map[string]protoreflect.MessageDescriptor{
 		"MCPApproveCallRequest":         (&localv1.MCPApproveCallRequest{}).ProtoReflect().Descriptor(),
 		"MCPApproveRegistrationRequest": (&localv1.MCPApproveRegistrationRequest{}).ProtoReflect().Descriptor(),
@@ -88,7 +93,7 @@ func TestMCPApprovalAndRegistrationContracts(t *testing.T) {
 		t.Fatalf("round-trip mismatch: got %v, want %v", &got, want)
 	}
 
-	registration := &localv1.MCPRegisterServerRequest{Name: "fixture", Command: "/tmp/fixture", Arguments: []string{"--stdio"}, WorkingDirectory: "/tmp"}
+	registration := &localv1.MCPRegisterServerRequest{Name: "fixture", Command: "/tmp/fixture", Arguments: []string{"--stdio"}, WorkingDirectory: "/tmp", SecretHeaders: map[string]string{"X-API-Key": "${api_key}"}}
 	encoded, err = proto.Marshal(registration)
 	if err != nil {
 		t.Fatal(err)
