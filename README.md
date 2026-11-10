@@ -1,5 +1,7 @@
 # sandboxes-api
 
+![Rheic blue shark logo](docs/assets/rheic-shark.png)
+
 ## Import path migration
 
 The canonical Go module path is now `github.com/rheic/sandboxes-api` (previously `github.com/quoiner/sandboxes-api`). Update imports and `go.mod` requirements when moving to a release that includes this change. The old module path is not kept as a compatibility alias.
