@@ -1,6 +1,7 @@
 # sandboxes-api
 
-![Rheic blue shark logo](docs/assets/rheic-shark.png)
+<img src="docs/assets/rheic-shark.png" alt="Rheic shark logo" width="180">
+
 
 ## Import path migration
 
@@ -17,7 +18,9 @@ Go code, stable error codes, and version/capability metadata.
 - no business logic;
 - no runtime, storage, or network implementations;
 - generated code is never edited by hand;
-- breaking contract changes require a major version and a migration note.
+- breaking contract changes before `1.0.0` follow the project's alpha policy:
+  they may ship with an explicit forward-migration note and contract tests;
+  after `1.0.0`, a breaking change requires a major version and migration note.
 
 Policy migration (unreleased): `UpdatePolicy` whole-policy replacement is
 rejected by the updated daemon because concurrent replacements can restore a
@@ -46,6 +49,12 @@ claim that registry auth has been verified or that guest pulls are enabled.
 OAuth credentials, device codes, or PKCE values. The daemon resolves endpoints
 and the public client registration from host configuration. Login is a bounded
 unary call; logout reports only whether local account state was removed.
+
+All remote MCP request headers must use `secret_headers` templates containing
+`${placeholder}` references. The references cross the local RPC; the daemon
+resolves values from the host vault when sending each request. The legacy
+`headers` field is deprecated and supported daemons reject it because a custom
+header name cannot prove that its value is non-secret.
 
 ## Development
 
