@@ -4,6 +4,8 @@
 
 - Add optional `Workspace.guest_path` for mounting a validated host path at an
   explicit guest destination. Empty values retain same-path mount behavior.
+- Advance the local RPC contract version to 0.0.25 so clients can reject older
+  daemons that would ignore a non-empty guest destination.
 
 ## v0.0.24 — 2026-11-09
 

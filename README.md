@@ -54,6 +54,7 @@ Local `Workspace` mounts identify a host `path`, whether it is `read_only`, and
 an optional absolute `guest_path` destination. An empty `guest_path` preserves
 the existing same-path mount behavior. Daemons must validate the host and guest
 paths and reject conflicting destinations before creating the sandbox.
+The local RPC contract version advances to 0.0.25 with this field.
 
 All remote MCP request headers must use `secret_headers` templates containing
 `${placeholder}` references. The references cross the local RPC; the daemon
