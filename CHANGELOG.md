@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Add optional `Workspace.guest_path` for mounting a validated host path at an
+  explicit guest destination. Empty values retain same-path mount behavior.
+
 ## v0.0.24 — 2026-11-09
 
 - Deprecate static remote MCP request headers; supported daemons reject them

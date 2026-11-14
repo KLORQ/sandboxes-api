@@ -50,6 +50,11 @@ OAuth credentials, device codes, or PKCE values. The daemon resolves endpoints
 and the public client registration from host configuration. Login is a bounded
 unary call; logout reports only whether local account state was removed.
 
+Local `Workspace` mounts identify a host `path`, whether it is `read_only`, and
+an optional absolute `guest_path` destination. An empty `guest_path` preserves
+the existing same-path mount behavior. Daemons must validate the host and guest
+paths and reject conflicting destinations before creating the sandbox.
+
 All remote MCP request headers must use `secret_headers` templates containing
 `${placeholder}` references. The references cross the local RPC; the daemon
 resolves values from the host vault when sending each request. The legacy

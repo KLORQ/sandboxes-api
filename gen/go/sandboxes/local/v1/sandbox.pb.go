@@ -401,9 +401,14 @@ func (x *Port) GetHostIp() string {
 }
 
 type Workspace struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Path          string                 `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
-	ReadOnly      bool                   `protobuf:"varint,2,opt,name=read_only,json=readOnly,proto3" json:"read_only,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Host path to expose. The daemon must validate this path before mounting it.
+	Path     string `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
+	ReadOnly bool   `protobuf:"varint,2,opt,name=read_only,json=readOnly,proto3" json:"read_only,omitempty"`
+	// Absolute destination in the guest. Empty preserves the legacy behavior of
+	// mounting Path at the same absolute path. The daemon must reject invalid or
+	// conflicting guest destinations before creating a sandbox.
+	GuestPath     string `protobuf:"bytes,3,opt,name=guest_path,json=guestPath,proto3" json:"guest_path,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -450,6 +455,13 @@ func (x *Workspace) GetReadOnly() bool {
 		return x.ReadOnly
 	}
 	return false
+}
+
+func (x *Workspace) GetGuestPath() string {
+	if x != nil {
+		return x.GuestPath
+	}
+	return ""
 }
 
 type Sandbox struct {
@@ -6004,10 +6016,12 @@ const file_sandboxes_local_v1_sandbox_proto_rawDesc = "" +
 	"\x04host\x18\x01 \x01(\rR\x04host\x12\x14\n" +
 	"\x05guest\x18\x02 \x01(\rR\x05guest\x12\x1a\n" +
 	"\bprotocol\x18\x03 \x01(\tR\bprotocol\x12\x17\n" +
-	"\ahost_ip\x18\x04 \x01(\tR\x06hostIp\"<\n" +
+	"\ahost_ip\x18\x04 \x01(\tR\x06hostIp\"[\n" +
 	"\tWorkspace\x12\x12\n" +
 	"\x04path\x18\x01 \x01(\tR\x04path\x12\x1b\n" +
-	"\tread_only\x18\x02 \x01(\bR\breadOnly\"\x8d\x06\n" +
+	"\tread_only\x18\x02 \x01(\bR\breadOnly\x12\x1d\n" +
+	"\n" +
+	"guest_path\x18\x03 \x01(\tR\tguestPath\"\x8d\x06\n" +
 	"\aSandbox\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x126\n" +
