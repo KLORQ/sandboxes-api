@@ -56,6 +56,12 @@ the existing same-path mount behavior. Daemons must validate the host and guest
 paths and reject conflicting destinations before creating the sandbox.
 The local RPC contract version advances to 0.0.25 with this field.
 
+The same unpublished 0.0.25 local contract candidate includes clone mode:
+`CreateRequest.clone` identifies a host `source_workspace_path` and may specify
+an optional guest working directory. `Sandbox.clone_info` reports the guest working
+directory and remote name. Its optional Git endpoint is absent while the
+sandbox is stopped; the daemon must not report a stale endpoint as usable.
+
 All remote MCP request headers must use `secret_headers` templates containing
 `${placeholder}` references. The references cross the local RPC; the daemon
 resolves values from the host vault when sending each request. The legacy

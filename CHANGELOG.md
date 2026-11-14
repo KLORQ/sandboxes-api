@@ -6,6 +6,8 @@
   explicit guest destination. Empty values retain same-path mount behavior.
 - Advance the local RPC contract version to 0.0.25 so clients can reject older
   daemons that would ignore a non-empty guest destination.
+- Include the typed clone request and sandbox clone metadata in the unpublished
+  0.0.25 contract candidate; the endpoint is optional and omitted while stopped.
 
 ## v0.0.24 — 2026-11-09
 

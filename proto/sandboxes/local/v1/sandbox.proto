@@ -90,6 +90,8 @@ message Sandbox {
   int64 last_used_at_unix = 19;
   int64 last_used_at_unix_nano = 20;
   string policy_profile = 21;
+  // Clone metadata. GitEndpoint is present only while the guest is running.
+  CloneInfo clone_info = 22;
 }
 
 message Operation {
@@ -125,6 +127,29 @@ message CreateRequest {
   bool privileged = 15;
   // OAuth kit metadata only; never put real access or refresh tokens here.
   repeated OAuthCredential oauth_credentials = 16;
+  // Clone an existing workspace into an isolated guest workspace.
+  CloneOptions clone = 17;
+}
+
+// CloneOptions describes the host source workspace and optional guest working
+// directory for clone mode. A missing guest_workdir lets the daemon choose it.
+message CloneOptions {
+  string source_workspace_path = 1;
+  optional string guest_workdir = 2;
+}
+
+// CloneInfo is the guest-visible clone identity returned with a Sandbox.
+message CloneInfo {
+  string guest_workdir = 1;
+  string remote_name = 2;
+  // Absent when the sandbox is stopped or no guest endpoint is available.
+  GitEndpoint git_endpoint = 3;
+}
+
+message GitEndpoint {
+  string host_ip = 1;
+  uint32 port = 2;
+  string repository = 3;
 }
 
 // OAuthCredential mirrors the Docker Sandboxes v2 OAuth kit declaration.
